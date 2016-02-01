@@ -1,0 +1,1 @@
+PQCHECKSDK_OTHER_LDFLAGS = -framework "MobileCoreServices" -framework "SystemConfiguration"

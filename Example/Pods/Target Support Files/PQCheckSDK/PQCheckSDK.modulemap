@@ -1,0 +1,6 @@
+framework module PQCheckSDK {
+  umbrella header "PQCheckSDK-umbrella.h"
+
+  export *
+  module * { export * }
+}

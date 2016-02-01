@@ -1,0 +1,1 @@
+../../../../../Pod/Classes/API/Request/AuthorisationRequest.h
