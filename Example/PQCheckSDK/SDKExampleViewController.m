@@ -42,7 +42,7 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
 - (IBAction)payButtonTapped:(id)sender
 {
     PQCheckManager *manager = [[PQCheckManager alloc] initWithUserIdentifier:_userIdentifier
-                                                                      digest:[self randomStringOfLength:6]
+                                                           authorisationHash:[self randomStringOfLength:6]
                                                                      summary:[self randomStringOfLength:5]];
     manager.delegate = self;
     manager.autoAttemptOnFailure = NO;

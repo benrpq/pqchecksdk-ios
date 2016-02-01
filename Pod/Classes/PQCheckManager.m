@@ -19,7 +19,7 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
 {
     NSString *_userIdentifier;
     NSString *_summary;
-    NSString *_digest;
+    NSString *_authorisationHash;
     APIKey *_apiKey;
     Authorisation *_authorisation;
     PQCheckRecordSelfieViewController *_selfieController;
@@ -32,14 +32,14 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
 @implementation PQCheckManager
 
 - (id)initWithUserIdentifier:(NSString *)userIdentifier
-                      digest:(NSString *)digest
+           authorisationHash:(NSString *)authorisationHash
                      summary:(NSString *)summary
 {
     self = [super init];
     if (self)
     {
         _userIdentifier = userIdentifier;
-        _digest = digest;
+        _authorisationHash = authorisationHash;
         _summary = summary;
         _shouldViewAuthorisationOnFailure = YES;
         
@@ -51,9 +51,9 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
 - (void)performAuthentication
 {
     // Do any additional setup after loading the view from its nib.
-    assert(_userIdentifier != nil && _userIdentifier.length > 0);
-    assert(_summary != nil        && _summary.length > 0);
-    assert(_digest != nil         && _digest.length > 0);
+    assert(_userIdentifier != nil    && _userIdentifier.length > 0);
+    assert(_summary != nil           && _summary.length > 0);
+    assert(_authorisationHash != nil && _authorisationHash.length > 0);
     
     // Make sure that we have a camera and microphone permission
     _cameraAuthorisationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
@@ -76,7 +76,7 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
             NSURLCredential *credential = [NSURLCredential credentialWithUser:_apiKey.uuid
                                                                      password:_apiKey.secret
                                                                   persistence:NSURLCredentialPersistenceNone];
-            [[APIManager sharedManager] createAuthorisationWithCredential:credential userIdentifier:_userIdentifier digest:_digest summary:_summary completion:^(Authorisation *authorisation, NSError *error) {
+            [[APIManager sharedManager] createAuthorisationWithCredential:credential userIdentifier:_userIdentifier authorisationHash:_authorisationHash summary:_summary completion:^(Authorisation *authorisation, NSError *error) {
                 
                 [hud hide:YES];
 

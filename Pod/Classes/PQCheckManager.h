@@ -18,7 +18,7 @@
 @property (nonatomic, assign) BOOL shouldPaceUser;
 
 - (id)initWithUserIdentifier:(NSString *)userIdentifier
-                      digest:(NSString *)digest
+           authorisationHash:(NSString *)authorisationHash
                      summary:(NSString *)summary;
 
 - (void)performAuthentication;

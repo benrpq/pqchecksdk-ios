@@ -37,7 +37,7 @@ typedef NS_ENUM(NSInteger, PQCheckEndpoint)
 
 - (void)createAuthorisationWithCredential:(NSURLCredential *)credential
                            userIdentifier:(NSString *)identifier
-                                   digest:(NSString *)digest
+                        authorisationHash:(NSString *)authorisationHash
                                   summary:(NSString *)summary
                                completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock;
 

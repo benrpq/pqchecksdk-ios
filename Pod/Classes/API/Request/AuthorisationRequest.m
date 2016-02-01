@@ -11,14 +11,14 @@
 @implementation AuthorisationRequest
 
 - (id)initWithUserIdentifier:(NSString *)identifier
-                      digest:(NSString *)digest
+           authorisationHash:(NSString *)authorisationHash
                      summary:(NSString *)summary
 {
     self = [super init];
     if (self)
     {
         self.userIdentifier = identifier;
-        self.digest = digest;
+        self.authorisationHash = authorisationHash;
         self.summary = summary;
     }
     return self;
@@ -27,7 +27,7 @@
 + (NSDictionary *)mapping
 {
     return @{@"userIdentifier": @"userIdentifier",
-             @"hash": @"digest",
+             @"hash": @"authorisationHash",
              @"summary": @"summary"};
 }
 

@@ -11,11 +11,11 @@
 @interface AuthorisationRequest : NSObject
 
 @property (nonatomic, copy) NSString *userIdentifier;
-@property (nonatomic, copy) NSString *digest;
+@property (nonatomic, copy) NSString *authorisationHash;
 @property (nonatomic, copy) NSString *summary;
 
 - (id)initWithUserIdentifier:(NSString *)identifier
-                      digest:(NSString *)digest
+           authorisationHash:(NSString *)authorisationHash
                      summary:(NSString *)summary;
 
 + (NSDictionary *)mapping;

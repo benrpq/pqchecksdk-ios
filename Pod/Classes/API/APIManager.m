@@ -227,7 +227,7 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
 
 - (void)createAuthorisationWithCredential:(NSURLCredential *)credential
                            userIdentifier:(NSString *)identifier
-                                   digest:(NSString *)digest
+                        authorisationHash:(NSString *)authorisationHash
                                   summary:(NSString *)summary
                                completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock
 {
@@ -288,7 +288,7 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
 
     // Perform POST request
     AuthorisationRequest *authorisationRequest = [[AuthorisationRequest alloc] initWithUserIdentifier:identifier
-                                                                                               digest:digest
+                                                                                    authorisationHash:authorisationHash
                                                                                               summary:summary];
     [_objectManager postObject:authorisationRequest
                           path:kPQCheckAuthorisationPath
