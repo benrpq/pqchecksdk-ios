@@ -1,5 +1,5 @@
 //
-//  PQCheckViewController.m
+//  SDKExampleViewController.m
 //  PQCheckSDK
 //
 //  Created by CJ Tjhai on 02/01/2016.
@@ -39,7 +39,7 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)payButtonTapped:(id)sender
+- (IBAction)authenticateButtonTapped:(id)sender
 {
     PQCheckManager *manager = [[PQCheckManager alloc] initWithUserIdentifier:_userIdentifier
                                                            authorisationHash:[self randomStringOfLength:6]

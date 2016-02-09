@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AuthorisationStatus.h"
 
 @interface CancelAuthorisationRequest : NSObject
 
-@property (nonatomic, copy) NSString *status;
+@property (nonatomic, copy, readonly)   NSString *status;
+
+@property (nonatomic, assign, readonly) PQCheckAuthorisationStatus authorisationStatus;
 
 + (NSDictionary *)mapping;
 

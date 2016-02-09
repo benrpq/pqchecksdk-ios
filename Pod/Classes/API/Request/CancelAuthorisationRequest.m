@@ -7,7 +7,12 @@
 //
 
 #import "CancelAuthorisationRequest.h"
-#import "AuthorisationStatus.h"
+
+@interface CancelAuthorisationRequest ()
+{
+    PQCheckAuthorisationStatus _authorisationStatus;
+}
+@end
 
 @implementation CancelAuthorisationRequest
 
@@ -16,15 +21,10 @@
     self = [super init];
     if (self)
     {
-        self.status = [AuthorisationStatus authorisationStatusStringOfValue:kPQCheckAuthorisationStatusCancelled];
+        _authorisationStatus = kPQCheckAuthorisationStatusCancelled;
+        _status = [AuthorisationStatus authorisationStatusStringOfValue:kPQCheckAuthorisationStatusCancelled];
     }
     return self;
-}
-
-- (void)setStatus:(NSString *)status
-{
-    // One cannot change the value of the status
-    self.status = [AuthorisationStatus authorisationStatusStringOfValue:kPQCheckAuthorisationStatusCancelled];
 }
 
 + (NSDictionary *)mapping

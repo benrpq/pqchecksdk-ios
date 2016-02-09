@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "AuthorisationStatus.h"
 
+@class Authorisation;
 @protocol PQCheckManagerDelegate;
 
 @interface PQCheckManager : NSObject
@@ -17,9 +18,13 @@
 @property (nonatomic, assign) BOOL autoAttemptOnFailure;
 @property (nonatomic, assign) BOOL shouldPaceUser;
 
+#ifndef THINSDK
 - (id)initWithUserIdentifier:(NSString *)userIdentifier
            authorisationHash:(NSString *)authorisationHash
                      summary:(NSString *)summary;
+#else
+- (id)initWithAuthorisation:(Authorisation *)authorisation;
+#endif
 
 - (void)performAuthentication;
 @end

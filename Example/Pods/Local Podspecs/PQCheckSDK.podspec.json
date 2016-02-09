@@ -19,8 +19,7 @@
   "source_files": "Pod/Classes/**/*",
   "resource_bundles": {
     "PQCheckSDK": [
-      "Pod/Assets/*.png",
-      "Pod/Assets/*.xib"
+      "Pod/Assets/*.png"
     ]
   },
   "ios": {

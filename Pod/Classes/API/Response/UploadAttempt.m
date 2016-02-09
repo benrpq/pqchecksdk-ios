@@ -8,7 +8,30 @@
 
 #import "UploadAttempt.h"
 
+@interface UploadAttempt ()
+{
+    PQCheckAuthorisationStatus _authorisationStatus;
+}
+@end
+
 @implementation UploadAttempt
+
+- (void)setStatus:(NSString *)status
+{
+    _status = status;
+    _authorisationStatus = [AuthorisationStatus authorisationStatusValueOfString:status];
+}
+
+- (void)setAuthorisationStatus:(PQCheckAuthorisationStatus)authorisationStatus
+{
+    _authorisationStatus = authorisationStatus;
+    _status = [AuthorisationStatus authorisationStatusStringOfValue:authorisationStatus];
+}
+
+- (PQCheckAuthorisationStatus)authorisationStatus
+{
+    return _authorisationStatus;
+}
 
 - (NSString *)description
 {

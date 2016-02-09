@@ -7,12 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AuthorisationStatus.h"
 
 @interface UploadAttempt : NSObject
 
 @property (nonatomic, assign) NSUInteger number;
 @property (nonatomic, copy)   NSString *status;
 @property (nonatomic, copy)   NSString *nextDigest;
+
+@property (nonatomic, assign) PQCheckAuthorisationStatus authorisationStatus;
 
 + (NSDictionary *)mapping;
 

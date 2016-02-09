@@ -8,7 +8,30 @@
 
 #import "Authorisation.h"
 
+@interface Authorisation ()
+{
+    PQCheckAuthorisationStatus _authorisationStatus;
+}
+@end
+
 @implementation Authorisation
+
+- (void)setStatus:(NSString *)status
+{
+    _status = status;
+    _authorisationStatus = [AuthorisationStatus authorisationStatusValueOfString:status];
+}
+
+- (PQCheckAuthorisationStatus)authorisationStatus
+{
+    return _authorisationStatus;
+}
+
+- (void)setAuthorisationStatus:(PQCheckAuthorisationStatus)authorisationStatus
+{
+    _authorisationStatus = authorisationStatus;
+    _status = [AuthorisationStatus authorisationStatusStringOfValue:authorisationStatus];
+}
 
 + (NSDictionary *)mapping
 {

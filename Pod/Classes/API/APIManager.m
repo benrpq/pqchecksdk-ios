@@ -10,12 +10,14 @@
 #import <RestKit/RestKit.h>
 #import <AFNetworking/AFNetworking.h>
 #import "APIManager.h"
+#ifndef THINSDK
 #import "APIKeyRequest.h"
 #import "AuthorisationRequest.h"
 #import "Attempts.h"
 #import "Authenticity.h"
 #import "BiometricEvaluations.h"
 #import "CancelAuthorisationRequest.h"
+#endif
 
 static NSString* kPQCheckBaseDevelopmentURL = @"http://selfieguard-dev.elasticbeanstalk.com";
 static NSString* kPQCheckBaseUnstableURL = @"https://unstable-beta-api-pqcheck.post-quantum.com";
@@ -144,6 +146,7 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
     }
 }
 
+#ifndef THINSDK
 - (void)createAPIKeyWithCredential:(NSURLCredential *)credential
                          namespace:(NSString *)apiNamespace
                         completion:(void (^)(APIKey *apiKey, NSError *error))completionBlock
@@ -306,12 +309,7 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
                                           UUID:(NSString *)uuid
                                     completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock
 {
-    [_objectManager setRequestSerializationMIMEType:RKMIMETypeJSON];
-    
-    // We want to accept JSON type data, plus profile and version if available
-    [self setAcceptHeaderWithMIMEType:RKMIMETypeJSON
-                              profile:_profile
-                              version:[_version stringValue]];
+    assert(_objectManager != nil);
     
     // Set authorisation header
     if (credential != nil)
@@ -319,24 +317,51 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
         [[_objectManager HTTPClient] setAuthorizationHeaderWithUsername:[credential user]
                                                                password:[credential password]];
     }
+
+    [self __viewAuthorisationRequestUUID:uuid completion:^(Authorisation *authorisation, NSError *error) {
+        completionBlock(authorisation, error);
+    }];
+}
+#else
+- (void)viewAuthorisationRequestWithUUID:(NSString *)uuid
+                              completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock
+{
+    assert(_objectManager != nil);
     
-    // {"uuid":"584bb218-7f36-4737-a6d2-aa8cb2452b37","status":"TIMED_OUT","digest":"865191","startTime":1454287361.398000000,"expiryTime":1454287541.398000000,"attempts":[{"attemptNumber":1,"timestamp":1454287377.100000000,"isSuccessful":false,"biometricEvaluations":[{"biometric":"FaceRecognition/OB","authenticity":{"FACE":1.0},"accuracy":null,"rejectionDetail":"INSUFFICIENT_HISTORY","log":""},{"biometric":"SpeechRecognition/N","authenticity":{},"accuracy":0.0,"rejectionDetail":"NONE","log":"451390"}]}],"_links":{"self":{"href":"https://unstable-beta-api-pqcheck.post-quantum.com/authorisation/584bb218-7f36-4737-a6d2-aa8cb2452b37"},"upload-attempt":{"href":"https://unstable-beta-api-pqcheck.post-quantum.com/authorisation/584bb218-7f36-4737-a6d2-aa8cb2452b37/attempt"}}}
+    [self __viewAuthorisationRequestUUID:uuid completion:^(Authorisation *authorisation, NSError *error) {
+        completionBlock(authorisation, error);
+    }];
+}
+#endif
+
+- (void)__viewAuthorisationRequestUUID:(NSString *)uuid
+                            completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock
+{
+    [_objectManager setRequestSerializationMIMEType:RKMIMETypeJSON];
+    
+    // We want to accept JSON type data, plus profile and version if available
+    [self setAcceptHeaderWithMIMEType:RKMIMETypeJSON
+                              profile:_profile
+                              version:[_version stringValue]];
     
     // Object mapping of the response
     RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Authorisation class]];
     [responseMapping addAttributeMappingsFromDictionary:[Authorisation mapping]];
+#ifndef THINSDK
     RKObjectMapping *attemptsMapping = [RKObjectMapping mappingForClass:[Attempts class]];
     [attemptsMapping addAttributeMappingsFromDictionary:[Attempts mapping]];
     RKObjectMapping *biometricEvaluationsMapping = [RKObjectMapping mappingForClass:[BiometricEvaluations class]];
     [biometricEvaluationsMapping addAttributeMappingsFromDictionary:[BiometricEvaluations mapping]];
     RKObjectMapping *authenticityMapping = [RKObjectMapping mappingForClass:[Authenticity class]];
     [authenticityMapping addAttributeMappingsFromDictionary:[Authenticity mapping]];
+#endif
     RKObjectMapping *linksMapping = [RKObjectMapping mappingForClass:[Links class]];
     RKObjectMapping *pathMapping = [RKObjectMapping mappingForClass:[URIPath class]];
     [pathMapping addAttributeMappingsFromDictionary:[URIPath mapping]];
     
     // Define the mapping relationship
     RKPropertyMapping *mapping = nil;
+#ifndef THINSDK
     mapping = [RKRelationshipMapping relationshipMappingFromKeyPath:@"authenticity"
                                                           toKeyPath:@"authenticity"
                                                         withMapping:authenticityMapping];
@@ -351,7 +376,7 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
                                                           toKeyPath:@"attempts"
                                                         withMapping:attemptsMapping];
     [responseMapping addPropertyMapping:mapping];
-    
+#endif
     mapping = [RKRelationshipMapping relationshipMappingFromKeyPath:@"self"
                                                           toKeyPath:@"selfPath"
                                                         withMapping:pathMapping];
@@ -387,6 +412,7 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
                              }];
 }
 
+#ifndef THINSDK
 - (void)cancelAuthorisationRequestWithUUID:(NSString *)uuid
                                 completion:(void (^)(NSError *error))completionBlock
 {
@@ -419,6 +445,7 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
                             completionBlock(error);
                         }];
 }
+#endif
 
 - (void)uploadAttemptWithAuthorisation:(Authorisation *)authorisation
                               mediaURL:(NSURL *)mediaURL
@@ -477,6 +504,7 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
     [_objectManager enqueueObjectRequestOperation:operation];
 }
 
+#ifndef THINSDK
 - (void)enrolUserWithIdentifier:(NSString *)userIdentifier
                       reference:(NSString *)reference
                      transcript:(NSString *)transcript
@@ -537,5 +565,6 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
                                               }];
     [_objectManager enqueueObjectRequestOperation:operation];
 }
+#endif
 
 @end

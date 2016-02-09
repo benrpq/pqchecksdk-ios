@@ -10,7 +10,11 @@
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "PQCheckManager.h"
 #import "PQCheckRecordSelfieViewController.h"
+#ifndef THINKSDK
 #import "AdminCredentials.h"
+#else
+#import "API/Response/Authorisation.h"
+#endif
 #import "API/APIManager.h"
 
 static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
@@ -20,10 +24,12 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
     NSString *_userIdentifier;
     NSString *_summary;
     NSString *_authorisationHash;
+#ifndef THINSDK
     APIKey *_apiKey;
+    BOOL _shouldViewAuthorisationOnFailure;
+#endif
     Authorisation *_authorisation;
     PQCheckRecordSelfieViewController *_selfieController;
-    BOOL _shouldViewAuthorisationOnFailure;
     AVAuthorizationStatus _cameraAuthorisationStatus;
     AVAuthorizationStatus _microphoneAuthorisationStatus;
 }
@@ -31,6 +37,7 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
 
 @implementation PQCheckManager
 
+#ifndef THINSDK
 - (id)initWithUserIdentifier:(NSString *)userIdentifier
            authorisationHash:(NSString *)authorisationHash
                      summary:(NSString *)summary
@@ -47,6 +54,19 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
     }
     return self;
 }
+#else
+- (id)initWithAuthorisation:(Authorisation *)authorisation
+{
+    self = [super init];
+    if (self)
+    {
+        _authorisation = authorisation;
+        
+        [self checkCameraAndMicrophonePermissions];
+    }
+    return self;
+}
+#endif
 
 - (void)performAuthentication
 {
@@ -69,6 +89,7 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
         hud.mode = MBProgressHUDModeIndeterminate;
         hud.labelText = NSLocalizedString(@"Please wait...", @"Please wait...");
         
+#ifndef THINSDK
         // Do I have a correct credential?
         [self prepareCredentialCompletion:^{
             
@@ -95,8 +116,16 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
                 
             }];
         }];
+#else
+        _selfieController = [[PQCheckRecordSelfieViewController alloc] init];
+        _selfieController.delegate = self;
+        _selfieController.authorisation = _authorisation;
+        _selfieController.pacingEnabled = self.shouldPaceUser;
+        
+        UIViewController *viewController = [PQCheckManager topMostController];
+        [viewController presentViewController:_selfieController animated:YES completion:nil];
+#endif
     }
-
 }
 
 #pragma mark - PQCheckRecordSelfie delegates
@@ -123,13 +152,14 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
             return;
         }
         
-        PQCheckAuthorisationStatus status = [AuthorisationStatus authorisationStatusValueOfString:uploadAttempt.status];
-        if (status == kPQCheckAuthorisationStatusOpen)
+        if (uploadAttempt.authorisationStatus == kPQCheckAuthorisationStatusOpen)
         {
+#ifndef THINSDK
             if (_shouldViewAuthorisationOnFailure)
             {
                 [self viewAuthorisationOnFailure];
             }
+#endif
             
             [controller updateDigest:uploadAttempt.nextDigest];
             if (self.autoAttemptOnFailure)
@@ -155,7 +185,7 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
         
         if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFinishWithAuthorisationStatus:)])
         {
-            [self.delegate PQCheckManager:self didFinishWithAuthorisationStatus:status];
+            [self.delegate PQCheckManager:self didFinishWithAuthorisationStatus:uploadAttempt.authorisationStatus];
         }
     }];
 }
@@ -181,6 +211,7 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
     return topController;
 }
 
+#ifndef THINSDK
 - (void)prepareCredentialCompletion:(void (^)(void))completionBlock
 {
     A0SimpleKeychain *keychain = [A0SimpleKeychain keychain];
@@ -216,6 +247,22 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
         completionBlock();
     }
 }
+
+- (void)viewAuthorisationOnFailure
+{
+    NSURLCredential *credential = [NSURLCredential credentialWithUser:_apiKey.uuid
+                                                             password:_apiKey.secret
+                                                          persistence:NSURLCredentialPersistenceNone];
+    [[APIManager sharedManager] viewAuthorisationRequestWithCredential:credential UUID:_authorisation.uuid completion:^(Authorisation *authorisation, NSError *error) {
+        // Need a way to do a pretty-print of Authorisation object
+        for (NSInteger index=0; index<authorisation.attempts.count; index++)
+        {
+            NSLog(@"Authorisation failure (%ld): %@", (long)index, [authorisation.attempts objectAtIndex:index]);
+        }
+    }];
+}
+
+#endif
 
 - (void)checkCameraAndMicrophonePermissions
 {
@@ -258,20 +305,6 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
         
         [viewController presentViewController:alertController animated:YES completion:nil];
     }
-}
-
-- (void)viewAuthorisationOnFailure
-{
-    NSURLCredential *credential = [NSURLCredential credentialWithUser:_apiKey.uuid
-                                                             password:_apiKey.secret
-                                                          persistence:NSURLCredentialPersistenceNone];
-    [[APIManager sharedManager] viewAuthorisationRequestWithCredential:credential UUID:_authorisation.uuid completion:^(Authorisation *authorisation, NSError *error) {
-        // Need a way to do a pretty-print of Authorisation object
-        for (NSInteger index=0; index<authorisation.attempts.count; index++)
-        {
-            NSLog(@"Authorisation failure (%ld): %@", (long)index, [authorisation.attempts objectAtIndex:index]);
-        }
-    }];
 }
 
 @end

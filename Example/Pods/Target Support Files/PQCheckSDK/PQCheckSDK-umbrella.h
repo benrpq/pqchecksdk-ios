@@ -1,6 +1,5 @@
 #import <UIKit/UIKit.h>
 
-#import "AdminCredentials.h"
 #import "APIManager.h"
 #import "AuthorisationStatus.h"
 #import "APIKeyRequest.h"
@@ -11,7 +10,6 @@
 #import "Attempts.h"
 #import "Authenticity.h"
 #import "Authorisation.h"
-#import "BiometricEvaluation.h"
 #import "BiometricEvaluations.h"
 #import "Links.h"
 #import "UploadAttempt.h"

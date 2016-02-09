@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Links.h"
+#import "AuthorisationStatus.h"
 
 @interface Authorisation : NSObject
 
@@ -18,6 +19,8 @@
 @property (nonatomic, assign) NSTimeInterval expiryTime;
 @property (nonatomic, strong) NSArray *attempts;
 @property (nonatomic, strong) Links *links;
+
+@property (nonatomic, assign) PQCheckAuthorisationStatus authorisationStatus;
 
 + (NSDictionary *)mapping;
 
