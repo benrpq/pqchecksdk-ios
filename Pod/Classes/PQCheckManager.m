@@ -68,11 +68,6 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
 }
 #endif
 
-- (void)dealloc
-{
-    NSLog(@"%s", __PRETTY_FUNCTION__);
-}
-
 - (void)performAuthentication
 {
     if ([NSThread isMainThread] == NO)
