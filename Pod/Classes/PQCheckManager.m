@@ -70,10 +70,17 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
 
 - (void)performAuthentication
 {
+    if ([NSThread isMainThread] == NO)
+    {
+        [self performSelectorOnMainThread:@selector(performAuthentication) withObject:nil waitUntilDone:NO];
+    }
+    
     // Do any additional setup after loading the view from its nib.
+#ifndef THINSDK
     assert(_userIdentifier != nil    && _userIdentifier.length > 0);
     assert(_summary != nil           && _summary.length > 0);
     assert(_authorisationHash != nil && _authorisationHash.length > 0);
+#endif
     
     // Make sure that we have a camera and microphone permission
     _cameraAuthorisationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
@@ -83,13 +90,13 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
         (_microphoneAuthorisationStatus == AVAuthorizationStatusAuthorized ||
          _microphoneAuthorisationStatus == AVAuthorizationStatusNotDetermined))
     {
+#ifndef THINSDK
         UIView *view = [[[UIApplication sharedApplication] delegate] window];
- 
+        
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
         hud.mode = MBProgressHUDModeIndeterminate;
         hud.labelText = NSLocalizedString(@"Please wait...", @"Please wait...");
         
-#ifndef THINSDK
         // Do I have a correct credential?
         [self prepareCredentialCompletion:^{
             
