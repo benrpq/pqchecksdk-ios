@@ -179,7 +179,10 @@
         hud.labelText = NSLocalizedString(@"Great, job done", @"Great, job done");
         [hud hide:YES afterDelay:1.0f];
         
-        [self dismissViewControllerAnimated:YES completion:nil];
+        self.payment.approved = YES;
+        [self dismissViewControllerAnimated:YES completion:^{
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
     }
     else if (status == kPQCheckAuthorisationStatusTimedOut)
     {
@@ -188,7 +191,10 @@
         hud.labelText = NSLocalizedString(@"Ooops, timed-out", @"Ooops, timed-out");
         [hud hide:YES afterDelay:1.0f];
         
-        [self dismissViewControllerAnimated:YES completion:nil];
+        self.payment.approved = NO;
+        [self dismissViewControllerAnimated:YES completion:^{
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
     }
     else if (status == kPQCheckAuthorisationStatusCancelled)
     {
@@ -197,7 +203,10 @@
         hud.labelText = NSLocalizedString(@"Sorry, cancelled", @"Sorry, cancelled");
         [hud hide:YES afterDelay:1.0f];
         
-        [self dismissViewControllerAnimated:YES completion:nil];
+        self.payment.approved = NO;
+        [self dismissViewControllerAnimated:YES completion:^{
+            [self.navigationController popViewControllerAnimated:YES];
+        }];
     }
     else if (status == kPQCheckAuthorisationStatusOpen)
     {

@@ -34,6 +34,9 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
     _isLoading = NO;
     
     _userUUID = [[NSUUID UUID] UUIDString];
+    
+    UIBarButtonItem *resetButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(resetAccounts)];
+    self.navigationItem.rightBarButtonItem = resetButton;
 }
 
 - (void)didReceiveMemoryWarning
@@ -98,9 +101,15 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
 
 #pragma mark - Private methods
 
+- (void)resetAccounts
+{
+    _accounts = nil;    
+    [self loadAccounts];
+}
+
 - (void)loadAccounts
 {
-    if (_isLoading)
+    if (_isLoading || (_accounts && [_accounts count] > 0))
     {
         return;
     }
