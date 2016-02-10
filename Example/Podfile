@@ -3,6 +3,14 @@ use_frameworks!
 
 target 'PQCheckSDK_Example', :exclusive => true do
   pod 'PQCheckSDK', :path => '../'
+  
+  pod 'MBProgressHUD'
+end
+
+target 'PQCheckThinSDK_Example', :exclusive => true do
+  pod 'PQCheckSDK', :path => '../'
+  
+  pod 'RestKit'
   pod 'MBProgressHUD'
 end
 

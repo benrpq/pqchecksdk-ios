@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		006EA4751A9C775CB517D02E /* Pods_PQCheckThinSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDE306CBECD465D1253863E5 /* Pods_PQCheckThinSDK_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		0F52232BAEADAF79B40109D8 /* Pods_PQCheckSDK_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D153B701819E8BA29C010491 /* Pods_PQCheckSDK_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -20,6 +21,26 @@
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		D711BA851C6ACBE100DD7156 /* AccountCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838541C6AB8BF0068372D /* AccountCollection.m */; };
+		D711BA861C6ACBE100DD7156 /* BankAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838561C6AB8BF0068372D /* BankAccount.m */; };
+		D711BA871C6ACBE100DD7156 /* Payment.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838581C6AB8BF0068372D /* Payment.m */; };
+		D73838011C6A454B0068372D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
+		D73838021C6A454B0068372D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
+		D73838031C6A454B0068372D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
+		D738383F1C6A462C0068372D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D738383E1C6A462A0068372D /* Main.storyboard */; };
+		D73838401C6A465A0068372D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D73838331C6A45DB0068372D /* LaunchScreen.storyboard */; };
+		D73838411C6A465F0068372D /* PQCheckAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838191C6A45870068372D /* PQCheckAppDelegate.m */; };
+		D73838421C6A46640068372D /* PaymentsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838171C6A45870068372D /* PaymentsViewController.m */; };
+		D73838431C6A46680068372D /* PaymentDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838151C6A45870068372D /* PaymentDetailViewController.m */; };
+		D73838441C6A466D0068372D /* AccountsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838121C6A45870068372D /* AccountsViewController.m */; };
+		D73838451C6A468F0068372D /* AccountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838211C6A45910068372D /* AccountCell.m */; };
+		D73838461C6A468F0068372D /* BankAccountCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838231C6A45910068372D /* BankAccountCell.m */; };
+		D73838471C6A468F0068372D /* DetailCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838251C6A45910068372D /* DetailCell.m */; };
+		D73838481C6A468F0068372D /* PaymentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838271C6A45910068372D /* PaymentCell.m */; };
+		D73838491C6A46B80068372D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D73838301C6A45CB0068372D /* InfoPlist.strings */; };
+		D738384A1C6A46F20068372D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838131C6A45870068372D /* main.m */; };
+		D738384D1C6A48790068372D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D738384B1C6A48740068372D /* Images.xcassets */; };
+		D738385D1C6AB8D80068372D /* EntityClientManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838511C6AB8BF0068372D /* EntityClientManager.m */; };
 		D742C4A81C68311400B27FF1 /* SDKExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5A6195388D20070C39A /* SDKExampleViewController.m */; };
 		D742C4A91C68311F00B27FF1 /* PQCheckAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* PQCheckAppDelegate.m */; };
 		D76E5FDC1C5FDCCC0095AD9B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D76E5FDB1C5FDCCC0095AD9B /* LaunchScreen.storyboard */; };
@@ -64,7 +85,42 @@
 		B03A54B6FEE652AF7ABE8009 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		BC9976A77F844FD06C2C041E /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		D153B701819E8BA29C010491 /* Pods_PQCheckSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PQCheckSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D738380F1C6A454B0068372D /* PQCheckThinSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PQCheckThinSDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D73838111C6A45870068372D /* AccountsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccountsViewController.h; path = PQCheckThinSDK/AccountsViewController.h; sourceTree = "<group>"; };
+		D73838121C6A45870068372D /* AccountsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AccountsViewController.m; path = PQCheckThinSDK/AccountsViewController.m; sourceTree = "<group>"; };
+		D73838131C6A45870068372D /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = PQCheckThinSDK/main.m; sourceTree = "<group>"; };
+		D73838141C6A45870068372D /* PaymentDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PaymentDetailViewController.h; path = PQCheckThinSDK/PaymentDetailViewController.h; sourceTree = "<group>"; };
+		D73838151C6A45870068372D /* PaymentDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PaymentDetailViewController.m; path = PQCheckThinSDK/PaymentDetailViewController.m; sourceTree = "<group>"; };
+		D73838161C6A45870068372D /* PaymentsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PaymentsViewController.h; path = PQCheckThinSDK/PaymentsViewController.h; sourceTree = "<group>"; };
+		D73838171C6A45870068372D /* PaymentsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PaymentsViewController.m; path = PQCheckThinSDK/PaymentsViewController.m; sourceTree = "<group>"; };
+		D73838181C6A45870068372D /* PQCheckAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PQCheckAppDelegate.h; path = PQCheckThinSDK/PQCheckAppDelegate.h; sourceTree = "<group>"; };
+		D73838191C6A45870068372D /* PQCheckAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PQCheckAppDelegate.m; path = PQCheckThinSDK/PQCheckAppDelegate.m; sourceTree = "<group>"; };
+		D73838201C6A45910068372D /* AccountCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountCell.h; sourceTree = "<group>"; };
+		D73838211C6A45910068372D /* AccountCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountCell.m; sourceTree = "<group>"; };
+		D73838221C6A45910068372D /* BankAccountCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankAccountCell.h; sourceTree = "<group>"; };
+		D73838231C6A45910068372D /* BankAccountCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankAccountCell.m; sourceTree = "<group>"; };
+		D73838241C6A45910068372D /* DetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailCell.h; sourceTree = "<group>"; };
+		D73838251C6A45910068372D /* DetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailCell.m; sourceTree = "<group>"; };
+		D73838261C6A45910068372D /* PaymentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PaymentCell.h; sourceTree = "<group>"; };
+		D73838271C6A45910068372D /* PaymentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PaymentCell.m; sourceTree = "<group>"; };
+		D738382D1C6A45BB0068372D /* PQCheckThinSDK-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "PQCheckThinSDK-Info.plist"; path = "PQCheckThinSDK/PQCheckThinSDK-Info.plist"; sourceTree = "<group>"; };
+		D738382E1C6A45BB0068372D /* PQCheckThinSDK-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "PQCheckThinSDK-Prefix.pch"; path = "PQCheckThinSDK/PQCheckThinSDK-Prefix.pch"; sourceTree = "<group>"; };
+		D73838311C6A45CB0068372D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = PQCheckThinSDK/en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		D73838331C6A45DB0068372D /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = PQCheckThinSDK/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D738383D1C6A462A0068372D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D738384B1C6A48740068372D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = PQCheckThinSDK/Images.xcassets; sourceTree = "<group>"; };
+		D73838501C6AB8BF0068372D /* EntityClientManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EntityClientManager.h; sourceTree = "<group>"; };
+		D73838511C6AB8BF0068372D /* EntityClientManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EntityClientManager.m; sourceTree = "<group>"; };
+		D73838531C6AB8BF0068372D /* AccountCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountCollection.h; sourceTree = "<group>"; };
+		D73838541C6AB8BF0068372D /* AccountCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountCollection.m; sourceTree = "<group>"; };
+		D73838551C6AB8BF0068372D /* BankAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankAccount.h; sourceTree = "<group>"; };
+		D73838561C6AB8BF0068372D /* BankAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankAccount.m; sourceTree = "<group>"; };
+		D73838571C6AB8BF0068372D /* Payment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Payment.h; sourceTree = "<group>"; };
+		D73838581C6AB8BF0068372D /* Payment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Payment.m; sourceTree = "<group>"; };
 		D76E5FDB1C5FDCCC0095AD9B /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D773A2F01C6AC88000248A30 /* Pods-PQCheckThinSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-PQCheckThinSDK_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PQCheckThinSDK_Example/Pods-PQCheckThinSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		D773A2F11C6AC88000248A30 /* Pods-PQCheckThinSDK_Example.release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-PQCheckThinSDK_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-PQCheckThinSDK_Example/Pods-PQCheckThinSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
+		DDE306CBECD465D1253863E5 /* Pods_PQCheckThinSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PQCheckThinSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F14EB6DD0D1782F0E3FA284F /* PQCheckSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PQCheckSDK.podspec; path = ../PQCheckSDK.podspec; sourceTree = "<group>"; };
 		FCB6F23D7A4C8B8A4B9E4E2D /* Pods_PQCheckSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PQCheckSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -92,6 +148,17 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D73838001C6A454B0068372D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D73838011C6A454B0068372D /* CoreGraphics.framework in Frameworks */,
+				D73838021C6A454B0068372D /* UIKit.framework in Frameworks */,
+				D73838031C6A454B0068372D /* Foundation.framework in Frameworks */,
+				006EA4751A9C775CB517D02E /* Pods_PQCheckThinSDK_Example.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -100,6 +167,7 @@
 			children = (
 				60FF7A9C1954A5C5007DD14C /* Podspec Metadata */,
 				6003F593195388D20070C39A /* Example for PQCheckSDK */,
+				D73837F91C6A45340068372D /* Example for PQCheckThinSDK */,
 				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
@@ -112,6 +180,7 @@
 			children = (
 				6003F58A195388D20070C39A /* PQCheckSDK_Example.app */,
 				6003F5AE195388D20070C39A /* PQCheckSDK_Tests.xctest */,
+				D738380F1C6A454B0068372D /* PQCheckThinSDK_Example.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -125,6 +194,7 @@
 				6003F5AF195388D20070C39A /* XCTest.framework */,
 				FCB6F23D7A4C8B8A4B9E4E2D /* Pods_PQCheckSDK_Example.framework */,
 				D153B701819E8BA29C010491 /* Pods_PQCheckSDK_Tests.framework */,
+				DDE306CBECD465D1253863E5 /* Pods_PQCheckThinSDK_Example.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -185,9 +255,83 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
+		D73837F91C6A45340068372D /* Example for PQCheckThinSDK */ = {
+			isa = PBXGroup;
+			children = (
+				D738384F1C6AB8BF0068372D /* EntityClient */,
+				D738381F1C6A45910068372D /* UI */,
+				D73838111C6A45870068372D /* AccountsViewController.h */,
+				D73838121C6A45870068372D /* AccountsViewController.m */,
+				D73838141C6A45870068372D /* PaymentDetailViewController.h */,
+				D73838151C6A45870068372D /* PaymentDetailViewController.m */,
+				D73838161C6A45870068372D /* PaymentsViewController.h */,
+				D73838171C6A45870068372D /* PaymentsViewController.m */,
+				D73838181C6A45870068372D /* PQCheckAppDelegate.h */,
+				D73838191C6A45870068372D /* PQCheckAppDelegate.m */,
+				D73838331C6A45DB0068372D /* LaunchScreen.storyboard */,
+				D738383E1C6A462A0068372D /* Main.storyboard */,
+				D738384B1C6A48740068372D /* Images.xcassets */,
+				D738382C1C6A459C0068372D /* Supporting Files */,
+			);
+			name = "Example for PQCheckThinSDK";
+			sourceTree = "<group>";
+		};
+		D738381F1C6A45910068372D /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				D73838201C6A45910068372D /* AccountCell.h */,
+				D73838211C6A45910068372D /* AccountCell.m */,
+				D73838221C6A45910068372D /* BankAccountCell.h */,
+				D73838231C6A45910068372D /* BankAccountCell.m */,
+				D73838241C6A45910068372D /* DetailCell.h */,
+				D73838251C6A45910068372D /* DetailCell.m */,
+				D73838261C6A45910068372D /* PaymentCell.h */,
+				D73838271C6A45910068372D /* PaymentCell.m */,
+			);
+			name = UI;
+			path = PQCheckThinSDK/UI;
+			sourceTree = "<group>";
+		};
+		D738382C1C6A459C0068372D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D73838301C6A45CB0068372D /* InfoPlist.strings */,
+				D738382D1C6A45BB0068372D /* PQCheckThinSDK-Info.plist */,
+				D738382E1C6A45BB0068372D /* PQCheckThinSDK-Prefix.pch */,
+				D73838131C6A45870068372D /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D738384F1C6AB8BF0068372D /* EntityClient */ = {
+			isa = PBXGroup;
+			children = (
+				D73838521C6AB8BF0068372D /* Models */,
+				D73838501C6AB8BF0068372D /* EntityClientManager.h */,
+				D73838511C6AB8BF0068372D /* EntityClientManager.m */,
+			);
+			name = EntityClient;
+			path = PQCheckThinSDK/EntityClient;
+			sourceTree = "<group>";
+		};
+		D73838521C6AB8BF0068372D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D73838531C6AB8BF0068372D /* AccountCollection.h */,
+				D73838541C6AB8BF0068372D /* AccountCollection.m */,
+				D73838551C6AB8BF0068372D /* BankAccount.h */,
+				D73838561C6AB8BF0068372D /* BankAccount.m */,
+				D73838571C6AB8BF0068372D /* Payment.h */,
+				D73838581C6AB8BF0068372D /* Payment.m */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		D86F8548425F6F9B3F5CAEA5 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
+				D773A2F01C6AC88000248A30 /* Pods-PQCheckThinSDK_Example.debug.xcconfig */,
+				D773A2F11C6AC88000248A30 /* Pods-PQCheckThinSDK_Example.release.xcconfig */,
 				8541A9862243D80B1518B472 /* Pods-PQCheckSDK_Example.debug.xcconfig */,
 				4CE31CDF39A12E086E4C3BDE /* Pods-PQCheckSDK_Example.release.xcconfig */,
 				A514C4202726AFF439380FE3 /* Pods-PQCheckSDK_Tests.debug.xcconfig */,
@@ -240,6 +384,26 @@
 			productReference = 6003F5AE195388D20070C39A /* PQCheckSDK_Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		D73837FA1C6A454B0068372D /* PQCheckThinSDK_Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D738380C1C6A454B0068372D /* Build configuration list for PBXNativeTarget "PQCheckThinSDK_Example" */;
+			buildPhases = (
+				D73837FB1C6A454B0068372D /* Check Pods Manifest.lock */,
+				D73837FC1C6A454B0068372D /* Sources */,
+				D73838001C6A454B0068372D /* Frameworks */,
+				D73838051C6A454B0068372D /* Resources */,
+				D738380A1C6A454B0068372D /* Embed Pods Frameworks */,
+				D738380B1C6A454B0068372D /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PQCheckThinSDK_Example;
+			productName = PQCheckSDK;
+			productReference = D738380F1C6A454B0068372D /* PQCheckThinSDK_Example.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -269,6 +433,7 @@
 			projectRoot = "";
 			targets = (
 				6003F589195388D20070C39A /* PQCheckSDK_Example */,
+				D73837FA1C6A454B0068372D /* PQCheckThinSDK_Example */,
 				6003F5AD195388D20070C39A /* PQCheckSDK_Tests */,
 			);
 		};
@@ -291,6 +456,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D73838051C6A454B0068372D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D73838491C6A46B80068372D /* InfoPlist.strings in Resources */,
+				D738384D1C6A48790068372D /* Images.xcassets in Resources */,
+				D738383F1C6A462C0068372D /* Main.storyboard in Resources */,
+				D73838401C6A465A0068372D /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,6 +563,51 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PQCheckSDK_Example/Pods-PQCheckSDK_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		D73837FB1C6A454B0068372D /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D738380A1C6A454B0068372D /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PQCheckThinSDK_Example/Pods-PQCheckThinSDK_Example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D738380B1C6A454B0068372D /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PQCheckThinSDK_Example/Pods-PQCheckThinSDK_Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -405,6 +626,26 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F5BC195388D20070C39A /* Tests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D73837FC1C6A454B0068372D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D73838411C6A465F0068372D /* PQCheckAppDelegate.m in Sources */,
+				D711BA861C6ACBE100DD7156 /* BankAccount.m in Sources */,
+				D73838461C6A468F0068372D /* BankAccountCell.m in Sources */,
+				D73838421C6A46640068372D /* PaymentsViewController.m in Sources */,
+				D711BA871C6ACBE100DD7156 /* Payment.m in Sources */,
+				D73838441C6A466D0068372D /* AccountsViewController.m in Sources */,
+				D73838451C6A468F0068372D /* AccountCell.m in Sources */,
+				D73838471C6A468F0068372D /* DetailCell.m in Sources */,
+				D711BA851C6ACBE100DD7156 /* AccountCollection.m in Sources */,
+				D73838481C6A468F0068372D /* PaymentCell.m in Sources */,
+				D738385D1C6AB8D80068372D /* EntityClientManager.m in Sources */,
+				D738384A1C6A46F20068372D /* main.m in Sources */,
+				D73838431C6A46680068372D /* PaymentDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,6 +674,23 @@
 				6003F5B9195388D20070C39A /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		D73838301C6A45CB0068372D /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D73838311C6A45CB0068372D /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		D738383E1C6A462A0068372D /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D738383D1C6A462A0068372D /* Base */,
+			);
+			name = Main.storyboard;
+			path = PQCheckThinSDK;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -591,6 +849,58 @@
 			};
 			name = Release;
 		};
+		D738380D1C6A454B0068372D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D773A2F01C6AC88000248A30 /* Pods-PQCheckThinSDK_Example.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PQCheckSDK/PQCheckSDK-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					THINSDK,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_ROOT}/Headers/Public",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/PQCheckThinSDK/PQCheckThinSDK-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.post-quantum.PQCheckThinSDK-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		D738380E1C6A454B0068372D /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = D773A2F11C6AC88000248A30 /* Pods-PQCheckThinSDK_Example.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "PQCheckSDK/PQCheckSDK-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					THINSDK,
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_ROOT}/Headers/Public",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/PQCheckThinSDK/PQCheckThinSDK-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MODULE_NAME = ExampleApp;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.post-quantum.PQCheckThinSDK-Example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -617,6 +927,15 @@
 			buildConfigurations = (
 				6003F5C3195388D20070C39A /* Debug */,
 				6003F5C4195388D20070C39A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D738380C1C6A454B0068372D /* Build configuration list for PBXNativeTarget "PQCheckThinSDK_Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D738380D1C6A454B0068372D /* Debug */,
+				D738380E1C6A454B0068372D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

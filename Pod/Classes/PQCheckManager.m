@@ -70,10 +70,17 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
 
 - (void)performAuthentication
 {
+    if ([NSThread isMainThread] == NO)
+    {
+        [self performSelectorOnMainThread:@selector(performAuthentication) withObject:nil waitUntilDone:NO];
+    }
+    
     // Do any additional setup after loading the view from its nib.
+#ifndef THINSDK
     assert(_userIdentifier != nil    && _userIdentifier.length > 0);
     assert(_summary != nil           && _summary.length > 0);
     assert(_authorisationHash != nil && _authorisationHash.length > 0);
+#endif
     
     // Make sure that we have a camera and microphone permission
     _cameraAuthorisationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];

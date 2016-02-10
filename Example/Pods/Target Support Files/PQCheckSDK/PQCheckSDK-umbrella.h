@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 
+#import "AdminCredentials.h"
 #import "APIManager.h"
 #import "AuthorisationStatus.h"
 #import "APIKeyRequest.h"

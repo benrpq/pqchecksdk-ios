@@ -41,6 +41,7 @@ DEPENDENCIES:
   - Expecta
   - MBProgressHUD
   - PQCheckSDK (from `../`)
+  - RestKit
   - Specta
 
 EXTERNAL SOURCES:
