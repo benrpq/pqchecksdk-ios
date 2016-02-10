@@ -14,9 +14,13 @@
 #import "BankAccountCell.h"
 #import "DetailCell.h"
 
-@interface PaymentDetailViewController ()
+@interface PaymentDetailViewController () <PQCheckManagerDelegate>
 {
     MBProgressHUD *_hud;
+    // We need to set PQCheckManager to be a member of this class, otherwise
+    // the allocated instance of this object will be released too early. We
+    // need the instance as it contains selfie recorder's delegate
+    PQCheckManager *_manager;
     BOOL _isPaymentInProgress;
 }
 @end
@@ -150,6 +154,60 @@
     }
 }
 
+#pragma mark - PQCheckViewController delegates
+
+- (void)PQCheckManager:(PQCheckManager *)controller didFailWithError:(NSError *)error
+{
+    [self dismissViewControllerAnimated:YES completion:^{
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"Error") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            // Do nothing
+        }];
+        [alertController addAction:okAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
+    }];
+}
+
+- (void)PQCheckManager:(PQCheckManager *)controller didFinishWithAuthorisationStatus:(PQCheckAuthorisationStatus)status
+{
+    UIView *view = [[[UIApplication sharedApplication] delegate] window];
+    if (status == kPQCheckAuthorisationStatusSuccessful)
+    {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = NSLocalizedString(@"Great, job done", @"Great, job done");
+        [hud hide:YES afterDelay:1.0f];
+        
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    else if (status == kPQCheckAuthorisationStatusTimedOut)
+    {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = NSLocalizedString(@"Ooops, timed-out", @"Ooops, timed-out");
+        [hud hide:YES afterDelay:1.0f];
+        
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    else if (status == kPQCheckAuthorisationStatusCancelled)
+    {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = NSLocalizedString(@"Sorry, cancelled", @"Sorry, cancelled");
+        [hud hide:YES afterDelay:1.0f];
+        
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+    else if (status == kPQCheckAuthorisationStatusOpen)
+    {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = NSLocalizedString(@"Please try again", @"Please try again");
+        [hud hide:YES afterDelay:1.0f];
+    }
+}
+
 #pragma mark - Private methods
 
 - (void)confirmPayment
@@ -167,8 +225,10 @@
             if (error == nil)
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    PQCheckManager *manager = [[PQCheckManager alloc] initWithAuthorisation:authorisation];
-                    [manager performAuthentication];
+                    _manager = [[PQCheckManager alloc] initWithAuthorisation:authorisation];
+                    [_manager setDelegate:self];
+                    [_manager setShouldPaceUser:YES];
+                    [_manager performAuthentication];
                     
                     [[MBProgressHUD HUDForView:window] hide:YES];
                 });

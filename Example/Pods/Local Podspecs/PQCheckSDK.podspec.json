@@ -16,6 +16,7 @@
     "ios": "8.0"
   },
   "requires_arc": true,
+  "compiler_flags": "-DTHINSDK",
   "source_files": "Pod/Classes/**/*",
   "resource_bundles": {
     "PQCheckSDK": [

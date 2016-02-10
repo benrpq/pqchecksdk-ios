@@ -68,6 +68,11 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
 }
 #endif
 
+- (void)dealloc
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+}
+
 - (void)performAuthentication
 {
     if ([NSThread isMainThread] == NO)
@@ -90,13 +95,13 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
         (_microphoneAuthorisationStatus == AVAuthorizationStatusAuthorized ||
          _microphoneAuthorisationStatus == AVAuthorizationStatusNotDetermined))
     {
+#ifndef THINSDK
         UIView *view = [[[UIApplication sharedApplication] delegate] window];
- 
+        
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
         hud.mode = MBProgressHUDModeIndeterminate;
         hud.labelText = NSLocalizedString(@"Please wait...", @"Please wait...");
         
-#ifndef THINSDK
         // Do I have a correct credential?
         [self prepareCredentialCompletion:^{
             
