@@ -46,7 +46,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -56,7 +56,7 @@
         return 4;
     }
     
-    return 2;
+    return 1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -111,15 +111,17 @@
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ButtonCellIdentifier" forIndexPath:indexPath];
         
-        if (indexPath.row == 0)
+        if (indexPath.section == 1)
         {
             cell.textLabel.text = NSLocalizedString(@"Confirm", @"Confirm");
-            cell.textLabel.textColor = [UIColor greenColor];
+            cell.textLabel.textColor = [UIColor whiteColor];
+            cell.backgroundColor = [UIColor colorWithRed:13.0f/255.0f green:185.0f/255.0f blue:78.0f/255.0f alpha:1.0f];
         }
         else
         {
             cell.textLabel.text = NSLocalizedString(@"Decline", @"Decline");
-            cell.textLabel.textColor = [UIColor redColor];
+            cell.textLabel.textColor = [UIColor whiteColor];
+            cell.backgroundColor = [UIColor redColor];
         }
         
         return cell;
@@ -144,11 +146,11 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.section == 1 && indexPath.row == 0)
+    if (indexPath.section == 1)
     {
         [self confirmPayment];
     }
-    else if (indexPath.section == 1 && indexPath.row == 1)
+    else if (indexPath.section == 2)
     {
         [self.navigationController popViewControllerAnimated:YES];
     }
