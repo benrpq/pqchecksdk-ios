@@ -31,6 +31,9 @@ static NSString* kPQCheckEnrolmentPath = @"/enrolment";
 static NSString* kPQCheckSDKDefaultProfile = @"pqcheck";
 static NSInteger kPQCheckSDKDefaultVersion = 1;
 
+static NSString* kVideoName = @"video";
+static NSString* kVideoExtension = @"mp4";
+
 @interface APIManager ()
 {
     NSString *_endpoint;
@@ -487,9 +490,9 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
     NSString *uploadAttemptPath = [attemptURL path];
     NSMutableURLRequest *urlRequest = [_objectManager multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:uploadAttemptPath parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         // POST the media file
-        NSString *fileName = [[authorisation uuid] stringByAppendingPathExtension:@"mp4"];
+        NSString *fileName = [[authorisation uuid] stringByAppendingPathExtension:kVideoExtension];
         NSString *MIMEType = (__bridge NSString *)(UTTypeCopyPreferredTagWithClass(kUTTypeMPEG4, kUTTagClassMIMEType));
-        [formData appendPartWithFileURL:mediaURL name:@"video" fileName:fileName mimeType:MIMEType error:nil];
+        [formData appendPartWithFileURL:mediaURL name:kVideoName fileName:fileName mimeType:MIMEType error:nil];
     }];
 
     RKObjectRequestOperation *operation =
@@ -542,9 +545,9 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
         // POST the media file if available
         if (isURIValid)
         {
-            NSString *fileName = [userIdentifier stringByAppendingPathExtension:@"mp4"];
+            NSString *fileName = [userIdentifier stringByAppendingPathExtension:kVideoExtension];
             NSString *MIMEType = (__bridge NSString *)(UTTypeCopyPreferredTagWithClass(kUTTypeMPEG4, kUTTagClassMIMEType));
-            [formData appendPartWithFileURL:mediaURL name:userIdentifier fileName:fileName mimeType:MIMEType error:nil];
+            [formData appendPartWithFileURL:mediaURL name:kVideoName fileName:fileName mimeType:MIMEType error:nil];
         }
     }];
     
