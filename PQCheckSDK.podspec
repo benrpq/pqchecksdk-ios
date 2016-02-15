@@ -19,11 +19,11 @@ Pod::Spec.new do |s|
   s.description      = <<-DESC
                        DESC
 
-  s.homepage         = "https://github.com/<GITHUB_USERNAME>/PQCheckSDK"
+  s.homepage         = "https://github.com/post-quantum/pqchecksdk-ios.git"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
   s.license          = 'MIT'
   s.author           = { "CJ Tjhai" => "cjt@post-quantum.com" }
-  s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/PQCheckSDK.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/post-quantum/pqchecksdk-ios.git", :branch => "sdk" }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.platform     = :ios, '8.0'

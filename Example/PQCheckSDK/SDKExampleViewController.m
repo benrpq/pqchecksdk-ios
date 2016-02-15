@@ -9,6 +9,7 @@
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <PQCheckSDK/PQCheckManager.h>
 #import "SDKExampleViewController.h"
+#import "AdminCredentials.h"
 
 static NSString *kUserIdentiferKey = @"UserIdentifier";
 
@@ -44,6 +45,8 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
     PQCheckManager *manager = [[PQCheckManager alloc] initWithUserIdentifier:_userIdentifier
                                                            authorisationHash:[self randomStringOfLength:6]
                                                                      summary:[self randomStringOfLength:5]];
+    NSURLCredential *adminCredential = [NSURLCredential credentialWithUser:kAdminUUID password:kAdminPassword persistence:NSURLCredentialPersistenceNone];
+    [manager setAdminCredential:adminCredential];
     manager.delegate = self;
     manager.autoAttemptOnFailure = NO;
     manager.shouldPaceUser = YES;

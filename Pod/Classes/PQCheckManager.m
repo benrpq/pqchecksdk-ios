@@ -10,9 +10,7 @@
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "PQCheckManager.h"
 #import "PQCheckRecordSelfieViewController.h"
-#ifndef THINKSDK
-#import "AdminCredentials.h"
-#else
+#ifdef THINKSDK
 #import "API/Response/Authorisation.h"
 #endif
 #import "API/APIManager.h"
@@ -26,6 +24,7 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
     NSString *_authorisationHash;
 #ifndef THINSDK
     APIKey *_apiKey;
+    NSURLCredential *_adminCredential;
     BOOL _shouldViewAuthorisationOnFailure;
 #endif
     Authorisation *_authorisation;
@@ -49,11 +48,18 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
         _authorisationHash = authorisationHash;
         _summary = summary;
         _shouldViewAuthorisationOnFailure = YES;
+        _adminCredential = nil;
         
         [self checkCameraAndMicrophonePermissions];
     }
     return self;
 }
+
+- (void)setAdminCredential:(NSURLCredential *)adminCredential
+{
+    _adminCredential = adminCredential;
+}
+
 #else
 - (id)initWithAuthorisation:(Authorisation *)authorisation
 {
@@ -80,6 +86,7 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
     assert(_userIdentifier != nil    && _userIdentifier.length > 0);
     assert(_summary != nil           && _summary.length > 0);
     assert(_authorisationHash != nil && _authorisationHash.length > 0);
+    assert(_adminCredential != nil);
 #endif
     
     // Make sure that we have a camera and microphone permission
@@ -98,7 +105,7 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
         hud.labelText = NSLocalizedString(@"Please wait...", @"Please wait...");
         
         // Do I have a correct credential?
-        [self prepareCredentialCompletion:^{
+        [self prepareManagerWithCredential:_adminCredential completion:^{
             
             // Create an authorisation
             NSURLCredential *credential = [NSURLCredential credentialWithUser:_apiKey.uuid
@@ -107,11 +114,11 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
             [[APIManager sharedManager] createAuthorisationWithCredential:credential userIdentifier:_userIdentifier authorisationHash:_authorisationHash summary:_summary completion:^(Authorisation *authorisation, NSError *error) {
                 
                 [hud hide:YES];
-
+                
                 if (error == nil)
                 {
                     _authorisation = authorisation;
-
+                    
                     _selfieController = [[PQCheckRecordSelfieViewController alloc] init];
                     _selfieController.delegate = self;
                     _selfieController.authorisation = _authorisation;
@@ -219,7 +226,7 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
 }
 
 #ifndef THINSDK
-- (void)prepareCredentialCompletion:(void (^)(void))completionBlock
+- (void)prepareManagerWithCredential:(NSURLCredential *)credential completion:(void (^)(void))completionBlock
 {
     A0SimpleKeychain *keychain = [A0SimpleKeychain keychain];
     NSData *apiData = [keychain dataForKey:kPQCheckAPIKey
@@ -230,11 +237,8 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
         UIView *view = [[[UIApplication sharedApplication] delegate] window];
         [MBProgressHUD showHUDAddedTo:view animated:YES];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSURLCredential *adminCredential = [NSURLCredential credentialWithUser:kAdminUUID
-                                                                          password:kAdminPassword
-                                                                       persistence:NSURLCredentialPersistenceNone];
             NSString *namespace = [[NSUUID UUID] UUIDString];
-            [[APIManager sharedManager] createAPIKeyWithCredential:adminCredential namespace:namespace completion:^(APIKey *apiKey, NSError *error) {
+            [[APIManager sharedManager] createAPIKeyWithCredential:credential namespace:namespace completion:^(APIKey *apiKey, NSError *error) {
                 // Save credential to keychain
                 _apiKey = apiKey;
                 //keychain.useAccessControl = YES;

@@ -22,6 +22,7 @@
 - (id)initWithUserIdentifier:(NSString *)userIdentifier
            authorisationHash:(NSString *)authorisationHash
                      summary:(NSString *)summary;
+- (void)setAdminCredential:(NSURLCredential *)adminCredential;
 #else
 - (id)initWithAuthorisation:(Authorisation *)authorisation;
 #endif

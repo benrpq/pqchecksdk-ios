@@ -65,6 +65,7 @@
 		BC9976A77F844FD06C2C041E /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		D153B701819E8BA29C010491 /* Pods_PQCheckSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PQCheckSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D76E5FDB1C5FDCCC0095AD9B /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		D7D96ED11C71C511005185D9 /* AdminCredentials.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdminCredentials.h; sourceTree = "<group>"; };
 		F14EB6DD0D1782F0E3FA284F /* PQCheckSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PQCheckSDK.podspec; path = ../PQCheckSDK.podspec; sourceTree = "<group>"; };
 		FCB6F23D7A4C8B8A4B9E4E2D /* Pods_PQCheckSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PQCheckSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -132,6 +133,7 @@
 		6003F593195388D20070C39A /* Example for PQCheckSDK */ = {
 			isa = PBXGroup;
 			children = (
+				D7D96ED11C71C511005185D9 /* AdminCredentials.h */,
 				6003F59C195388D20070C39A /* PQCheckAppDelegate.h */,
 				6003F59D195388D20070C39A /* PQCheckAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,

@@ -859,7 +859,6 @@
 		8DDA38B08E4FFB409400CC43E2A7A30E /* Pods-PQCheckSDK_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-PQCheckSDK_Example-frameworks.sh"; sourceTree = "<group>"; };
 		8E4A9D5A7934848B3381189083E08766 /* RKManagedObjectImporter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RKManagedObjectImporter.m; path = Code/CoreData/RKManagedObjectImporter.m; sourceTree = "<group>"; };
 		8EAA0E31ADDB410A1325D8123C3BF461 /* RKManagedObjectStore.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RKManagedObjectStore.h; path = Code/CoreData/RKManagedObjectStore.h; sourceTree = "<group>"; };
-		8FFA19F3F0208CD11B0AAA4679264C6F /* AdminCredentials.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = AdminCredentials.h; sourceTree = "<group>"; };
 		90848A7496116F3981AE610A06D81069 /* RKManagedObjectStore.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RKManagedObjectStore.m; path = Code/CoreData/RKManagedObjectStore.m; sourceTree = "<group>"; };
 		92B27B6F71726D1929C2DD6C800C80D4 /* SOCKit.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SOCKit.m; sourceTree = "<group>"; };
 		92F72A9B437974C90A9B04264E0A71D8 /* SPTCallSite.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SPTCallSite.h; path = Specta/Specta/SPTCallSite.h; sourceTree = "<group>"; };
@@ -1001,7 +1000,6 @@
 		D9A1A0F5A20AF532BA911976723D5473 /* PQCheckFaceShape.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = PQCheckFaceShape.h; sourceTree = "<group>"; };
 		DB3122BE1779BA8DE39D872D1EA34DF5 /* RKObjectUtilities.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RKObjectUtilities.m; path = Code/ObjectMapping/RKObjectUtilities.m; sourceTree = "<group>"; };
 		DBA3B417031E5A89D0DC6E706BDFDA14 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
-		DC5AB868D08D75F6D3C83589A889EA6F /* AdminCredentials.h.sample */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = AdminCredentials.h.sample; sourceTree = "<group>"; };
 		DCCB29BD215E85EE6CAADB10C78AA007 /* RKPathMatcher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RKPathMatcher.h; path = Code/Network/RKPathMatcher.h; sourceTree = "<group>"; };
 		DD814B6EFAFBD78DCA5A9F6A9E81D306 /* SpectaDSL.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SpectaDSL.m; path = Specta/Specta/SpectaDSL.m; sourceTree = "<group>"; };
 		DDCF38D656DC8190C304A509FCA7DE1B /* TransitionKit-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "TransitionKit-Private.xcconfig"; sourceTree = "<group>"; };
@@ -1742,8 +1740,6 @@
 			children = (
 				D64291CB1E09B29705A5C5BE5B7B7932 /* APIManager.h */,
 				65E60BE12F6EF3BB96E97466D1A458D4 /* APIManager.m */,
-				8FFA19F3F0208CD11B0AAA4679264C6F /* AdminCredentials.h */,
-				DC5AB868D08D75F6D3C83589A889EA6F /* AdminCredentials.h.sample */,
 				DED1AF526B701E7501DCA9B423A10383 /* AuthorisationStatus.h */,
 				C7625F1C205F21EC0611CA9CE80D4205 /* AuthorisationStatus.m */,
 				7D4A8B83DFD173AF7F554AB0F69D0D2E /* Request */,
