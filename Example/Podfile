@@ -1,12 +1,12 @@
 source 'https://github.com/CocoaPods/Specs.git'
-use_frameworks!
+#use_frameworks!
 
-target 'PQCheckSDK_Example', :exclusive => true do
+target 'PQCheckSDK_Example' do
   pod 'PQCheckSDK', :path => '../'
   pod 'MBProgressHUD'
 end
 
-target 'PQCheckSDK_Tests', :exclusive => true do
+target 'PQCheckSDK_Tests' do
   pod 'PQCheckSDK', :path => '../'
 
   pod 'Specta'

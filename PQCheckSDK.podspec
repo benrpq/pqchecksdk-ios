@@ -7,24 +7,22 @@
 #
 
 Pod::Spec.new do |s|
-  s.name             = "PQCheckSDK"
-  s.version          = "0.1.0"
-  s.summary          = "A short description of PQCheckSDK."
+  s.name             = 'PQCheckSDK'
+  s.version          = '0.1.0'
+  s.summary          = 'A short description of PQCheckSDK.'
 
 # This description is used to generate tags and improve search results.
 #   * Think: What does it do? Why did you write it? What is the focus?
 #   * Try to keep it short, snappy and to the point.
 #   * Write the description between the DESC delimiters below.
 #   * Finally, don't worry about the indent, CocoaPods strips it!  
-  s.description      = <<-DESC
-                       DESC
+  s.description      = s.summary
 
-  s.homepage         = "https://github.com/post-quantum/pqchecksdk-ios.git"
-  # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
+  s.homepage         = 'https://github.com/post-quantum/pqchecksdk-ios.git'
+  # s.screenshots     = 'www.example.com/screenshots_1", "www.example.com/screenshots_2'
   s.license          = 'MIT'
-  s.author           = { "CJ Tjhai" => "cjt@post-quantum.com" }
-  s.source           = { :git => "https://github.com/post-quantum/pqchecksdk-ios.git", :branch => "sdk" }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.author           = { 'Cna' => 'ss@post-quantum.com' }
+  s.source           = { :git => 'https://github.com/post-quantum/pqchecksdk-ios.git', :branch => 'sdk' }
 
   s.platform     = :ios, '8.0'
   s.requires_arc = true
