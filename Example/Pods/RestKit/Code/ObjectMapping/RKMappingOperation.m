@@ -1217,7 +1217,7 @@ static NSArray *RKInsertInMetadataList(NSArray *list, id metadata1, id metadata2
         }
     }
     
-    BOOL canSkipProperties = [dataSource respondsToSelector:@selector(mappingOperationShouldSkipPropertyMapping:)] && [dataSource mappingOperationShouldSkipPropertyMapping:self];
+    BOOL canSkipProperties = [dataSource respondsToSelector:@selector(mappingOperationShouldSkipAttributeMapping:)] && [dataSource mappingOperationShouldSkipRelationshipMapping:self];
     BOOL canSkipAttributes = canSkipProperties;
     BOOL canSkipRelationships = canSkipProperties;
     if ([dataSource respondsToSelector:@selector(mappingOperationShouldSkipRelationshipMapping:)]) {

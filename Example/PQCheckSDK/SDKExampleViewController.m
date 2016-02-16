@@ -9,7 +9,10 @@
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <PQCheckSDK/PQCheckManager.h>
 #import "SDKExampleViewController.h"
-#import "AdminCredentials.h"
+
+
+static NSString* kAdminUUID = @"anAdminUUID";
+static NSString* kAdminPassword  = @"anAdminPass";
 
 static NSString *kUserIdentiferKey = @"UserIdentifier";
 
