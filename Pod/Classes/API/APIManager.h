@@ -61,11 +61,12 @@ typedef NS_ENUM(NSInteger, PQCheckEndpoint)
                             completion:(void (^)(UploadAttempt *uploadAttempt, NSError *error))completionBlock;
 
 #ifndef THINSDK
-- (void)enrolUserWithIdentifier:(NSString *)userIdentifier
+- (void)enrolUserWithCredential:(NSURLCredential *)credential
+                 userIdentifier:(NSString *)identifier
                       reference:(NSString *)reference
                      transcript:(NSString *)transcript
-                       mediaURL:(NSURL *)movieURL
-                     completion:(void (^)(NSURL *uploadURI, NSError *error))completionBlock;
+                       mediaURL:(NSURL *)mediaURL
+                     completion:(void (^)(NSError *error))completionBlock;
 #endif
 
 @end

@@ -19,20 +19,22 @@
 @property (nonatomic, assign) BOOL shouldPaceUser;
 
 #ifndef THINSDK
-- (id)initWithUserIdentifier:(NSString *)userIdentifier
-           authorisationHash:(NSString *)authorisationHash
-                     summary:(NSString *)summary;
+- (id)initWithUserIdentifier:(NSString *)userIdentifier;
 - (void)setAdminCredential:(NSURLCredential *)adminCredential;
+- (void)resetAPIKey;
+- (NSString *)currentNamespace;
 #else
 - (id)initWithAuthorisation:(Authorisation *)authorisation;
 #endif
 
-- (void)performAuthentication;
+- (void)performAuthorisationWithHash:(NSString *)authorisationHash summary:(NSString *)summary;
+- (void)performEnrolmentWithReference:(NSString *)reference transcript:(NSString *)transcript;
 @end
 
 
 @protocol PQCheckManagerDelegate <NSObject>
 @optional
+- (void)PQCheckManagerDidFinishEnrolment:(PQCheckManager *)manager;
 - (void)PQCheckManager:(PQCheckManager *)manager didFinishWithAuthorisationStatus:(PQCheckAuthorisationStatus)status;
 - (void)PQCheckManager:(PQCheckManager *)manager didFailWithError:(NSError *)error;
 @end

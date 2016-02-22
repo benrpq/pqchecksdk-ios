@@ -10,4 +10,23 @@
 
 @implementation Enrolment
 
+- (id)initWithUserIdentifier:(NSString *)userIdentifier reference:(NSString *)reference transcript:(NSString *)transcript
+{
+    self = [super init];
+    if (self)
+    {
+        _userIdentifier = userIdentifier;
+        _reference = reference;
+        _transcript = transcript;
+    }
+    return self;
+}
+
++ (NSDictionary *)mapping
+{
+    return @{@"userIdentifier": @"userIdentifier",
+             @"reference": @"reference",
+             @"transcript": @"transcript"};
+}
+
 @end
