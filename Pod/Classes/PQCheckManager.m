@@ -121,10 +121,7 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
         [self prepareManagerWithCredential:_adminCredential completion:^{
             
             // Create an authorisation
-            NSURLCredential *credential = [NSURLCredential credentialWithUser:_apiKey.uuid
-                                                                     password:_apiKey.secret
-                                                                  persistence:NSURLCredentialPersistenceNone];
-            [[APIManager sharedManager] createAuthorisationWithCredential:credential userIdentifier:_userIdentifier authorisationHash:theAuthorisationHash summary:theSummary completion:^(Authorisation *authorisation, NSError *error) {
+            [[APIManager sharedManager] createAuthorisationWithAPIKey:_apiKey userIdentifier:_userIdentifier authorisationHash:theAuthorisationHash summary:theSummary completion:^(Authorisation *authorisation, NSError *error) {
                 
                 [hud hide:YES];
                 
@@ -266,10 +263,7 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
 
 - (void)viewAuthorisationOnFailure
 {
-    NSURLCredential *credential = [NSURLCredential credentialWithUser:_apiKey.uuid
-                                                             password:_apiKey.secret
-                                                          persistence:NSURLCredentialPersistenceNone];
-    [[APIManager sharedManager] viewAuthorisationRequestWithCredential:credential UUID:_authorisation.uuid completion:^(Authorisation *authorisation, NSError *error) {
+    [[APIManager sharedManager] viewAuthorisationRequestWithAPIKey:_apiKey UUID:_authorisation.uuid completion:^(Authorisation *authorisation, NSError *error) {
         // Need a way to do a pretty-print of Authorisation object
         for (NSInteger index=0; index<authorisation.attempts.count; index++)
         {
@@ -398,11 +392,7 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
     NSAssert(reference != nil && reference.length > 0, @"Enrolment reference cannot be nil or have zero length");
     NSAssert(transcript != nil && transcript.length > 0, @"Enrolment transcript cannot be nil or have zero length");
     
-    NSURLCredential *credential = [NSURLCredential credentialWithUser:_apiKey.uuid
-                                                             password:_apiKey.secret
-                                                          persistence:NSURLCredentialPersistenceNone];
-    
-    [[APIManager sharedManager] enrolUserWithCredential:credential userIdentifier:_userIdentifier reference:reference transcript:transcript mediaURL:mediaURL completion:^(NSError *error) {
+    [[APIManager sharedManager] enrolUserWithAPIKey:_apiKey userIdentifier:_userIdentifier reference:reference transcript:transcript mediaURL:mediaURL completion:^(NSError *error) {
         
         [hud hide:YES];
         

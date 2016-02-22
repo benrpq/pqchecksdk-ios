@@ -21,8 +21,8 @@
 #endif
 
 static NSString* kPQCheckBaseDevelopmentURL = @"http://selfieguard-dev.elasticbeanstalk.com";
-static NSString* kPQCheckBaseUnstableURL = @"https://unstable-beta-api-pqcheck.post-quantum.com";
-static NSString* kPQCheckBaseStableURL = @"https://stable-beta-api-pqcheck.post-quantum.com";
+static NSString* kPQCheckBaseUnstableURL = @"https://beta-api-pqcheck.post-quantum.com";
+static NSString* kPQCheckBaseStableURL = @"https://api-pqcheck.post-quantum.com";
 static NSString* kPQCheckBaseDataCollectionURL = @"https://data-collection-pqcheck.post-quantum.com";
 
 static NSString* kPQCheckAPIKeyPath = @"/key";
@@ -233,7 +233,7 @@ static NSString* kVideoExtension = @"mp4";
                              }];
 }
 
-- (void)createAuthorisationWithCredential:(NSURLCredential *)credential
+- (void)createAuthorisationWithAPIKey:(APIKey *)apiKey
                            userIdentifier:(NSString *)identifier
                         authorisationHash:(NSString *)authorisationHash
                                   summary:(NSString *)summary
@@ -247,10 +247,10 @@ static NSString* kVideoExtension = @"mp4";
                               version:[_version stringValue]];
         
     // Set authorisation header
-    if (credential != nil)
+    if (apiKey != nil)
     {
-        [[_objectManager HTTPClient] setAuthorizationHeaderWithUsername:[credential user]
-                                                               password:[credential password]];
+        [[_objectManager HTTPClient] setAuthorizationHeaderWithUsername:apiKey.uuid
+                                                               password:apiKey.secret];
     }
     
     // Object mapping of the request
@@ -310,17 +310,17 @@ static NSString* kVideoExtension = @"mp4";
                        }];
 }
 
-- (void)viewAuthorisationRequestWithCredential:(NSURLCredential *)credential
+- (void)viewAuthorisationRequestWithAPIKey:(APIKey *)apiKey
                                           UUID:(NSString *)uuid
                                     completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock
 {
     assert(_objectManager != nil);
     
     // Set authorisation header
-    if (credential != nil)
+    if (apiKey != nil)
     {
-        [[_objectManager HTTPClient] setAuthorizationHeaderWithUsername:[credential user]
-                                                               password:[credential password]];
+        [[_objectManager HTTPClient] setAuthorizationHeaderWithUsername:apiKey.uuid
+                                                               password:apiKey.secret];
     }
 
     [self __viewAuthorisationRequestUUID:uuid completion:^(Authorisation *authorisation, NSError *error) {
@@ -510,7 +510,7 @@ static NSString* kVideoExtension = @"mp4";
 }
 
 #ifndef THINSDK
-- (void)enrolUserWithCredential:(NSURLCredential *)credential
+- (void)enrolUserWithAPIKey:(APIKey *)apiKey
                  userIdentifier:(NSString *)identifier
                       reference:(NSString *)reference
                      transcript:(NSString *)transcript
@@ -545,8 +545,12 @@ static NSString* kVideoExtension = @"mp4";
                                                                                        statusCodes:statusCodes];
     [_objectManager addResponseDescriptor:responseDescriptor];
 
-    [[_objectManager HTTPClient] setAuthorizationHeaderWithUsername:[credential user]
-                                                           password:[credential password]];
+    // Set authorisation header
+    if (apiKey != nil)
+    {
+        [[_objectManager HTTPClient] setAuthorizationHeaderWithUsername:apiKey.uuid
+                                                               password:apiKey.secret];
+    }
     
     Enrolment *enrolment = [[Enrolment alloc] initWithUserIdentifier:identifier reference:reference transcript:transcript];
     
