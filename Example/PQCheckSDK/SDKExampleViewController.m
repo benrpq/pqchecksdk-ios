@@ -18,9 +18,13 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
     NSString *_userIdentifier;
     PQCheckManager *_manager;
 }
+
+@property (nonatomic, weak) IBOutlet UISwitch *offlineModeSwitch;
 @end
 
 @implementation SDKExampleViewController
+
+@synthesize offlineModeSwitch;
 
 - (void)viewDidLoad
 {
@@ -41,6 +45,19 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)offlineModeSwitchChanged:(id)sender
+{
+    UISwitch *theSwitch = (UISwitch *)sender;
+    if (theSwitch.on)
+    {
+        NSLog(@"Offline mode is enabled");
+    }
+    else
+    {
+        NSLog(@"Offline mode is disabled");
+    }
+}
+
 - (IBAction)authenticateButtonTapped:(id)sender
 {
     _manager = [[PQCheckManager alloc] initWithUserIdentifier:_userIdentifier];
@@ -49,6 +66,7 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
     _manager.delegate = self;
     _manager.autoAttemptOnFailure = NO;
     _manager.shouldPaceUser = YES;
+    _manager.offlineModeEnabled = self.offlineModeSwitch.on;
     [_manager performAuthorisationWithHash:[self randomStringOfLength:6] summary:[self randomStringOfLength:5]];
 }
 
@@ -59,6 +77,7 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
     [_manager setAdminCredential:adminCredential];
     _manager.delegate = self;
     _manager.shouldPaceUser = YES;
+    _manager.offlineModeEnabled = self.offlineModeSwitch.on;
     [_manager performEnrolmentWithReference:@"Enrolment" transcript:@"0123456789"];
 }
 
@@ -88,7 +107,7 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
 
 #pragma mark - PQCheckViewController delegates
 
-- (void)PQCheckManager:(PQCheckManager *)controller didFailWithError:(NSError *)error
+- (void)PQCheckManager:(PQCheckManager *)manager didFailWithError:(NSError *)error
 {
     [self dismissViewControllerAnimated:YES completion:^{
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"Error") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
@@ -101,11 +120,13 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
     }];
 }
 
-- (void)PQCheckManager:(PQCheckManager *)controller didFinishWithAuthorisationStatus:(PQCheckAuthorisationStatus)status
+- (void)PQCheckManager:(PQCheckManager *)manager didFinishWithAuthorisationStatus:(PQCheckAuthorisationStatus)status
 {
     UIView *view = [[[UIApplication sharedApplication] delegate] window];
     if (status == kPQCheckAuthorisationStatusSuccessful)
     {
+        NSLog(@"Authorisation - Offline mode: %@, userIdentifier: %@, status: SUCCESS",
+              manager.isOfflineModeEnabled ? @"YES" : @"NO", manager.userIdentifier);
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
         hud.mode = MBProgressHUDModeText;
         hud.labelText = NSLocalizedString(@"Great, job done", @"Great, job done");
@@ -115,6 +136,8 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
     }
     else if (status == kPQCheckAuthorisationStatusTimedOut)
     {
+        NSLog(@"Authorisation - Offline mode: %@, userIdentifier: %@, status: TIMED-OUT",
+              manager.isOfflineModeEnabled ? @"YES" : @"NO", manager.userIdentifier);
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
         hud.mode = MBProgressHUDModeText;
         hud.labelText = NSLocalizedString(@"Ooops, timed-out", @"Ooops, timed-out");
@@ -124,6 +147,8 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
     }
     else if (status == kPQCheckAuthorisationStatusCancelled)
     {
+        NSLog(@"Authorisation - Offline mode: %@, userIdentifier: %@, status: CANCELLED",
+              manager.isOfflineModeEnabled ? @"YES" : @"NO", manager.userIdentifier);
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
         hud.mode = MBProgressHUDModeText;
         hud.labelText = NSLocalizedString(@"Sorry, cancelled", @"Sorry, cancelled");
@@ -133,6 +158,8 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
     }
     else if (status == kPQCheckAuthorisationStatusOpen)
     {
+        NSLog(@"Authorisation - Offline mode: %@, userIdentifier: %@, status: OPEN",
+              manager.isOfflineModeEnabled ? @"YES" : @"NO", manager.userIdentifier);
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
         hud.mode = MBProgressHUDModeText;
         hud.labelText = NSLocalizedString(@"Please try again", @"Please try again");
@@ -142,6 +169,8 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
 
 - (void)PQCheckManagerDidFinishEnrolment:(PQCheckManager *)manager
 {
+    NSLog(@"Enrolment - Offline mode: %@, userIdentifier: %@",
+          manager.isOfflineModeEnabled ? @"YES" : @"NO", manager.userIdentifier);
     UIView *view = [[[UIApplication sharedApplication] delegate] window];
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
     hud.mode = MBProgressHUDModeText;

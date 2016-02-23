@@ -19,10 +19,13 @@
 @property (nonatomic, assign) BOOL shouldPaceUser;
 
 #ifndef THINSDK
+@property (nonatomic, assign, getter=isOfflineModeEnabled) BOOL offlineModeEnabled;
+
 - (id)initWithUserIdentifier:(NSString *)userIdentifier;
 - (void)setAdminCredential:(NSURLCredential *)adminCredential;
 - (void)resetAPIKey;
 - (NSString *)currentNamespace;
+- (NSString *)userIdentifier;
 #else
 - (id)initWithAuthorisation:(Authorisation *)authorisation;
 #endif

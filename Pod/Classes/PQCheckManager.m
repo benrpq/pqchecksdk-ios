@@ -16,9 +16,11 @@
 #import "API/APIManager.h"
 
 static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
+#ifndef THINSDK
 static NSString* kPQCheckUserInfoEnrolmentReference = @"reference";
 static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
-
+static NSTimeInterval kDefaultOfflineDelay = 2.0f;
+#endif
 
 @interface PQCheckManager () <PQCheckRecordSelfieDelegate>
 {
@@ -73,6 +75,11 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
     return _apiKey.apiNamespace;
 }
 
+- (NSString *)userIdentifier
+{
+    return _userIdentifier;
+}
+
 #else
 - (id)initWithAuthorisation:(Authorisation *)authorisation
 {
@@ -120,25 +127,41 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
         // Do I have a correct credential?
         [self prepareManagerWithCredential:_adminCredential completion:^{
             
-            // Create an authorisation
-            [[APIManager sharedManager] createAuthorisationWithAPIKey:_apiKey userIdentifier:_userIdentifier authorisationHash:theAuthorisationHash summary:theSummary completion:^(Authorisation *authorisation, NSError *error) {
-                
+            if (self.isOfflineModeEnabled == NO)
+            {
+                // Create an authorisation
+                [[APIManager sharedManager] createAuthorisationWithAPIKey:_apiKey userIdentifier:_userIdentifier authorisationHash:theAuthorisationHash summary:theSummary completion:^(Authorisation *authorisation, NSError *error) {
+                    
+                    [hud hide:YES];
+                    
+                    if (error == nil)
+                    {
+                        _authorisation = authorisation;
+                        
+                        _selfieController = [[PQCheckRecordSelfieViewController alloc] initWithPQCheckSelfieMode:kPQCheckSelfieModeAuthorisation
+                                                                                                      transcript:_authorisation.digest];
+                        _selfieController.delegate = self;
+                        _selfieController.pacingEnabled = self.shouldPaceUser;
+                        
+                        UIViewController *viewController = [PQCheckManager topMostController];
+                        [viewController presentViewController:_selfieController animated:YES completion:nil];
+                    }
+                    
+                }];
+            }
+            else
+            {
                 [hud hide:YES];
                 
-                if (error == nil)
-                {
-                    _authorisation = authorisation;
-                    
-                    _selfieController = [[PQCheckRecordSelfieViewController alloc] initWithPQCheckSelfieMode:kPQCheckSelfieModeAuthorisation
-                                                                                                  transcript:_authorisation.digest];
-                    _selfieController.delegate = self;
-                    _selfieController.pacingEnabled = self.shouldPaceUser;
-                    
-                    UIViewController *viewController = [PQCheckManager topMostController];
-                    [viewController presentViewController:_selfieController animated:YES completion:nil];
-                }
+                NSString *digest = [self randomIntegerStringOfLength:8];
+                _selfieController = [[PQCheckRecordSelfieViewController alloc] initWithPQCheckSelfieMode:kPQCheckSelfieModeAuthorisation
+                                                                                              transcript:digest];
+                _selfieController.delegate = self;
+                _selfieController.pacingEnabled = self.shouldPaceUser;
                 
-            }];
+                UIViewController *viewController = [PQCheckManager topMostController];
+                [viewController presentViewController:_selfieController animated:YES completion:nil];
+            }
         }];
 #else
         _selfieController = [[PQCheckRecordSelfieViewController alloc] init];
@@ -234,30 +257,49 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
 #ifndef THINSDK
 - (void)prepareManagerWithCredential:(NSURLCredential *)credential completion:(void (^)(void))completionBlock
 {
-    A0SimpleKeychain *keychain = [A0SimpleKeychain keychain];
-    NSData *apiData = [keychain dataForKey:kPQCheckAPIKey
-                             promptMessage:NSLocalizedString(@"Please authenticate", @"Please authenticate")];
-    if (apiData == nil)
+    if (self.isOfflineModeEnabled == NO)
     {
-        // Create API-key using admin credential
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSString *namespace = [[NSUUID UUID] UUIDString];
-            [[APIManager sharedManager] createAPIKeyWithCredential:credential namespace:namespace completion:^(APIKey *apiKey, NSError *error) {
-                // Save credential to keychain
-                _apiKey = apiKey;
-                //keychain.useAccessControl = YES;
-                //keychain.defaultAccessiblity = A0SimpleKeychainItemAccessibleWhenPasscodeSetThisDeviceOnly;
-                [keychain setData:[_apiKey data] forKey:kPQCheckAPIKey];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completionBlock();
-                });
-            }];
-        });
+        A0SimpleKeychain *keychain = [A0SimpleKeychain keychain];
+        NSData *apiData = [keychain dataForKey:kPQCheckAPIKey
+                                 promptMessage:NSLocalizedString(@"Please authenticate", @"Please authenticate")];
+        if (apiData == nil)
+        {
+            // Create API-key using admin credential
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                NSString *namespace = [[NSUUID UUID] UUIDString];
+                [[APIManager sharedManager] createAPIKeyWithCredential:credential namespace:namespace completion:^(APIKey *apiKey, NSError *error) {
+                    // Save credential to keychain
+                    _apiKey = apiKey;
+                    //keychain.useAccessControl = YES;
+                    //keychain.defaultAccessiblity = A0SimpleKeychainItemAccessibleWhenPasscodeSetThisDeviceOnly;
+                    [keychain setData:[_apiKey data] forKey:kPQCheckAPIKey];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        completionBlock();
+                    });
+                }];
+            });
+        }
+        else
+        {
+            _apiKey = [[APIKey alloc] initWithData:apiData];
+            completionBlock();
+        }
     }
     else
     {
-        _apiKey = [[APIKey alloc] initWithData:apiData];
-        completionBlock();
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kDefaultOfflineDelay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            // Create a fake API key
+            NSString *namespace = [[NSUUID UUID] UUIDString];
+            NSString *uuid = [[NSUUID UUID] UUIDString];
+            NSString *secret = [[NSUUID UUID] UUIDString];
+            
+            _apiKey = [[APIKey alloc] init];
+            _apiKey.uuid = uuid;
+            _apiKey.secret = secret;
+            _apiKey.apiNamespace = namespace;
+            
+            completionBlock();
+        });
     }
 }
 
@@ -317,6 +359,17 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
     }
 }
 
+- (NSString *)randomIntegerStringOfLength:(NSUInteger)length
+{
+    NSString *str = @"";
+    for (int i=0; i<length; i++)
+    {
+        int value = arc4random() % 10;
+        str = [str stringByAppendingFormat:@"%d", value];
+    }
+    return str;
+}
+
 - (void)selfieController:(PQCheckRecordSelfieViewController *)controller performsAuthorisationWithMediaAtURL:(NSURL *)mediaURL
 {
     
@@ -326,56 +379,71 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
     hud.mode = MBProgressHUDModeIndeterminate;
     hud.labelText = NSLocalizedString(@"Validating...", @"Validating...");
     
-    [[APIManager sharedManager] uploadAttemptWithAuthorisation:_authorisation mediaURL:mediaURL completion:^(UploadAttempt *uploadAttempt, NSError *error) {
-        
-        [hud hide:YES];
-        
-        if (error != nil)
-        {
-            if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFailWithError:)])
+    if (self.isOfflineModeEnabled == NO)
+    {
+        [[APIManager sharedManager] uploadAttemptWithAuthorisation:_authorisation mediaURL:mediaURL completion:^(UploadAttempt *uploadAttempt, NSError *error) {
+            
+            [hud hide:YES];
+            
+            if (error != nil)
             {
-                [self.delegate PQCheckManager:self didFailWithError:error];
+                if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFailWithError:)])
+                {
+                    [self.delegate PQCheckManager:self didFailWithError:error];
+                }
+                
+                return;
             }
             
-            return;
-        }
-        
-        if (uploadAttempt.authorisationStatus == kPQCheckAuthorisationStatusOpen)
-        {
+            if (uploadAttempt.authorisationStatus == kPQCheckAuthorisationStatusOpen)
+            {
 #ifndef THINSDK
-            if (_shouldViewAuthorisationOnFailure)
-            {
-                [self viewAuthorisationOnFailure];
-            }
+                if (_shouldViewAuthorisationOnFailure)
+                {
+                    [self viewAuthorisationOnFailure];
+                }
 #endif
-            [_authorisation setDigest:uploadAttempt.nextDigest];
-            [controller setTranscript:uploadAttempt.nextDigest];
-            if (self.autoAttemptOnFailure)
-            {
-                [controller attemptSelfie];
-            }
-            else
-            {
-                UIViewController *viewController = [PQCheckManager topMostController];
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Attempt Failed", @"Attempt Failed") message:NSLocalizedString(@"Your attempt was not successful, would you like to try again?", @"Your attempt was not successful, would you like to try again?") preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *noAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"No, thanks", @"No, thanks") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    [[viewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-                }];
-                UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes, please", @"Yes, please") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [_authorisation setDigest:uploadAttempt.nextDigest];
+                [controller setTranscript:uploadAttempt.nextDigest];
+                if (self.autoAttemptOnFailure)
+                {
                     [controller attemptSelfie];
-                }];
-                [alertController addAction:noAction];
-                [alertController addAction:yesAction];
-                
-                [viewController presentViewController:alertController animated:YES completion:nil];
+                }
+                else
+                {
+                    UIViewController *viewController = [PQCheckManager topMostController];
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Attempt Failed", @"Attempt Failed") message:NSLocalizedString(@"Your attempt was not successful, would you like to try again?", @"Your attempt was not successful, would you like to try again?") preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *noAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"No, thanks", @"No, thanks") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                        [[viewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+                    }];
+                    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes, please", @"Yes, please") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        [controller attemptSelfie];
+                    }];
+                    [alertController addAction:noAction];
+                    [alertController addAction:yesAction];
+                    
+                    [viewController presentViewController:alertController animated:YES completion:nil];
+                }
             }
-        }
-        
-        if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFinishWithAuthorisationStatus:)])
-        {
-            [self.delegate PQCheckManager:self didFinishWithAuthorisationStatus:uploadAttempt.authorisationStatus];
-        }
-    }];
+            
+            if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFinishWithAuthorisationStatus:)])
+            {
+                [self.delegate PQCheckManager:self didFinishWithAuthorisationStatus:uploadAttempt.authorisationStatus];
+            }
+        }];
+    }
+    else
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * kDefaultOfflineDelay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+
+            [hud hide:YES];
+
+            if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFinishWithAuthorisationStatus:)])
+            {
+                [self.delegate PQCheckManager:self didFinishWithAuthorisationStatus:kPQCheckAuthorisationStatusSuccessful];
+            }
+        });
+    }
 }
 
 - (void)selfieController:(PQCheckRecordSelfieViewController *)controller performsEnrolmentWithMediaAtURL:(NSURL *)mediaURL
@@ -392,26 +460,41 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
     NSAssert(reference != nil && reference.length > 0, @"Enrolment reference cannot be nil or have zero length");
     NSAssert(transcript != nil && transcript.length > 0, @"Enrolment transcript cannot be nil or have zero length");
     
-    [[APIManager sharedManager] enrolUserWithAPIKey:_apiKey userIdentifier:_userIdentifier reference:reference transcript:transcript mediaURL:mediaURL completion:^(NSError *error) {
-        
-        [hud hide:YES];
-        
-        if (error != nil)
-        {
-            if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFailWithError:)])
+    if (self.isOfflineModeEnabled == NO)
+    {
+        [[APIManager sharedManager] enrolUserWithAPIKey:_apiKey userIdentifier:_userIdentifier reference:reference transcript:transcript mediaURL:mediaURL completion:^(NSError *error) {
+            
+            [hud hide:YES];
+            
+            if (error != nil)
             {
-                [self.delegate PQCheckManager:self didFailWithError:error];
+                if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFailWithError:)])
+                {
+                    [self.delegate PQCheckManager:self didFailWithError:error];
+                }
+                
+                return;
             }
             
-            return;
-        }
-        
-        if ([self.delegate respondsToSelector:@selector(PQCheckManagerDidFinishEnrolment:)])
-        {
-            [self.delegate PQCheckManagerDidFinishEnrolment:self];
-        }
-        
-    }];
+            if ([self.delegate respondsToSelector:@selector(PQCheckManagerDidFinishEnrolment:)])
+            {
+                [self.delegate PQCheckManagerDidFinishEnrolment:self];
+            }
+            
+        }];
+    }
+    else
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * kDefaultOfflineDelay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
+            [hud hide:YES];
+            
+            if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFinishWithAuthorisationStatus:)])
+            {
+                [self.delegate PQCheckManager:self didFinishWithAuthorisationStatus:kPQCheckAuthorisationStatusSuccessful];
+            }
+        });
+    }
 }
 
 @end
