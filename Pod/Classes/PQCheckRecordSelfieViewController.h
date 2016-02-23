@@ -15,14 +15,25 @@
 
 @protocol PQCheckRecordSelfieDelegate;
 
+typedef enum PQCheckSelfieMode : NSUInteger
+{
+    kPQCheckSelfieModeAuthorisation,
+    kPQCheckSelfieModeEnrolment
+}
+PQCheckSelfieMode;
+
 @interface PQCheckRecordSelfieViewController : UIViewController <AVCaptureFileOutputRecordingDelegate>
 
 @property (nonatomic, assign, getter=isPacingEnabled) BOOL pacingEnabled;
 @property (nonatomic, weak) id<PQCheckRecordSelfieDelegate> delegate;
-@property (nonatomic, strong) Authorisation *authorisation;
+@property (nonatomic, copy) NSString *transcript;
+@property (nonatomic, strong) NSDictionary *userInfo;
 
-- (void)updateDigest:(NSString *)digest;
+- (id)initWithPQCheckSelfieMode:(PQCheckSelfieMode)mode
+                     transcript:(NSString *)transcript;
 - (void)attemptSelfie;
+
+- (PQCheckSelfieMode)currentSelfieMode;
 
 @end
 

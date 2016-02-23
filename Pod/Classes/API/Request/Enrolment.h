@@ -13,6 +13,11 @@
 @property (nonatomic, copy) NSString *userIdentifier;
 @property (nonatomic, copy) NSString *reference;
 @property (nonatomic, copy) NSString *transcript;
-@property (nonatomic, copy) NSURL *sampleURL;
+
+- (id)initWithUserIdentifier:(NSString *)userIdentifier
+                   reference:(NSString *)reference
+                  transcript:(NSString *)transcript;
+
++ (NSDictionary *)mapping;
 
 @end

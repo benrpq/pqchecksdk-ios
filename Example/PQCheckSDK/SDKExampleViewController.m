@@ -16,6 +16,7 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
 @interface SDKExampleViewController () <PQCheckManagerDelegate>
 {
     NSString *_userIdentifier;
+    PQCheckManager *_manager;
 }
 @end
 
@@ -42,15 +43,34 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
 
 - (IBAction)authenticateButtonTapped:(id)sender
 {
-    PQCheckManager *manager = [[PQCheckManager alloc] initWithUserIdentifier:_userIdentifier
-                                                           authorisationHash:[self randomStringOfLength:6]
-                                                                     summary:[self randomStringOfLength:5]];
+    _manager = [[PQCheckManager alloc] initWithUserIdentifier:_userIdentifier];
     NSURLCredential *adminCredential = [NSURLCredential credentialWithUser:kAdminUUID password:kAdminPassword persistence:NSURLCredentialPersistenceNone];
-    [manager setAdminCredential:adminCredential];
-    manager.delegate = self;
-    manager.autoAttemptOnFailure = NO;
-    manager.shouldPaceUser = YES;
-    [manager performAuthentication];
+    [_manager setAdminCredential:adminCredential];
+    _manager.delegate = self;
+    _manager.autoAttemptOnFailure = NO;
+    _manager.shouldPaceUser = YES;
+    [_manager performAuthorisationWithHash:[self randomStringOfLength:6] summary:[self randomStringOfLength:5]];
+}
+
+- (IBAction)enrolButtonTapped:(id)sender
+{
+    _manager = [[PQCheckManager alloc] initWithUserIdentifier:_userIdentifier];
+    NSURLCredential *adminCredential = [NSURLCredential credentialWithUser:kAdminUUID password:kAdminPassword persistence:NSURLCredentialPersistenceNone];
+    [_manager setAdminCredential:adminCredential];
+    _manager.delegate = self;
+    _manager.shouldPaceUser = YES;
+    [_manager performEnrolmentWithReference:@"Enrolment" transcript:@"0123456789"];
+}
+
+- (IBAction)resetButtonTapped:(id)sender
+{
+    _manager = [[PQCheckManager alloc] initWithUserIdentifier:_userIdentifier];
+    [_manager resetAPIKey];
+    
+    // Reset user-identifier
+    _userIdentifier = [[NSUUID UUID] UUIDString];
+    [[NSUserDefaults standardUserDefaults] setObject:_userIdentifier forKey:kUserIdentiferKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 #pragma mark - Private methods
@@ -118,6 +138,17 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
         hud.labelText = NSLocalizedString(@"Please try again", @"Please try again");
         [hud hide:YES afterDelay:1.0f];
     }
+}
+
+- (void)PQCheckManagerDidFinishEnrolment:(PQCheckManager *)manager
+{
+    UIView *view = [[[UIApplication sharedApplication] delegate] window];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+    hud.mode = MBProgressHUDModeText;
+    hud.labelText = NSLocalizedString(@"Great, job done", @"Great, job done");
+    [hud hide:YES afterDelay:1.0f];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end
