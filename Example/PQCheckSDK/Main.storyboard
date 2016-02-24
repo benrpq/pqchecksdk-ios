@@ -31,9 +31,9 @@
                                     <action selector="enrolButtonTapped:" destination="whP-gf-Uak" eventType="touchUpInside" id="Mtc-il-CjQ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eWd-ZC-KMC">
-                                <rect key="frame" x="281" y="507" width="39" height="30"/>
-                                <state key="normal" title="Reset"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eWd-ZC-KMC">
+                                <rect key="frame" x="263" y="507" width="76" height="30"/>
+                                <state key="normal" title="Reset User"/>
                                 <connections>
                                     <action selector="resetButtonTapped:" destination="whP-gf-Uak" eventType="touchUpInside" id="Sw8-Y9-Snf"/>
                                 </connections>

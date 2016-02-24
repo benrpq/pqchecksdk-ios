@@ -64,9 +64,6 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
 
 - (IBAction)resetButtonTapped:(id)sender
 {
-    _manager = [[PQCheckManager alloc] initWithUserIdentifier:_userIdentifier];
-    [_manager resetAPIKey];
-    
     // Reset user-identifier
     _userIdentifier = [[NSUUID UUID] UUIDString];
     [[NSUserDefaults standardUserDefaults] setObject:_userIdentifier forKey:kUserIdentiferKey];

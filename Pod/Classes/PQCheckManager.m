@@ -27,7 +27,7 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
 #ifndef THINSDK
     APIKey *_apiKey;
     NSURLCredential *_adminCredential;
-    BOOL _shouldViewAuthorisationOnFailure;
+    BOOL _shouldViewAuthorisation;
 #endif
     Authorisation *_authorisation;
     PQCheckRecordSelfieViewController *_selfieController;
@@ -45,7 +45,7 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
     if (self)
     {
         _userIdentifier = userIdentifier;
-        _shouldViewAuthorisationOnFailure = YES;
+        _shouldViewAuthorisation = YES;
         _adminCredential = nil;
         
         [self checkCameraAndMicrophonePermissions];
@@ -262,13 +262,13 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
     }
 }
 
-- (void)viewAuthorisationOnFailure
+- (void)viewAuthorisation
 {
     [[APIManager sharedManager] viewAuthorisationRequestWithAPIKey:_apiKey UUID:_authorisation.uuid completion:^(Authorisation *authorisation, NSError *error) {
         // Need a way to do a pretty-print of Authorisation object
         for (NSInteger index=0; index<authorisation.attempts.count; index++)
         {
-            NSLog(@"Authorisation failure (%ld): %@", (long)index, [authorisation.attempts objectAtIndex:index]);
+            NSLog(@"Authorisation result (%ld): %@", (long)index, [authorisation.attempts objectAtIndex:index]);
         }
     }];
 }
@@ -343,12 +343,6 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
         
         if (uploadAttempt.authorisationStatus == kPQCheckAuthorisationStatusOpen)
         {
-#ifndef THINSDK
-            if (_shouldViewAuthorisationOnFailure)
-            {
-                [self viewAuthorisationOnFailure];
-            }
-#endif
             [_authorisation setDigest:uploadAttempt.nextDigest];
             [controller setTranscript:uploadAttempt.nextDigest];
             if (self.autoAttemptOnFailure)
@@ -371,6 +365,13 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
                 [viewController presentViewController:alertController animated:YES completion:nil];
             }
         }
+
+#ifndef THINSDK
+        if (_shouldViewAuthorisation)
+        {
+            [self viewAuthorisation];
+        }
+#endif
         
         if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFinishWithAuthorisationStatus:)])
         {
