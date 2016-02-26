@@ -17,7 +17,7 @@
 // TODO:
 // 1. This file will not be required in future release
 
-static NSString const* kAdminUUID = @"Replace_With_Your_Admin_UUID_Here";
-static NSString const* kAdminPassword  = @"Replace_With_Your_Admin_UUID";
+static NSString* kAdminUUID = @"***REMOVED***";
+static NSString* kAdminPassword  = @"***REMOVED***";
 
 #endif /* AdminCredentials_h */

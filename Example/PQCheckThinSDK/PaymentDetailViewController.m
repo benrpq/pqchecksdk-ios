@@ -8,6 +8,8 @@
 
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <PQCheckSDK/PQCheckManager.h>
+#import <PQCheckSDK/Authorisation.h>
+#import <PQCheckSDK/APIManager.h>
 #import "EntityClientManager.h"
 #import "BankAccount.h"
 #import "PaymentDetailViewController.h"
@@ -46,7 +48,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -117,12 +119,6 @@
             cell.textLabel.textColor = [UIColor whiteColor];
             cell.backgroundColor = [UIColor colorWithRed:13.0f/255.0f green:185.0f/255.0f blue:78.0f/255.0f alpha:1.0f];
         }
-        else
-        {
-            cell.textLabel.text = NSLocalizedString(@"Decline", @"Decline");
-            cell.textLabel.textColor = [UIColor whiteColor];
-            cell.backgroundColor = [UIColor redColor];
-        }
         
         return cell;
     }
@@ -150,40 +146,43 @@
     {
         [self confirmPayment];
     }
-    else if (indexPath.section == 2)
-    {
-        [self.navigationController popViewControllerAnimated:YES];
-    }
 }
 
 #pragma mark - PQCheckViewController delegates
 
-- (void)PQCheckManager:(PQCheckManager *)controller didFailWithError:(NSError *)error
+- (void)PQCheckManager:(PQCheckManager *)manager didFailWithError:(NSError *)error
 {
     [self dismissViewControllerAnimated:YES completion:^{
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"Error") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            // Do nothing
-        }];
-        [alertController addAction:okAction];
         
-        [self presentViewController:alertController animated:YES completion:nil];
+        [self presentAlertViewControllerWithError:error];
     }];
 }
 
-- (void)PQCheckManager:(PQCheckManager *)controller didFinishWithAuthorisationStatus:(PQCheckAuthorisationStatus)status
+- (void)PQCheckManager:(PQCheckManager *)manager didFinishWithAuthorisationStatus:(PQCheckAuthorisationStatus)status
 {
     UIView *view = [[[UIApplication sharedApplication] delegate] window];
     if (status == kPQCheckAuthorisationStatusSuccessful)
     {
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
-        hud.mode = MBProgressHUDModeText;
-        hud.labelText = NSLocalizedString(@"Great, job done", @"Great, job done");
-        [hud hide:YES afterDelay:1.0f];
-        
-        self.payment.approved = YES;
+        hud.mode = MBProgressHUDModeIndeterminate;
+        hud.labelText = NSLocalizedString(@"Success, updating status", @"Success, updating status");
+
+        // Cool, selfie is accepted, now patch the payment again so that the approved status is committed on the server
         [self dismissViewControllerAnimated:YES completion:^{
-            [self.navigationController popViewControllerAnimated:YES];
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[EntityClientManager defaultManager] approvePaymentWithUUID:self.payment.uuid userUUID:self.userUUID completion:^(Payment *payment, NSError *error) {
+                    
+                    self.payment.approved = payment.approved;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        [hud hide:YES];
+                        [self.navigationController popViewControllerAnimated:YES];
+                        
+                    });
+                }];
+            });
+            
         }];
     }
     else if (status == kPQCheckAuthorisationStatusTimedOut)
@@ -232,19 +231,71 @@
     _hud.labelText = NSLocalizedString(@"Please Wait...", @"Please Wait...");
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[EntityClientManager defaultManager] approvePaymentWithUUID:self.payment.uuid userUUID:self.userUUID completion:^(Authorisation *authorisation, NSError *error) {
-            if (error == nil)
+        
+        [[EntityClientManager defaultManager] approvePaymentWithUUID:self.payment.uuid userUUID:self.userUUID completion:^(Payment *payment, NSError *error) {
+            
+            // Make sure that the payment is not approved yet
+            if (payment.approved == YES)
             {
+                NSDictionary *userInfo = [NSDictionary dictionaryWithObject:NSLocalizedString(@"This payment has already been approved", @"This payment has already been approved") forKey:NSLocalizedFailureReasonErrorKey];
+                NSError *error = [[NSError alloc] initWithDomain:@"EntityClientErrorDomain" code:1000 userInfo:userInfo];
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    _manager = [[PQCheckManager alloc] initWithAuthorisation:authorisation];
-                    [_manager setDelegate:self];
-                    [_manager setShouldPaceUser:YES];
-                    [_manager performAuthentication];
                     
                     [[MBProgressHUD HUDForView:window] hide:YES];
+                    [self presentAlertViewControllerWithError:error];
+                });
+                
+                return;
+            }
+            
+            if (error == nil)
+            {
+                [[EntityClientManager defaultManager] viewAuthorisationForPayment:payment completion:^(Authorisation *authorisation, NSError *error) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        [[MBProgressHUD HUDForView:window] hide:YES];
+                        
+                        if (error == nil)
+                        {
+                            _manager = [[PQCheckManager alloc] initWithAuthorisation:authorisation];
+                            [_manager setDelegate:self];
+                            [_manager setShouldPaceUser:YES];
+                            [_manager performAuthorisationWithDigest:authorisation.digest];
+                        }
+                        else
+                        {
+                            [self presentAlertViewControllerWithError:error];
+                        }
+                    });
+                }];
+            }
+            else
+            {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    [[MBProgressHUD HUDForView:window] hide:YES];
+                    
+                    [self presentAlertViewControllerWithError:error];
                 });
             }
+            
         }];
+    });
+}
+
+- (void)presentAlertViewControllerWithError:(NSError *)error
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"Error") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            // Do nothing
+        }];
+        [alertController addAction:okAction];
+        
+        [self presentViewController:alertController animated:YES completion:nil];
     });
 }
 

@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+@class Enrolment;
 @class Authorisation;
+@class Payment;
 
 @interface EntityClientManager : NSObject
 
@@ -20,11 +22,17 @@
 
 - (void)setVersion:(NSNumber *)version;
 
+- (void)enrolUserWithUUID:(NSString *)userUUID
+               completion:(void (^)(Enrolment *enrolment, NSError *error))completion;
+
 - (void)getAccountsWithUserUUID:(NSString *)userUUID
                      completion:(void (^)(NSArray *accounts, NSError *error))completion;
 
 - (void)approvePaymentWithUUID:(NSString *)paymentUUID
                       userUUID:(NSString *)userUUID
-                    completion:(void (^)(Authorisation *authorisation, NSError *error))completion;
+                    completion:(void (^)(Payment *payment, NSError *))completion;
+
+- (void)viewAuthorisationForPayment:(Payment *)payment
+                         completion:(void (^)(Authorisation *authorisation, NSError *error))completion;
 
 @end

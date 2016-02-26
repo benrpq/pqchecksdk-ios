@@ -1,12 +1,10 @@
 #import <UIKit/UIKit.h>
 
-#import "AdminCredentials.h"
 #import "APIManager.h"
 #import "AuthorisationStatus.h"
 #import "APIKeyRequest.h"
 #import "AuthorisationRequest.h"
 #import "CancelAuthorisationRequest.h"
-#import "Enrolment.h"
 #import "APIKey.h"
 #import "Attempts.h"
 #import "Authenticity.h"

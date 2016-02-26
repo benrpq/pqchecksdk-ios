@@ -12,6 +12,7 @@
 #import "BankAccount.h"
 #import "Payment.h"
 #import "AccountCollection.h"
+#import "Enrolment.h"
 
 @interface EntityClientManager ()
 {
@@ -21,6 +22,7 @@
 }
 @end
 
+static NSString*  kEnrolAPIPath   = @"enrol";
 static NSString*  kAccountAPIPath = @"accounts";
 static NSString*  kPaymentAPIPath = @"payment";
 static NSString*  kDefaultProfile = @"pqcheck";
@@ -84,6 +86,39 @@ static NSUInteger kDefaultVersion = 1;
     _version = version;
 }
 
+- (void)enrolUserWithUUID:(NSString *)userUUID
+               completion:(void (^)(Enrolment *enrolment, NSError *error))completion
+{
+    assert(_objectManager != nil);
+    assert(_objectManager.HTTPClient != nil);
+    assert(_objectManager.HTTPClient.baseURL != nil);
+    
+    // We want to accept JSON type data, plus profile and version if available
+    [self setAcceptHeaderWithMIMEType:RKMIMETypeJSON
+                              profile:_profile
+                              version:[_version stringValue]];
+    
+    RKObjectMapping *enrolmentMapping = [RKObjectMapping mappingForClass:[Enrolment class]];
+    [enrolmentMapping addAttributeMappingsFromDictionary:[Enrolment mapping]];
+    NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:enrolmentMapping
+                                                                                            method:RKRequestMethodGET
+                                                                                       pathPattern:nil
+                                                                                           keyPath:nil
+                                                                                       statusCodes:statusCodes];
+    [_objectManager addResponseDescriptor:responseDescriptor];
+
+    // Perform GET request
+    NSString *accountPath = [NSString stringWithFormat:@"%@/%@", userUUID, kEnrolAPIPath];
+    [_objectManager getObjectsAtPath:accountPath
+                          parameters:nil
+                             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                 completion([mappingResult firstObject], nil);
+                             } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                 completion(nil, error);
+                             }];
+}
+
 - (void)getAccountsWithUserUUID:(NSString *)userUUID
                      completion:(void (^)(NSArray *accounts, NSError *error))completion;
 {
@@ -133,12 +168,12 @@ static NSUInteger kDefaultVersion = 1;
 
 - (void)approvePaymentWithUUID:(NSString *)paymentUUID
                       userUUID:(NSString *)userUUID
-                    completion:(void (^)(Authorisation *authorisation, NSError *error))completion
+                    completion:(void (^)(Payment *payment, NSError *))completion
 {
     assert(_objectManager != nil);
     assert(_objectManager.HTTPClient != nil);
     assert(_objectManager.HTTPClient.baseURL != nil);
-
+    
     [_objectManager setRequestSerializationMIMEType:RKMIMETypeJSON];
     
     // We want to accept JSON type data, plus profile and version if available
@@ -155,7 +190,7 @@ static NSUInteger kDefaultVersion = 1;
     [paymentMapping addPropertyMapping:mapping];
     mapping = [RKRelationshipMapping relationshipMappingFromKeyPath:@"to" toKeyPath:@"to" withMapping:bankAccountMapping];
     [paymentMapping addPropertyMapping:mapping];
-
+    
     // Register the mapping with provider using a response descriptor
     NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
     RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:paymentMapping
@@ -169,20 +204,35 @@ static NSUInteger kDefaultVersion = 1;
     NSString *paymentPath = [NSString stringWithFormat:@"%@/%@/%@", userUUID, kPaymentAPIPath, paymentUUID];
     [_objectManager patchObject:nil path:paymentPath parameters:@{@"approved": @(YES)} success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
         Payment *payment = [mappingResult firstObject];
-        
-        NSString *approvalUUID = [[NSURL URLWithString:payment.approvalUri] lastPathComponent];
-        [[APIManager sharedManager] viewAuthorisationRequestWithUUID:approvalUUID completion:^(Authorisation *authorisation, NSError *error) {
-            if (error == nil)
-            {
-                completion(authorisation, nil);
-            }
-            else
-            {
-                completion(nil, error);
-            }
-        }];
+        completion(payment, nil);
     } failure:^(RKObjectRequestOperation *operation, NSError *error) {
         completion(nil, error);
+    }];
+}
+
+- (void)viewAuthorisationForPayment:(Payment *)payment
+                         completion:(void (^)(Authorisation *authorisation, NSError *error))completion
+{
+    NSString *approvalUUID = [[NSURL URLWithString:payment.approvalUri] lastPathComponent];
+    
+    // Make sure that APIManager points to a correct endpoint
+    NSString *currentEndpoint = [[APIManager sharedManager] currentPQCheckEndpoint];
+    NSURL *baseURL = [NSURL URLWithString:[[NSURL URLWithString:@"/" relativeToURL:[NSURL URLWithString:payment.approvalUri]] absoluteString]];
+    [[APIManager sharedManager] setBaseURL:baseURL];
+    
+    [[APIManager sharedManager] viewAuthorisationRequestWithUUID:approvalUUID completion:^(Authorisation *authorisation, NSError *error) {
+        
+        if (error == nil)
+        {
+            completion(authorisation, nil);
+        }
+        else
+        {
+            completion(nil, error);
+        }
+        
+        // Revert the endpoint configuration
+        [[APIManager sharedManager] setBaseURL:[NSURL URLWithString:currentEndpoint]];
     }];
 }
 

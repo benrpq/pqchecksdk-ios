@@ -7,11 +7,13 @@
 //
 
 #import <MBProgressHUD/MBProgressHUD.h>
+#import "EnrolmentViewController.h"
 #import "EntityClientManager.h"
 #import "AccountCollection.h"
 #import "AccountsViewController.h"
 #import "PaymentsViewController.h"
 #import "AccountCell.h"
+#import "UserManager.h"
 
 static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
 
@@ -19,7 +21,7 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
 {
     MBProgressHUD *hud;
     NSArray *_accounts;
-    NSString *_userUUID;
+    NSString *_userIdentifier;
     BOOL _isLoading;
 }
 @end
@@ -33,7 +35,11 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
 	// Do any additional setup after loading the view, typically from a nib.
     _isLoading = NO;
     
-    _userUUID = [[NSUUID UUID] UUIDString];
+    _userIdentifier = [[UserManager defaultManager] currentUserIdentifer];
+    if (_userIdentifier == nil)
+    {
+        _userIdentifier = [[[NSUUID UUID] UUIDString] lowercaseString];
+    }
     
     UIBarButtonItem *resetButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(resetAccounts)];
     self.navigationItem.rightBarButtonItem = resetButton;
@@ -45,11 +51,24 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewWillAppear:(BOOL)animated
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
     
-    [self loadAccounts];
+    // Is this user enroled? A user must be enroled before he/she
+    // can use the system.
+    if ([[UserManager defaultManager] isUserEnroled:_userIdentifier] == NO)
+    {
+        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+        EnrolmentViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"EnrolmentViewController"];
+        [viewController setUserIdentifier:_userIdentifier];
+        [viewController setModalPresentationStyle:UIModalPresentationFullScreen];
+        [self presentViewController:viewController animated:YES completion:nil];
+    }
+    else
+    {
+        [self loadAccounts];
+    }
 }
 
 #pragma mark - Table view data source
@@ -94,7 +113,7 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
         PaymentsViewController *viewController = [segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         AccountCollection *account = [_accounts objectAtIndex:indexPath.row];
-        [viewController setUserUUID:_userUUID];
+        [viewController setUserUUID:_userIdentifier];
         [viewController setPayments:[[account payments] allObjects]];
     }
 }
@@ -103,8 +122,15 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
 
 - (void)resetAccounts
 {
-    _accounts = nil;    
-    [self loadAccounts];
+    _accounts = nil;
+    _userIdentifier = [[[NSUUID UUID] UUIDString] lowercaseString];
+    
+    // Enrol this new user
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    EnrolmentViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"EnrolmentViewController"];
+    [viewController setUserIdentifier:_userIdentifier];
+    [viewController setModalPresentationStyle:UIModalPresentationFullScreen];
+    [self presentViewController:viewController animated:YES completion:nil];
 }
 
 - (void)loadAccounts
@@ -121,7 +147,7 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
     hud.labelText = NSLocalizedString(@"Please Wait...", @"Please Wait...");
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[EntityClientManager defaultManager] getAccountsWithUserUUID:_userUUID completion:^(NSArray *accounts, NSError *error) {
+        [[EntityClientManager defaultManager] getAccountsWithUserUUID:_userIdentifier completion:^(NSArray *accounts, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 _isLoading = NO;
                 [hud hide:YES];
