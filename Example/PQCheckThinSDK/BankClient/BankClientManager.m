@@ -8,17 +8,15 @@
 
 #import <RestKit/RestKit.h>
 #import <PQCheckSDK/APIManager.h>
-#import "EntityClientManager.h"
+#import "BankClientManager.h"
 #import "BankAccount.h"
 #import "Payment.h"
 #import "AccountCollection.h"
 #import "Enrolment.h"
 
-@interface EntityClientManager ()
+@interface BankClientManager ()
 {
     RKObjectManager *_objectManager;
-    NSString *_profile;
-    NSNumber *_version;
 }
 @end
 
@@ -26,16 +24,15 @@ static NSString*  kEnrolAPIPath   = @"enrol";
 static NSString*  kAccountAPIPath = @"accounts";
 static NSString*  kPaymentAPIPath = @"payment";
 static NSString*  kDefaultProfile = @"pqcheck";
-static NSUInteger kDefaultVersion = 1;
 
-@implementation EntityClientManager
+@implementation BankClientManager
 
-+ (EntityClientManager *)defaultManager
++ (BankClientManager *)defaultManager
 {
-    static EntityClientManager *_defaultManager = nil;
+    static BankClientManager *_defaultManager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        _defaultManager = [[EntityClientManager alloc] init];
+        _defaultManager = [[BankClientManager alloc] init];
     });
     return _defaultManager;
 }
@@ -55,9 +52,6 @@ static NSUInteger kDefaultVersion = 1;
         
         _objectManager = [[RKObjectManager alloc] initWithHTTPClient:httpClient];
         
-        _profile = kDefaultProfile;
-        _version = @(kDefaultVersion);
-        
         [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
         
 #if DEBUG
@@ -76,16 +70,6 @@ static NSUInteger kDefaultVersion = 1;
     [_objectManager setHTTPClient:httpClient];
 }
 
-- (void)setProfile:(NSString *)profile
-{
-    _profile = profile;
-}
-
-- (void)setVersion:(NSNumber *)version
-{
-    _version = version;
-}
-
 - (void)enrolUserWithUUID:(NSString *)userUUID
                completion:(void (^)(Enrolment *enrolment, NSError *error))completion
 {
@@ -93,10 +77,8 @@ static NSUInteger kDefaultVersion = 1;
     assert(_objectManager.HTTPClient != nil);
     assert(_objectManager.HTTPClient.baseURL != nil);
     
-    // We want to accept JSON type data, plus profile and version if available
-    [self setAcceptHeaderWithMIMEType:RKMIMETypeJSON
-                              profile:_profile
-                              version:[_version stringValue]];
+    // Set the appropriate accept-header
+    [_objectManager setAcceptHeaderWithMIMEType:RKMIMETypeJSON];
     
     RKObjectMapping *enrolmentMapping = [RKObjectMapping mappingForClass:[Enrolment class]];
     [enrolmentMapping addAttributeMappingsFromDictionary:[Enrolment mapping]];
@@ -126,10 +108,8 @@ static NSUInteger kDefaultVersion = 1;
     assert(_objectManager.HTTPClient != nil);
     assert(_objectManager.HTTPClient.baseURL != nil);
 
-    // We want to accept JSON type data, plus profile and version if available
-    [self setAcceptHeaderWithMIMEType:RKMIMETypeJSON
-                              profile:_profile
-                              version:[_version stringValue]];
+    // Set the appropriate accept-header
+    [_objectManager setAcceptHeaderWithMIMEType:RKMIMETypeJSON];
     
     // Object mapping of the response
     RKObjectMapping *accountCollectionMapping = [RKObjectMapping mappingForClass:[AccountCollection class]];
@@ -176,10 +156,8 @@ static NSUInteger kDefaultVersion = 1;
     
     [_objectManager setRequestSerializationMIMEType:RKMIMETypeJSON];
     
-    // We want to accept JSON type data, plus profile and version if available
-    [self setAcceptHeaderWithMIMEType:RKMIMETypeJSON
-                              profile:_profile
-                              version:[_version stringValue]];
+    // Set the appropriate accept-header
+    [_objectManager setAcceptHeaderWithMIMEType:RKMIMETypeJSON];
     
     RKObjectMapping *paymentMapping = [RKObjectMapping mappingForClass:[Payment class]];
     [paymentMapping addAttributeMappingsFromDictionary:[Payment mapping]];
@@ -234,38 +212,6 @@ static NSUInteger kDefaultVersion = 1;
         // Revert the endpoint configuration
         [[APIManager sharedManager] setBaseURL:[NSURL URLWithString:currentEndpoint]];
     }];
-}
-
-#pragma mark - Private methods
-
-- (void)setAcceptHeaderWithMIMEType:(NSString *)MIMEType
-                            profile:(NSString *)profile
-                            version:(NSString *)version
-{
-    if (_objectManager == nil)
-    {
-        return;
-    }
-    
-    NSString *acceptHeader = MIMEType;
-    if (acceptHeader == nil)
-    {
-        acceptHeader = @"";
-    }
-    if (profile && [profile length] > 0)
-    {
-        acceptHeader = [acceptHeader stringByAppendingFormat:@"; profile=%@", profile];
-    }
-    if (version)
-    {
-        acceptHeader = [acceptHeader stringByAppendingFormat:@"; version=%@", version];
-    }
-    
-    // We want to accept JSON type data
-    if ([acceptHeader length] > 0)
-    {
-        [_objectManager setAcceptHeaderWithMIMEType:acceptHeader];
-    }
 }
 
 @end

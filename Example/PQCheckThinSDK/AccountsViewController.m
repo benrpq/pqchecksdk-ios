@@ -8,7 +8,7 @@
 
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "EnrolmentViewController.h"
-#import "EntityClientManager.h"
+#import "BankClientManager.h"
 #import "AccountCollection.h"
 #import "AccountsViewController.h"
 #import "PaymentsViewController.h"
@@ -147,14 +147,14 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
     hud.labelText = NSLocalizedString(@"Please Wait...", @"Please Wait...");
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[EntityClientManager defaultManager] getAccountsWithUserUUID:_userIdentifier completion:^(NSArray *accounts, NSError *error) {
+        [[BankClientManager defaultManager] getAccountsWithUserUUID:_userIdentifier completion:^(NSArray *accounts, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 _isLoading = NO;
                 [hud hide:YES];
                 
                 if (error)
                 {
-                    [self showAlert:error];
+                    [self presentAlertViewControllerWithError:error];
                 }
                 else
                 {
@@ -166,7 +166,7 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
     });
 }
 
-- (void)showAlert:(NSError *)error
+- (void)presentAlertViewControllerWithError:(NSError *)error
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"Error") message:[error localizedDescription] preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *okButton = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

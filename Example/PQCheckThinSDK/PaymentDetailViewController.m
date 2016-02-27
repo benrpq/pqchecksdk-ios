@@ -10,8 +10,9 @@
 #import <PQCheckSDK/PQCheckManager.h>
 #import <PQCheckSDK/Authorisation.h>
 #import <PQCheckSDK/APIManager.h>
-#import "EntityClientManager.h"
+#import "BankClientManager.h"
 #import "BankAccount.h"
+#import "Payment.h"
 #import "PaymentDetailViewController.h"
 #import "BankAccountCell.h"
 #import "DetailCell.h"
@@ -171,7 +172,7 @@
         [self dismissViewControllerAnimated:YES completion:^{
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [[EntityClientManager defaultManager] approvePaymentWithUUID:self.payment.uuid userUUID:self.userUUID completion:^(Payment *payment, NSError *error) {
+                [[BankClientManager defaultManager] approvePaymentWithUUID:self.payment.uuid userUUID:self.userUUID completion:^(Payment *payment, NSError *error) {
                     
                     self.payment.approved = payment.approved;
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -232,7 +233,7 @@
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        [[EntityClientManager defaultManager] approvePaymentWithUUID:self.payment.uuid userUUID:self.userUUID completion:^(Payment *payment, NSError *error) {
+        [[BankClientManager defaultManager] approvePaymentWithUUID:self.payment.uuid userUUID:self.userUUID completion:^(Payment *payment, NSError *error) {
             
             // Make sure that the payment is not approved yet
             if (payment.approved == YES)
@@ -251,7 +252,7 @@
             
             if (error == nil)
             {
-                [[EntityClientManager defaultManager] viewAuthorisationForPayment:payment completion:^(Authorisation *authorisation, NSError *error) {
+                [[BankClientManager defaultManager] viewAuthorisationForPayment:payment completion:^(Authorisation *authorisation, NSError *error) {
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         

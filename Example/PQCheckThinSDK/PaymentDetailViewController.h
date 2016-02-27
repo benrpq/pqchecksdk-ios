@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Payment.h"
+
+@class Payment;
 
 @interface PaymentDetailViewController : UITableViewController
 

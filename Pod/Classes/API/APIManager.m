@@ -62,8 +62,9 @@ static NSString* kVideoExtension = @"mp4";
     self = [super init];
     if (self)
     {
+#ifndef THINSDK
         [self setPQCheckEndpoint:kStableEndpoint];
-        
+#endif
         NSURL *baseURL = [NSURL URLWithString:[self currentPQCheckEndpoint]];
         AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
         
@@ -86,7 +87,8 @@ static NSString* kVideoExtension = @"mp4";
 {
     return _endpoint;
 }
-                          
+
+#ifndef THINSDK
 - (void)setPQCheckEndpoint:(PQCheckEndpoint)endpoint
 {
     // Initialize HTTPClient
@@ -109,13 +111,13 @@ static NSString* kVideoExtension = @"mp4";
     NSURL *baseURL = [NSURL URLWithString:_endpoint];
     [self setBaseURL:baseURL];
 }
+#endif
 
 - (void)setBaseURL:(NSURL *)baseURL
 {
     AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
     [_objectManager setHTTPClient:httpClient];
 }
-
 
 - (void)setProfile:(NSString *)profile
 {
@@ -606,6 +608,8 @@ static NSString* kVideoExtension = @"mp4";
         return;
     }
     
+    // Make sure that APIManager points to a correct endpoint
+    NSString *currentEndpoint = [[APIManager sharedManager] currentPQCheckEndpoint];
     NSURL *baseURL = [NSURL URLWithString:[[NSURL URLWithString:@"/" relativeToURL:uploadURL] absoluteString]];
     AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
     _objectManager = [[RKObjectManager alloc] initWithHTTPClient:httpClient];
@@ -639,9 +643,15 @@ static NSString* kVideoExtension = @"mp4";
     RKObjectRequestOperation *operation =
     [_objectManager objectRequestOperationWithRequest:urlRequest
                                               success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                                  // Revert the endpoint configuration
+                                                  [[APIManager sharedManager] setBaseURL:[NSURL URLWithString:currentEndpoint]];
+
                                                   completionBlock(nil);
                                               }
                                               failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                  // Revert the endpoint configuration
+                                                  [[APIManager sharedManager] setBaseURL:[NSURL URLWithString:currentEndpoint]];
+
                                                   completionBlock(error);
                                               }];
     [_objectManager enqueueObjectRequestOperation:operation];

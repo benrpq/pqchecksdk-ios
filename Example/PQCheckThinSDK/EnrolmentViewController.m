@@ -11,7 +11,7 @@
 #import <PQCheckSDK/UIColor+Additions.h>
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "EnrolmentViewController.h"
-#import "EntityClientManager.h"
+#import "BankClientManager.h"
 #import "Enrolment.h"
 #import "UserManager.h"
 
@@ -50,7 +50,7 @@
     hud.mode = MBProgressHUDModeIndeterminate;
     hud.labelText = NSLocalizedString(@"Please Wait...", @"Please Wait...");
     
-    [[EntityClientManager defaultManager] enrolUserWithUUID:self.userIdentifier completion:^(Enrolment *enrolment, NSError *error) {
+    [[BankClientManager defaultManager] enrolUserWithUUID:self.userIdentifier completion:^(Enrolment *enrolment, NSError *error) {
         
         [hud hide:YES];
         

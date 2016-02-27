@@ -13,6 +13,7 @@
 #import "Authorisation.h"
 #import "UploadAttempt.h"
 
+#ifndef THINSDK
 typedef NS_ENUM(NSInteger, PQCheckEndpoint)
 {
     kStableEndpoint = 0,
@@ -20,6 +21,7 @@ typedef NS_ENUM(NSInteger, PQCheckEndpoint)
     kDevelopmentEndpoint,
     kDataCollectionEndpoint
 };
+#endif
 
 @interface APIManager : NSObject
 
@@ -27,7 +29,9 @@ typedef NS_ENUM(NSInteger, PQCheckEndpoint)
 
 - (NSString *)currentPQCheckEndpoint;
 
+#ifndef THINSDK
 - (void)setPQCheckEndpoint:(PQCheckEndpoint)endpoint;
+#endif
 
 - (void)setBaseURL:(NSURL *)baseURL;
 
