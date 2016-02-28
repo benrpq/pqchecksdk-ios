@@ -55,9 +55,9 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
 {
     [super viewDidAppear:animated];
     
-    // Is this user enroled? A user must be enroled before he/she
+    // Is this user enrolled? A user must be enrolled before he/she
     // can use the system.
-    if ([[UserManager defaultManager] isUserEnroled:_userIdentifier] == NO)
+    if ([[UserManager defaultManager] isUserEnrolled:_userIdentifier] == NO)
     {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         EnrolmentViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"EnrolmentViewController"];

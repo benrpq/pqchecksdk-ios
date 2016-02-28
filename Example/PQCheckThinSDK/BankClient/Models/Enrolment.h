@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 /**
- *  This class implements an enrolment representation object. It contains two items, namely `uri` and `transcript`. The user to be enroled is expected to perform a selfie reading the `transcript` and upload the resulting video to `uri`.
+ *  This class implements an enrolment representation object. It contains two items, namely `uri` and `transcript`. The user to be enrolled is expected to perform a selfie reading the `transcript` and upload the resulting video to `uri`.
  *
  *  This representation is returned by `[BankClientManager enrolUserWithUUID:completion:]` method of `BankClientManager` class.
  */

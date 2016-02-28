@@ -78,7 +78,7 @@
 
 - (void)PQCheckManagerDidFinishEnrolment:(PQCheckManager *)manager
 {
-    [[UserManager defaultManager] addEnroledUser:self.userIdentifier];
+    [[UserManager defaultManager] addEnrolledUser:self.userIdentifier];
     [[UserManager defaultManager] setCurrentUserIdentifer:self.userIdentifier];
     
     // Enrol is successful, this view controller can now be dismissed

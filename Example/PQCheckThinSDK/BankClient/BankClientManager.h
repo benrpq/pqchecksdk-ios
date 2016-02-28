@@ -40,9 +40,9 @@
 - (void)setBaseURL:(NSURL *)baseURL;
 
 /**
- *  Sends a request to the bank application server that a user identifed by `userUUID` needs to be enroled.
+ *  Sends a request to the bank application server that a user identifed by `userUUID` needs to be enrolled.
  *
- *  @param userUUID   The identifier of the user to be enroled.
+ *  @param userUUID   The identifier of the user to be enrolled.
  *  @param completion A block object to be executed when the enrolment request is completed. This block has no return value and takes two arguments: an instance of `Enrolment` object and an instance of `NSError` object. If this request is not successful, `NSError` object is not `nil` and `Enrolment` object is `nil`. On the other hand, if it is successful, `NSError` is `nil` and `Enrolment` object, which contains `transcript` and `uri`, should be passed to PQCheck SDK, which in turn will request a user to perform a selfie reading `transcript` and submit the resulting selfie video to `uri`.
  */
 - (void)enrolUserWithUUID:(NSString *)userUUID

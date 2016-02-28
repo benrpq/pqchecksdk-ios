@@ -10,6 +10,7 @@
 		<string>Libraries</string>
 		<string>Frameworks</string>
 		<string>Tests</string>
+		<string>*.m</string>
 	</array>
 	<key>--logformat</key>
 	<integer>1</integer>
@@ -26,6 +27,10 @@
 	<key>--verbose</key>
 	<string>3</string>
 	<key>--create-docset</key>
+	<false/>
+	<key>--index-desc</key>
+	<string>README.md</string>
+	<key>--warn-invalid-crossref</key>
 	<false/>
 </dict>
 </plist>

@@ -252,7 +252,6 @@
 		D55604A9FB2EAC1C6E3655C466BCE571 /* RKManagedObjectRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CAE206EDEC605D76A49E692D49BF97E2 /* RKManagedObjectRequestOperation.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		D5BD7F688173A189F93549A6A053E0F2 /* AFNetworking-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F2DAB998EE691EAB969693E3E4F04D3A /* AFNetworking-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D68E944358DF4BEFCB280FBDE3119CE4 /* A0SimpleKeychain+KeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A601F68FBC17769F5C2754F1683992D /* A0SimpleKeychain+KeyPair.m */; };
-		D759C9AE1C827DDC0030742F /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D759C9AD1C827DDC0030742F /* README.md */; };
 		D98D1B5C7AFD4907DC7F2593E41D6609 /* APIKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 6915FFC2545FBC297BA37A5E8DA393A7 /* APIKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D99DD2F029590B845D79CACADEDED029 /* PQCheckFaceShape.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FC6507E00AF2EBAC3D3B23A9B28FE3 /* PQCheckFaceShape.m */; settings = {COMPILER_FLAGS = "-DTHINSDK"; }; };
 		DAB60EDD5C8E70593C02AD39D52D053F /* RKTestNotificationObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = AC90924E64231617647F60CBE860935B /* RKTestNotificationObserver.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -2166,7 +2165,6 @@
 				AFE80A524ED18761A70C220D462FC26C /* AFPropertyListRequestOperation.m in Sources */,
 				C57DDBAE84B7167181062972F663ED74 /* AFURLConnectionOperation.m in Sources */,
 				1DB783C878B6844AE936BFAD02D0745D /* AFXMLRequestOperation.m in Sources */,
-				D759C9AE1C827DDC0030742F /* README.md in Sources */,
 				94444F0E75558EE30438B668E0662EBD /* UIImageView+AFNetworking.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

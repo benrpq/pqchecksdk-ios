@@ -6,9 +6,22 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		D759C9AF1C82848D0030742F /* Documentation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = D759C9B21C82848D0030742F /* Build configuration list for PBXAggregateTarget "Documentation" */;
+			buildPhases = (
+				D759C9B31C8284B50030742F /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = Documentation;
+			productName = Documentation;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		B4B36C440136BC849749A4C7 /* Pods_PQCheckThinSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EB072CEE57858611E76789C /* Pods_PQCheckThinSDK_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		D70147621C81A52B00C1C73A /* AppledocSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D70147611C81A52B00C1C73A /* AppledocSettings.plist */; };
 		D73838011C6A454B0068372D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		D73838021C6A454B0068372D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		D73838031C6A454B0068372D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
@@ -73,20 +86,21 @@
 		D73838331C6A45DB0068372D /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = PQCheckThinSDK/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D738383D1C6A462A0068372D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D738384B1C6A48740068372D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = PQCheckThinSDK/Images.xcassets; sourceTree = "<group>"; };
-		D7A5E5181C81A0AD00190FE0 /* BankClientManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankClientManager.h; sourceTree = "<group>"; };
+		D759C9B41C82F8EA0030742F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D7A5E5181C81A0AD00190FE0 /* BankClientManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BankClientManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		D7A5E5191C81A0AD00190FE0 /* BankClientManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankClientManager.m; sourceTree = "<group>"; };
 		D7A5E51B1C81A0AD00190FE0 /* AccountCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountCollection.h; sourceTree = "<group>"; };
 		D7A5E51C1C81A0AD00190FE0 /* AccountCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountCollection.m; sourceTree = "<group>"; };
 		D7A5E51D1C81A0AD00190FE0 /* BankAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BankAccount.h; sourceTree = "<group>"; };
 		D7A5E51E1C81A0AD00190FE0 /* BankAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankAccount.m; sourceTree = "<group>"; };
-		D7A5E51F1C81A0AD00190FE0 /* Enrolment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Enrolment.h; sourceTree = "<group>"; };
+		D7A5E51F1C81A0AD00190FE0 /* Enrolment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = Enrolment.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		D7A5E5201C81A0AD00190FE0 /* Enrolment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Enrolment.m; sourceTree = "<group>"; };
 		D7A5E5211C81A0AD00190FE0 /* Payment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Payment.h; sourceTree = "<group>"; };
 		D7A5E5221C81A0AD00190FE0 /* Payment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Payment.m; sourceTree = "<group>"; };
-		D7A5E5231C81A0AD00190FE0 /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserManager.h; sourceTree = "<group>"; };
-		D7A5E5241C81A0AD00190FE0 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserManager.m; sourceTree = "<group>"; };
+		D7A5E5231C81A0AD00190FE0 /* UserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = UserManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		D7A5E5241C81A0AD00190FE0 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = UserManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		D7B5B14D1C7D84DB007CD9F8 /* EnrolmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EnrolmentViewController.h; path = PQCheckThinSDK/EnrolmentViewController.h; sourceTree = "<group>"; };
-		D7B5B14E1C7D84DB007CD9F8 /* EnrolmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EnrolmentViewController.m; path = PQCheckThinSDK/EnrolmentViewController.m; sourceTree = "<group>"; };
+		D7B5B14E1C7D84DB007CD9F8 /* EnrolmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = EnrolmentViewController.m; path = PQCheckThinSDK/EnrolmentViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		F14EB6DD0D1782F0E3FA284F /* PQCheckSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PQCheckSDK.podspec; path = ../PQCheckSDK.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -217,6 +231,7 @@
 		D738382C1C6A459C0068372D /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D759C9B41C82F8EA0030742F /* README.md */,
 				D70147611C81A52B00C1C73A /* AppledocSettings.plist */,
 				D73838301C6A45CB0068372D /* InfoPlist.strings */,
 				D738382D1C6A45BB0068372D /* PQCheckThinSDK-Info.plist */,
@@ -286,6 +301,11 @@
 				CLASSPREFIX = PQCheck;
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "CJ Tjhai";
+				TargetAttributes = {
+					D759C9AF1C82848D0030742F = {
+						CreatedOnToolsVersion = 7.2.1;
+					};
+				};
 			};
 			buildConfigurationList = 6003F585195388D10070C39A /* Build configuration list for PBXProject "PQCheckSDK" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -301,6 +321,7 @@
 			projectRoot = "";
 			targets = (
 				D73837FA1C6A454B0068372D /* PQCheckThinSDK_Example */,
+				D759C9AF1C82848D0030742F /* Documentation */,
 			);
 		};
 /* End PBXProject section */
@@ -314,7 +335,6 @@
 				D738384D1C6A48790068372D /* Images.xcassets in Resources */,
 				D738383F1C6A462C0068372D /* Main.storyboard in Resources */,
 				D73838401C6A465A0068372D /* LaunchScreen.storyboard in Resources */,
-				D70147621C81A52B00C1C73A /* AppledocSettings.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -350,6 +370,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PQCheckThinSDK_Example/Pods-PQCheckThinSDK_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		D759C9B31C8284B50030742F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Create documentation for the SDK\ncd \"${SRCROOT}/../Pod/Classes\"\nappledoc .\n\n# Create documentation for the example code\ncd \"${SRCROOT}\"\nappledoc .\n";
 		};
 		DD4EB519FD71EA16039A6E9A /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -548,6 +581,20 @@
 			};
 			name = Release;
 		};
+		D759C9B01C82848D0030742F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		D759C9B11C82848D0030742F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -568,6 +615,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		D759C9B21C82848D0030742F /* Build configuration list for PBXAggregateTarget "Documentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D759C9B01C82848D0030742F /* Debug */,
+				D759C9B11C82848D0030742F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

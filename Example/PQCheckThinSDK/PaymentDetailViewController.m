@@ -174,13 +174,16 @@
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [[BankClientManager defaultManager] approvePaymentWithUUID:self.payment.uuid userUUID:self.userUUID completion:^(Payment *payment, NSError *error) {
                     
-                    self.payment.approved = payment.approved;
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        
-                        [hud hide:YES];
-                        [self.navigationController popViewControllerAnimated:YES];
-                        
-                    });
+                    if (error == nil)
+                    {
+                        self.payment.approved = payment.approved;
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            
+                            [hud hide:YES];
+                            [self.navigationController popViewControllerAnimated:YES];
+                            
+                        });
+                    }
                 }];
             });
             

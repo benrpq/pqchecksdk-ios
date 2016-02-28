@@ -11,6 +11,7 @@
 		<string>Frameworks</string>
 		<string>Tests</string>
 		<string>SDAVAssetExportSession</string>
+		<string>*.m</string>
 	</array>
 	<key>--logformat</key>
 	<integer>1</integer>
