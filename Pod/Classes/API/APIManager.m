@@ -19,6 +19,8 @@
 #import "CancelAuthorisationRequest.h"
 #import "Enrolment.h"
 #endif
+#import "Authorisation.h"
+#import "UploadAttempt.h"
 
 static NSString* kPQCheckBaseDevelopmentURL = @"http://selfieguard-dev.elasticbeanstalk.com";
 static NSString* kPQCheckBaseUnstableURL = @"https://beta-api-pqcheck.post-quantum.com";
@@ -64,6 +66,9 @@ static NSString* kVideoExtension = @"mp4";
     {
 #ifndef THINSDK
         [self setPQCheckEndpoint:kStableEndpoint];
+#else
+        // We need some value that is not nil
+        _endpoint = kPQCheckBaseStableURL;
 #endif
         NSURL *baseURL = [NSURL URLWithString:[self currentPQCheckEndpoint]];
         AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
@@ -336,13 +341,23 @@ static NSString* kVideoExtension = @"mp4";
     }];
 }
 #else
-- (void)viewAuthorisationRequestWithUUID:(NSString *)uuid
-                              completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock
+- (void)viewAuthorisationAtURL:(NSURL *)url
+                    completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock
 {
     assert(_objectManager != nil);
     
+    NSString *uuid = [url lastPathComponent];
+    
+    // Make sure that APIManager points to a correct endpoint
+    NSString *currentEndpoint = [[APIManager sharedManager] currentPQCheckEndpoint];
+    NSURL *baseURL = [NSURL URLWithString:[[NSURL URLWithString:@"/" relativeToURL:url] absoluteString]];
+    [[APIManager sharedManager] setBaseURL:baseURL];
+    
     [self __viewAuthorisationRequestUUID:uuid completion:^(Authorisation *authorisation, NSError *error) {
         completionBlock(authorisation, error);
+        
+        // Revert the endpoint configuration
+        [[APIManager sharedManager] setBaseURL:[NSURL URLWithString:currentEndpoint]];
     }];
 }
 #endif
@@ -369,8 +384,8 @@ static NSString* kVideoExtension = @"mp4";
     [authenticityMapping addAttributeMappingsFromDictionary:[Authenticity mapping]];
 #endif
     RKObjectMapping *linksMapping = [RKObjectMapping mappingForClass:[Links class]];
-    RKObjectMapping *pathMapping = [RKObjectMapping mappingForClass:[URIPath class]];
-    [pathMapping addAttributeMappingsFromDictionary:[URIPath mapping]];
+    RKObjectMapping *pathMapping = [RKObjectMapping mappingForClass:[HATEOASObject class]];
+    [pathMapping addAttributeMappingsFromDictionary:[HATEOASObject mapping]];
     
     // Define the mapping relationship
     RKPropertyMapping *mapping = nil;

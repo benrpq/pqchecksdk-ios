@@ -75,12 +75,10 @@
 
 - (UIImage *)roundedCornerImage
 {
-    /**
-     * In order to return a circular image from a squared image,
-     * we need to create a mask, which is a squared image with
-     * white background and a black circle to denote the area
-     * at which we want the image to be drawn
-     **/
+    // In order to return a circular image from a squared image,
+    // we need to create a mask, which is a squared image with
+    // white background and a black circle to denote the area
+    // at which we want the image to be drawn
     UIGraphicsBeginImageContextWithOptions(self.size, NO, 0.0f);
     [[UIColor whiteColor] setFill];
     CGRect rect = CGRectMake(0.0f, 0.0f, self.size.width, self.size.height);

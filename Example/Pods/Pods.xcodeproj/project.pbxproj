@@ -67,7 +67,7 @@
 		31CD814518E34A3CFADB0EFDE9C4EF0A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B0C09B779C957456C1814C4860C1EDA /* Foundation.framework */; };
 		320C918482C742D8BF917052B2494C79 /* Authorisation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6753B9244CD820F25994A7D289A85914 /* Authorisation.m */; settings = {COMPILER_FLAGS = "-DTHINSDK"; }; };
 		33BEDC994E2D5A08311A137DAEE6929B /* RKObjectParameterization.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E7A33498EAE5176446CE569BF3233D1 /* RKObjectParameterization.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		3538D6442290839568697BE922138FED /* URIPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A8DF49E60402EA2C86193301ED5555C /* URIPath.m */; settings = {COMPILER_FLAGS = "-DTHINSDK"; }; };
+		3538D6442290839568697BE922138FED /* HATEOASObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 1A8DF49E60402EA2C86193301ED5555C /* HATEOASObject.m */; settings = {COMPILER_FLAGS = "-DTHINSDK"; }; };
 		378F91C1C89DCF5527C902CC056638FB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B0C09B779C957456C1814C4860C1EDA /* Foundation.framework */; };
 		38AB39E6A79689ACD1ECD761B7B26C79 /* NSManagedObjectContext+RKAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 85104225D0A51D58FCCD316F86521817 /* NSManagedObjectContext+RKAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		39000E39A72B56971D4CB81EA6399875 /* RKCoreData.h in Headers */ = {isa = PBXBuildFile; fileRef = 05CBE09DA865CA6E84EBEFC75669CA53 /* RKCoreData.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -252,6 +252,7 @@
 		D55604A9FB2EAC1C6E3655C466BCE571 /* RKManagedObjectRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = CAE206EDEC605D76A49E692D49BF97E2 /* RKManagedObjectRequestOperation.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		D5BD7F688173A189F93549A6A053E0F2 /* AFNetworking-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F2DAB998EE691EAB969693E3E4F04D3A /* AFNetworking-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D68E944358DF4BEFCB280FBDE3119CE4 /* A0SimpleKeychain+KeyPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A601F68FBC17769F5C2754F1683992D /* A0SimpleKeychain+KeyPair.m */; };
+		D759C9AE1C827DDC0030742F /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = D759C9AD1C827DDC0030742F /* README.md */; };
 		D98D1B5C7AFD4907DC7F2593E41D6609 /* APIKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 6915FFC2545FBC297BA37A5E8DA393A7 /* APIKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D99DD2F029590B845D79CACADEDED029 /* PQCheckFaceShape.m in Sources */ = {isa = PBXBuildFile; fileRef = 06FC6507E00AF2EBAC3D3B23A9B28FE3 /* PQCheckFaceShape.m */; settings = {COMPILER_FLAGS = "-DTHINSDK"; }; };
 		DAB60EDD5C8E70593C02AD39D52D053F /* RKTestNotificationObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = AC90924E64231617647F60CBE860935B /* RKTestNotificationObserver.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -264,7 +265,7 @@
 		E09EE052B5D42C3479FC24CC1A14734A /* RKValueTransformers-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0347885C7AAA5AF8A3D403FDD20A59E5 /* RKValueTransformers-dummy.m */; };
 		E0E9AD63B0FE8699300EBF751A340F8C /* CancelAuthorisationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 109A10ADD54A169D5456056EBBF026D0 /* CancelAuthorisationRequest.m */; settings = {COMPILER_FLAGS = "-DTHINSDK"; }; };
 		E1A0CE63BE48329F8F94EE9A7E75C9EC /* RKResponseDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = E93BDA79188CFC20BB25D8A3CF853917 /* RKResponseDescriptor.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		E31A483F582DBD232C4919C1989677CB /* URIPath.h in Headers */ = {isa = PBXBuildFile; fileRef = 92E19504F27FE57751BC650619BFAA24 /* URIPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E31A483F582DBD232C4919C1989677CB /* HATEOASObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 92E19504F27FE57751BC650619BFAA24 /* HATEOASObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E59C6FC5ECFD2A7473FFA39C0E89BDEB /* RKTestNotificationObserver.h in Headers */ = {isa = PBXBuildFile; fileRef = 958FE3981DE5CF742C485D1947F037F7 /* RKTestNotificationObserver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E6AB790BBD3DB1A376F0A9A6A156B7D8 /* TransitionKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1160E8ADD8CDC2C49957D41A865921CF /* TransitionKit.framework */; };
 		E87B9C7A2B71458A27613F192F8A3319 /* RKMappingOperationDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 56D26A27561363E2B16063A59E53D519 /* RKMappingOperationDataSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -464,7 +465,7 @@
 		18A5C6B5B476424A753F16FAECADBC83 /* BiometricEvaluations.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = BiometricEvaluations.m; sourceTree = "<group>"; };
 		1942F5C6ADC71F7E54722400194C62C9 /* ISO8601DateFormatterValueTransformer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ISO8601DateFormatterValueTransformer.m; path = Code/ISO8601DateFormatterValueTransformer.m; sourceTree = "<group>"; };
 		197496082CCB663AB8B90C40DFF0E67F /* Pods-PQCheckThinSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-PQCheckThinSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
-		1A8DF49E60402EA2C86193301ED5555C /* URIPath.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = URIPath.m; sourceTree = "<group>"; };
+		1A8DF49E60402EA2C86193301ED5555C /* HATEOASObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = HATEOASObject.m; sourceTree = "<group>"; };
 		1CD6A30F05FD5471B04879A844ED3E8D /* RKValueTransformers-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "RKValueTransformers-umbrella.h"; sourceTree = "<group>"; };
 		1D5BD56AE200C3DC0360C321F5124EAD /* AFXMLRequestOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFXMLRequestOperation.h; path = AFNetworking/AFXMLRequestOperation.h; sourceTree = "<group>"; };
 		1EA49EF8FD86C2562CFDB14C05A8969B /* APIKey.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = APIKey.m; sourceTree = "<group>"; };
@@ -605,7 +606,7 @@
 		90848A7496116F3981AE610A06D81069 /* RKManagedObjectStore.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RKManagedObjectStore.m; path = Code/CoreData/RKManagedObjectStore.m; sourceTree = "<group>"; };
 		9191BBFC08DDFA0D6A1954EEAD76C0D1 /* AFXMLRequestOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFXMLRequestOperation.m; path = AFNetworking/AFXMLRequestOperation.m; sourceTree = "<group>"; };
 		92B27B6F71726D1929C2DD6C800C80D4 /* SOCKit.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = SOCKit.m; sourceTree = "<group>"; };
-		92E19504F27FE57751BC650619BFAA24 /* URIPath.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = URIPath.h; sourceTree = "<group>"; };
+		92E19504F27FE57751BC650619BFAA24 /* HATEOASObject.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = HATEOASObject.h; sourceTree = "<group>"; };
 		94694E97DB0A2F1E219C42E3E7E283A9 /* ISO8601DateFormatterValueTransformer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ISO8601DateFormatterValueTransformer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		94BA8461131D93EF81E64947B485AD67 /* RKRouter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RKRouter.m; path = Code/Network/RKRouter.m; sourceTree = "<group>"; };
 		95815F00BFD414007F72E1E20AD76DD8 /* AFNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AFNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -692,6 +693,8 @@
 		D3D5E074D18F0FD30D3808F4A32AD230 /* RKAttributeMapping.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RKAttributeMapping.m; path = Code/ObjectMapping/RKAttributeMapping.m; sourceTree = "<group>"; };
 		D40E1248EF9F6A2CCADE217A613D4621 /* MBProgressHUD.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		D7355C72E8632B9175036C0FAD8DF3C9 /* RKFetchRequestManagedObjectCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RKFetchRequestManagedObjectCache.h; path = Code/CoreData/RKFetchRequestManagedObjectCache.h; sourceTree = "<group>"; };
+		D759C9AC1C827C570030742F /* AppledocSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppledocSettings.plist; path = ../../../../Pod/Classes/AppledocSettings.plist; sourceTree = "<group>"; };
+		D759C9AD1C827DDC0030742F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../../../../Pod/Classes/README.md; sourceTree = "<group>"; };
 		D7EAF12224E9AFFF19DA934E9B9FF477 /* RKObjectMapping.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RKObjectMapping.m; path = Code/ObjectMapping/RKObjectMapping.m; sourceTree = "<group>"; };
 		D7F549B15143F8C8EC5B326EAEE42689 /* RKValueTransformers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RKValueTransformers.h; path = Code/RKValueTransformers.h; sourceTree = "<group>"; };
 		D85D08368432B560BD4FB59A7DBCBBBE /* RKObjectMappingMatcher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RKObjectMappingMatcher.h; path = Code/ObjectMapping/RKObjectMappingMatcher.h; sourceTree = "<group>"; };
@@ -1429,6 +1432,8 @@
 		E82D4194E3E55E1E3775B1FCD99FA144 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
+				D759C9AD1C827DDC0030742F /* README.md */,
+				D759C9AC1C827C570030742F /* AppledocSettings.plist */,
 				E4620CF45C90B56490916B2F78446530 /* Info.plist */,
 				AA145DFB057745436146AC6996F799D9 /* PQCheckSDK.modulemap */,
 				E6070DAB5782B95CB8465B096C366052 /* PQCheckSDK.xcconfig */,
@@ -1471,8 +1476,8 @@
 				18A5C6B5B476424A753F16FAECADBC83 /* BiometricEvaluations.m */,
 				E80B95420FC3E69A84486BB5092F7BC0 /* Links.h */,
 				2274EF5DFCC32A20A4B9A957EEB25914 /* Links.m */,
-				92E19504F27FE57751BC650619BFAA24 /* URIPath.h */,
-				1A8DF49E60402EA2C86193301ED5555C /* URIPath.m */,
+				92E19504F27FE57751BC650619BFAA24 /* HATEOASObject.h */,
+				1A8DF49E60402EA2C86193301ED5555C /* HATEOASObject.m */,
 				2F25851BC00B32F86DBDFAF622A84811 /* UploadAttempt.h */,
 				3C8F7EDBED60F1660E8B92217B77E29F /* UploadAttempt.m */,
 			);
@@ -1625,7 +1630,7 @@
 				BFFF65D12595CDF7214983701B86700E /* SDAVAssetExportSession.h in Headers */,
 				125294C0FF8A30A037E33009D3D268C9 /* UIColor+Additions.h in Headers */,
 				63B50ACC8E88A29B2EA8DD4CCC966CD9 /* UIImage+Additions.h in Headers */,
-				E31A483F582DBD232C4919C1989677CB /* URIPath.h in Headers */,
+				E31A483F582DBD232C4919C1989677CB /* HATEOASObject.h in Headers */,
 				86F439154E483F5DCA39B5B9C8352F63 /* UploadAttempt.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1934,7 +1939,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0720;
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -2125,7 +2130,7 @@
 				4CFCE9401365B30CB78D5F134FC827FA /* SDAVAssetExportSession.podspec in Sources */,
 				99DCA9BA382F83988E92EDDB8053065B /* UIColor+Additions.m in Sources */,
 				7F6DAB22CF1EE9FDAAA53DF1BEE14994 /* UIImage+Additions.m in Sources */,
-				3538D6442290839568697BE922138FED /* URIPath.m in Sources */,
+				3538D6442290839568697BE922138FED /* HATEOASObject.m in Sources */,
 				267F9BF0777EF2F373C30B8A3C7E1821 /* UploadAttempt.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2161,6 +2166,7 @@
 				AFE80A524ED18761A70C220D462FC26C /* AFPropertyListRequestOperation.m in Sources */,
 				C57DDBAE84B7167181062972F663ED74 /* AFURLConnectionOperation.m in Sources */,
 				1DB783C878B6844AE936BFAD02D0745D /* AFXMLRequestOperation.m in Sources */,
+				D759C9AE1C827DDC0030742F /* README.md in Sources */,
 				94444F0E75558EE30438B668E0662EBD /* UIImageView+AFNetworking.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2318,6 +2324,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/TransitionKit/TransitionKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = TransitionKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2345,6 +2352,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/SimpleKeychain/SimpleKeychain.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = SimpleKeychain;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2396,6 +2404,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/AFNetworking/AFNetworking.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = AFNetworking;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2425,6 +2434,7 @@
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Pods_PQCheckThinSDK_Example;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2452,6 +2462,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/PQCheckSDK/PQCheckSDK.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = PQCheckSDK;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2481,6 +2492,7 @@
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Pods_PQCheckThinSDK_Example;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2508,6 +2520,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/PQCheckSDK/PQCheckSDK.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = PQCheckSDK;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2535,6 +2548,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/SOCKit/SOCKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = SOCKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2562,6 +2576,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/ISO8601DateFormatterValueTransformer/ISO8601DateFormatterValueTransformer.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = ISO8601DateFormatterValueTransformer;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2589,6 +2604,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/RKValueTransformers/RKValueTransformers.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RKValueTransformers;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2616,6 +2632,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/AFNetworking/AFNetworking.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = AFNetworking;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2643,6 +2660,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/ISO8601DateFormatterValueTransformer/ISO8601DateFormatterValueTransformer.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = ISO8601DateFormatterValueTransformer;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2670,6 +2688,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/MBProgressHUD/MBProgressHUD.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = MBProgressHUD;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2697,6 +2716,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2736,6 +2756,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/RestKit/RestKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RestKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2763,6 +2784,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/SimpleKeychain/SimpleKeychain.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = SimpleKeychain;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2790,6 +2812,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/RKValueTransformers/RKValueTransformers.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RKValueTransformers;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2817,6 +2840,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/RestKit/RestKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RestKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2844,6 +2868,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/TransitionKit/TransitionKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = TransitionKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2871,6 +2896,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/MBProgressHUD/MBProgressHUD.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = MBProgressHUD;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -2932,6 +2958,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/SOCKit/SOCKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = SOCKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;

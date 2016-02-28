@@ -10,10 +10,10 @@
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "PQCheckManager.h"
 #import "PQCheckRecordSelfieViewController.h"
-#ifdef THINKSDK
-#import "API/Response/Authorisation.h"
-#endif
 #import "API/APIManager.h"
+#import "API/Response/Authorisation.h"
+#import "API/Response/UploadAttempt.h"
+
 
 static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
 static NSString* kPQCheckUserInfoEnrolmentReference = @"reference";

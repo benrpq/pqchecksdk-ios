@@ -6,6 +6,9 @@
 //  Copyright © 2016 Post-Quantum. All rights reserved.
 //
 
+#import <CoreMedia/CoreMedia.h>
+#import <AVFoundation/AVFoundation.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 #import "PQCheckRecordSelfieViewController.h"
 #import "PQCheckFaceShape.h"
 #import "PQCheckDigestLabel.h"
@@ -30,7 +33,7 @@ static const NSTimeInterval kDelayBeforeDigestDismissal = 1.0f;
 static const NSTimeInterval kMinimumAcceptableRecordingDuration = 2.0f;
 static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
-@interface PQCheckRecordSelfieViewController () <PQCheckDigestLabelDelegate>
+@interface PQCheckRecordSelfieViewController () <AVCaptureFileOutputRecordingDelegate, PQCheckDigestLabelDelegate>
 {
     BOOL _isRecording;
     AVCaptureDevice *_camera;

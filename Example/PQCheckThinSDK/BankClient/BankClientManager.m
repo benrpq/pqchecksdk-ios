@@ -191,14 +191,7 @@ static NSString*  kDefaultProfile = @"pqcheck";
 - (void)viewAuthorisationForPayment:(Payment *)payment
                          completion:(void (^)(Authorisation *authorisation, NSError *error))completion
 {
-    NSString *approvalUUID = [[NSURL URLWithString:payment.approvalUri] lastPathComponent];
-    
-    // Make sure that APIManager points to a correct endpoint
-    NSString *currentEndpoint = [[APIManager sharedManager] currentPQCheckEndpoint];
-    NSURL *baseURL = [NSURL URLWithString:[[NSURL URLWithString:@"/" relativeToURL:[NSURL URLWithString:payment.approvalUri]] absoluteString]];
-    [[APIManager sharedManager] setBaseURL:baseURL];
-    
-    [[APIManager sharedManager] viewAuthorisationRequestWithUUID:approvalUUID completion:^(Authorisation *authorisation, NSError *error) {
+    [[APIManager sharedManager] viewAuthorisationAtURL:[NSURL URLWithString:payment.approvalUri] completion:^(Authorisation *authorisation, NSError *error) {
         
         if (error == nil)
         {
@@ -209,8 +202,6 @@ static NSString*  kDefaultProfile = @"pqcheck";
             completion(nil, error);
         }
         
-        // Revert the endpoint configuration
-        [[APIManager sharedManager] setBaseURL:[NSURL URLWithString:currentEndpoint]];
     }];
 }
 

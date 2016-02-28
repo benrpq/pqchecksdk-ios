@@ -78,7 +78,7 @@
  *  The paymenet representation can be obtained from `approvePaymentWithUUID:userUUID:completion:` method.
  *
  *  @param payment    The payment representation
- *  @param completion A block object to be executed when the viewing request is completed. This block has no return value and takes two arguments: an instance of `Authorisation` object and an instance of `NSError` object. If this request is not successful, `NSError` object is not `nil` and `Authorisation` object is `nil`. On the other hand, if it is successful, `NSError` object is `nil` and `Authorisation` object, which contains `digest` and `upload-attempt` amongst other information, should then be passed to PQCheck SDK, which in turn will request a user to perform a selfie reading `digest` and submit the resulting selfie video to `upload-attempt`.
+ *  @param completion A block object to be executed when the viewing request is completed. This block has no return value and takes two arguments: an instance of `Authorisation` object and an instance of `NSError` object. If this request is not successful, `NSError` object is not `nil` and `Authorisation` object is `nil`. On the other hand, if it is successful, `NSError` object is `nil` and `Authorisation` object, which contains `digest` and `upload-attempt` amongst other information, should then be passed to PQCheck SDK, which in turn should request a user to perform a selfie reading `digest` and submit the resulting selfie video to `upload-attempt`.
  * 
  *  @see -approvePaymentWithUUID:userUUID:completion:
  */
