@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 /**
- *  This class implement a bank account representation object.
+ *  This class implements a bank account representation object.
  */
 @interface BankAccount : NSObject
 

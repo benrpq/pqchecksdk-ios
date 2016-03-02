@@ -11,7 +11,7 @@
 @class BankAccount;
 
 /**
- *  This class implement a payment representation object.
+ *  This class implements a payment representation object.
  *
  *  @see AccountCollection class
  */

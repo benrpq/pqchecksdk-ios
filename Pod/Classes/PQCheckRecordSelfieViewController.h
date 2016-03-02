@@ -27,9 +27,9 @@ typedef NS_ENUM(NSUInteger, PQCheckSelfieMode)
 };
 
 /**
- *  `PQCheckRecordSelfieViewController` is a subclass of `UIViewController` that handles the recording of selfie video.
+ *  `PQCheckRecordSelfieViewController` is a subclass of `UIViewController` that handles the recording of a selfie video.
  *
- *  The use can supply a `transcript` of what to read during selfie via the appropriate setter. The recording behaviour of this view controller can be controlled with `pacingEnabled` property.
+ *  The user can supply a `transcript` of what to read during selfie via the appropriate setter. The recording behaviour of this view controller can be controlled with `pacingEnabled` property.
  */
 @interface PQCheckRecordSelfieViewController : UIViewController
 

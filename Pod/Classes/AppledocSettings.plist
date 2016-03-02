@@ -24,12 +24,12 @@
 	<key>--repeat-first-par</key>
 	<false/>
 	<key>--output</key>
-	<string>../Docs</string>
+	<string>../../Docs/SDK</string>
 	<key>--verbose</key>
 	<string>3</string>
 	<key>--create-docset</key>
 	<false/>
 	<key>--index-desc</key>
-	<string>README.md</string>
+	<string>../README.md</string>
 </dict>
 </plist>

@@ -16,7 +16,7 @@
 @interface Enrolment : NSObject
 
 /**
- *  The URI to which the enrolment selfie video can be send.
+ *  The URI to which the enrolment selfie video can be sent.
  */
 @property (nonatomic, copy) NSString *uri;
 

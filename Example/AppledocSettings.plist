@@ -23,7 +23,7 @@
 	<key>--repeat-first-par</key>
 	<false/>
 	<key>--output</key>
-	<string>Docs</string>
+	<string>../Docs/Example</string>
 	<key>--verbose</key>
 	<string>3</string>
 	<key>--create-docset</key>

@@ -1,5 +1,7 @@
 This document shows an example application of the deployment of PQCheck in retail banking application. PQCheck is used to approve  a transaction of a high-value payment. The term **approve** in the context of PQCheck means creating a *video signature* that binds the user to his/her transaction. 
 
+>**Note** The documentation for PQCheck iOS SDK is available at [PQCheck SDK for iOS Reference](../../SDK/html/index.html).
+
 In this example banking application, we have three components:-
 
 1. PQCheck engine or server;
@@ -121,7 +123,7 @@ Each payment is assigned a unique `paymentIdentifier` and the process to approve
         else
         {
             // 3b. Oh dear, the payment approval request is not successful. 
-            // You can show an aelrt to the user 
+            // You can show an alert to the user 
         }
     }];
 

@@ -6,6 +6,8 @@
 //
 //
 
+#import <AVFoundation/AVFoundation.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 #import <SimpleKeychain/SimpleKeychain.h>
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "PQCheckManager.h"

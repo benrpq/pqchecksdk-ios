@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 /**
- *  This class implement an account collection representation object. An array of this representation is returned by `[BankClientManager getAccountsWithUserUUID:completion:]` method of `BankClientManager` class.
+ *  This class implements an account collection representation object. An array of this representation is returned by `[BankClientManager getAccountsWithUserUUID:completion:]` method of `BankClientManager` class.
  */
 @interface AccountCollection : NSObject
 

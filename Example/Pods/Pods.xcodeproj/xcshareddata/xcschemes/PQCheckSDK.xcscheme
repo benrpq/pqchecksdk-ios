@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0FEDECEFCF9FF90462B4940D2919A0F6"
+               BlueprintIdentifier = "E45F6CAC6ED6F138690FC6C5E20AA856"
                BuildableName = "PQCheckSDK.framework"
                BlueprintName = "PQCheckSDK"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0FEDECEFCF9FF90462B4940D2919A0F6"
+            BlueprintIdentifier = "E45F6CAC6ED6F138690FC6C5E20AA856"
             BuildableName = "PQCheckSDK.framework"
             BlueprintName = "PQCheckSDK"
             ReferencedContainer = "container:Pods.xcodeproj">

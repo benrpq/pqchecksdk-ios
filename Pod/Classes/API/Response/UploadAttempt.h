@@ -15,7 +15,7 @@
  *  The status of the attempt is given by `authorisationStatus`, if the status is:
  *  
  *  1. SUCCESS, then that's the end of the authorisation;
- *  2. OPEN, then the user should be asked the record another selfie video reading the transcript given by `nextDigest`;
+ *  2. OPEN, then the user should be asked to record another selfie video reading the transcript given by `nextDigest`;
  *  3. TIMED-OUT, then the authorisation has failed and a new authorisation has to be created;
  *  4. CANCELLED, then the authorisation has been called by the user and a new authorisation has to be created.
  */

@@ -11,7 +11,7 @@
 /**
  *  The `UserManager` class handles the users of this sample app. Each user is assigned an identifier. Before a user can use the sample app, he/she needs to go through an enrolment process. Once enrolled, he/she will be added into the set of enrolled users and will then be able to perform basic functionality as implemented in `BankClientManager` class.
  *
- *  While there can be more than one enrolled users in the sample app, there can only be one active user.
+ *  While there can be several enrolled users in the sample app, there can only be one active user at a time.
  */
 @interface UserManager : NSObject
 

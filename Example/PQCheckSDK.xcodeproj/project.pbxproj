@@ -21,7 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		B4B36C440136BC849749A4C7 /* Pods_PQCheckThinSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EB072CEE57858611E76789C /* Pods_PQCheckThinSDK_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		3DB19FE79A0E06E9CD9BA0E6 /* Pods_PQCheckThinSDK_ExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B7ACA2AD9915CCEB45F25D21 /* Pods_PQCheckThinSDK_ExampleTests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		617A8160F6F9E9521914817B /* Pods_PQCheckThinSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADC53861025437AA33E7FA4A /* Pods_PQCheckThinSDK_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D73838011C6A454B0068372D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		D73838021C6A454B0068372D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		D73838031C6A454B0068372D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
@@ -38,6 +39,7 @@
 		D73838491C6A46B80068372D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D73838301C6A45CB0068372D /* InfoPlist.strings */; };
 		D738384A1C6A46F20068372D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D73838131C6A45870068372D /* main.m */; };
 		D738384D1C6A48790068372D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D738384B1C6A48740068372D /* Images.xcassets */; };
+		D78E4EC71C877FCC00213E08 /* ILTesting in Resources */ = {isa = PBXBuildFile; fileRef = D78E4EC61C877FCC00213E08 /* ILTesting */; };
 		D7A5E5251C81A0AD00190FE0 /* BankClientManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A5E5191C81A0AD00190FE0 /* BankClientManager.m */; };
 		D7A5E5261C81A0AD00190FE0 /* AccountCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A5E51C1C81A0AD00190FE0 /* AccountCollection.m */; };
 		D7A5E5271C81A0AD00190FE0 /* BankAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A5E51E1C81A0AD00190FE0 /* BankAccount.m */; };
@@ -45,9 +47,21 @@
 		D7A5E5291C81A0AD00190FE0 /* Payment.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A5E5221C81A0AD00190FE0 /* Payment.m */; };
 		D7A5E52A1C81A0AD00190FE0 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A5E5241C81A0AD00190FE0 /* UserManager.m */; };
 		D7B5B14F1C7D84DB007CD9F8 /* EnrolmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7B5B14E1C7D84DB007CD9F8 /* EnrolmentViewController.m */; };
+		D7CB07141C8448FC00AF2DB6 /* PQCheckThinSDK_ExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D7CB07131C8448FC00AF2DB6 /* PQCheckThinSDK_ExampleTests.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		D7CB07161C8448FC00AF2DB6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6003F582195388D10070C39A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D73837FA1C6A454B0068372D;
+			remoteInfo = PQCheckThinSDK_Example;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		531F2319EF381D24C828F4FA /* Pods-PQCheckThinSDK_ExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PQCheckThinSDK_ExampleTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PQCheckThinSDK_ExampleTests/Pods-PQCheckThinSDK_ExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -55,12 +69,14 @@
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
+		600B4FE366CA1304008D4908 /* Pods-PQCheckThinSDK_ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PQCheckThinSDK_ExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PQCheckThinSDK_ExampleTests/Pods-PQCheckThinSDK_ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
-		8EB072CEE57858611E76789C /* Pods_PQCheckThinSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PQCheckThinSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9632BF90CB7BD48BBA59404D /* Pods-PQCheckThinSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PQCheckThinSDK_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PQCheckThinSDK_Example/Pods-PQCheckThinSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		A83CE88FC0BE4864C5AF69E7 /* Pods-PQCheckThinSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PQCheckThinSDK_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-PQCheckThinSDK_Example/Pods-PQCheckThinSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
+		ADC53861025437AA33E7FA4A /* Pods_PQCheckThinSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PQCheckThinSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B03A54B6FEE652AF7ABE8009 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		B7ACA2AD9915CCEB45F25D21 /* Pods_PQCheckThinSDK_ExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PQCheckThinSDK_ExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC9976A77F844FD06C2C041E /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		BF64AC26DD400E9B0BBC160D /* Pods-PQCheckThinSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PQCheckThinSDK_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-PQCheckThinSDK_Example/Pods-PQCheckThinSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
-		CF821FD3FCA04CBC23D1652A /* Pods-PQCheckThinSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PQCheckThinSDK_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PQCheckThinSDK_Example/Pods-PQCheckThinSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		D70147611C81A52B00C1C73A /* AppledocSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppledocSettings.plist; sourceTree = "<group>"; };
 		D738380F1C6A454B0068372D /* PQCheckThinSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PQCheckThinSDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D73838111C6A45870068372D /* AccountsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AccountsViewController.h; path = PQCheckThinSDK/AccountsViewController.h; sourceTree = "<group>"; };
@@ -87,6 +103,7 @@
 		D738383D1C6A462A0068372D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D738384B1C6A48740068372D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = PQCheckThinSDK/Images.xcassets; sourceTree = "<group>"; };
 		D759C9B41C82F8EA0030742F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D78E4EC61C877FCC00213E08 /* ILTesting */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ILTesting; sourceTree = "<group>"; };
 		D7A5E5181C81A0AD00190FE0 /* BankClientManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BankClientManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		D7A5E5191C81A0AD00190FE0 /* BankClientManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankClientManager.m; sourceTree = "<group>"; };
 		D7A5E51B1C81A0AD00190FE0 /* AccountCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountCollection.h; sourceTree = "<group>"; };
@@ -101,6 +118,9 @@
 		D7A5E5241C81A0AD00190FE0 /* UserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = UserManager.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		D7B5B14D1C7D84DB007CD9F8 /* EnrolmentViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EnrolmentViewController.h; path = PQCheckThinSDK/EnrolmentViewController.h; sourceTree = "<group>"; };
 		D7B5B14E1C7D84DB007CD9F8 /* EnrolmentViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = EnrolmentViewController.m; path = PQCheckThinSDK/EnrolmentViewController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		D7CB07111C8448FC00AF2DB6 /* PQCheckThinSDK_ExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PQCheckThinSDK_ExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7CB07131C8448FC00AF2DB6 /* PQCheckThinSDK_ExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PQCheckThinSDK_ExampleTests.m; sourceTree = "<group>"; };
+		D7CB07151C8448FC00AF2DB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F14EB6DD0D1782F0E3FA284F /* PQCheckSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PQCheckSDK.podspec; path = ../PQCheckSDK.podspec; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,7 +132,15 @@
 				D73838011C6A454B0068372D /* CoreGraphics.framework in Frameworks */,
 				D73838021C6A454B0068372D /* UIKit.framework in Frameworks */,
 				D73838031C6A454B0068372D /* Foundation.framework in Frameworks */,
-				B4B36C440136BC849749A4C7 /* Pods_PQCheckThinSDK_Example.framework in Frameworks */,
+				617A8160F6F9E9521914817B /* Pods_PQCheckThinSDK_Example.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D7CB070E1C8448FC00AF2DB6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3DB19FE79A0E06E9CD9BA0E6 /* Pods_PQCheckThinSDK_ExampleTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,9 +153,10 @@
 				60FF7A9C1954A5C5007DD14C /* Podspec Metadata */,
 				D73837F91C6A45340068372D /* Example for PQCheckThinSDK */,
 				6003F5B5195388D20070C39A /* Tests */,
+				D7CB07121C8448FC00AF2DB6 /* PQCheckThinSDK_ExampleTests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
-				953984B28B693A0B2E68E6D2 /* Pods */,
+				CC7DB677D1BEEDE513CCED00 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -135,6 +164,7 @@
 			isa = PBXGroup;
 			children = (
 				D738380F1C6A454B0068372D /* PQCheckThinSDK_Example.app */,
+				D7CB07111C8448FC00AF2DB6 /* PQCheckThinSDK_ExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -146,7 +176,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				8EB072CEE57858611E76789C /* Pods_PQCheckThinSDK_Example.framework */,
+				ADC53861025437AA33E7FA4A /* Pods_PQCheckThinSDK_Example.framework */,
+				B7ACA2AD9915CCEB45F25D21 /* Pods_PQCheckThinSDK_ExampleTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -180,11 +211,13 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
-		953984B28B693A0B2E68E6D2 /* Pods */ = {
+		CC7DB677D1BEEDE513CCED00 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				CF821FD3FCA04CBC23D1652A /* Pods-PQCheckThinSDK_Example.debug.xcconfig */,
-				BF64AC26DD400E9B0BBC160D /* Pods-PQCheckThinSDK_Example.release.xcconfig */,
+				9632BF90CB7BD48BBA59404D /* Pods-PQCheckThinSDK_Example.debug.xcconfig */,
+				A83CE88FC0BE4864C5AF69E7 /* Pods-PQCheckThinSDK_Example.release.xcconfig */,
+				531F2319EF381D24C828F4FA /* Pods-PQCheckThinSDK_ExampleTests.debug.xcconfig */,
+				600B4FE366CA1304008D4908 /* Pods-PQCheckThinSDK_ExampleTests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -269,6 +302,16 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		D7CB07121C8448FC00AF2DB6 /* PQCheckThinSDK_ExampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				D78E4EC61C877FCC00213E08 /* ILTesting */,
+				D7CB07131C8448FC00AF2DB6 /* PQCheckThinSDK_ExampleTests.m */,
+				D7CB07151C8448FC00AF2DB6 /* Info.plist */,
+			);
+			path = PQCheckThinSDK_ExampleTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -276,12 +319,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D738380C1C6A454B0068372D /* Build configuration list for PBXNativeTarget "PQCheckThinSDK_Example" */;
 			buildPhases = (
-				A6E8A7B4321AA95EBE9BC00D /* Check Pods Manifest.lock */,
+				34BBAB0627943F43B5EFDE06 /* Check Pods Manifest.lock */,
 				D73837FC1C6A454B0068372D /* Sources */,
 				D73838001C6A454B0068372D /* Frameworks */,
 				D73838051C6A454B0068372D /* Resources */,
-				CFE1F05EDE5E2C69117B8C50 /* Embed Pods Frameworks */,
-				DD4EB519FD71EA16039A6E9A /* Copy Pods Resources */,
+				7996EAD045B03F1F45ECC796 /* Embed Pods Frameworks */,
+				D4307E69AC01B6C709DE9938 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -291,6 +334,27 @@
 			productName = PQCheckSDK;
 			productReference = D738380F1C6A454B0068372D /* PQCheckThinSDK_Example.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D7CB07101C8448FC00AF2DB6 /* PQCheckThinSDK_ExampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D7CB071A1C8448FC00AF2DB6 /* Build configuration list for PBXNativeTarget "PQCheckThinSDK_ExampleTests" */;
+			buildPhases = (
+				91A1E43CECF03E3D9804CC0A /* Check Pods Manifest.lock */,
+				D7CB070D1C8448FC00AF2DB6 /* Sources */,
+				D7CB070E1C8448FC00AF2DB6 /* Frameworks */,
+				D7CB070F1C8448FC00AF2DB6 /* Resources */,
+				36707EF56E25064F786DE422 /* Embed Pods Frameworks */,
+				3945A54A3C9CF5C07DC03B49 /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D7CB07171C8448FC00AF2DB6 /* PBXTargetDependency */,
+			);
+			name = PQCheckThinSDK_ExampleTests;
+			productName = PQCheckThinSDK_ExampleTests;
+			productReference = D7CB07111C8448FC00AF2DB6 /* PQCheckThinSDK_ExampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -304,6 +368,10 @@
 				TargetAttributes = {
 					D759C9AF1C82848D0030742F = {
 						CreatedOnToolsVersion = 7.2.1;
+					};
+					D7CB07101C8448FC00AF2DB6 = {
+						CreatedOnToolsVersion = 7.2.1;
+						TestTargetID = D73837FA1C6A454B0068372D;
 					};
 				};
 			};
@@ -322,6 +390,7 @@
 			targets = (
 				D73837FA1C6A454B0068372D /* PQCheckThinSDK_Example */,
 				D759C9AF1C82848D0030742F /* Documentation */,
+				D7CB07101C8448FC00AF2DB6 /* PQCheckThinSDK_ExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -338,10 +407,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D7CB070F1C8448FC00AF2DB6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D78E4EC71C877FCC00213E08 /* ILTesting in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		A6E8A7B4321AA95EBE9BC00D /* Check Pods Manifest.lock */ = {
+		34BBAB0627943F43B5EFDE06 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -356,7 +433,37 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		CFE1F05EDE5E2C69117B8C50 /* Embed Pods Frameworks */ = {
+		36707EF56E25064F786DE422 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PQCheckThinSDK_ExampleTests/Pods-PQCheckThinSDK_ExampleTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3945A54A3C9CF5C07DC03B49 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PQCheckThinSDK_ExampleTests/Pods-PQCheckThinSDK_ExampleTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7996EAD045B03F1F45ECC796 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -371,20 +478,22 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PQCheckThinSDK_Example/Pods-PQCheckThinSDK_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D759C9B31C8284B50030742F /* ShellScript */ = {
+		91A1E43CECF03E3D9804CC0A /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Create documentation for the SDK\ncd \"${SRCROOT}/../Pod/Classes\"\nappledoc .\n\n# Create documentation for the example code\ncd \"${SRCROOT}\"\nappledoc .\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
 		};
-		DD4EB519FD71EA16039A6E9A /* Copy Pods Resources */ = {
+		D4307E69AC01B6C709DE9938 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -398,6 +507,19 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PQCheckThinSDK_Example/Pods-PQCheckThinSDK_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		D759C9B31C8284B50030742F /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Create documentation for the SDK\ncd \"${SRCROOT}/../Pod/Classes\"\nappledoc .\n\n# Create documentation for the example code\ncd \"${SRCROOT}\"\nappledoc .\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -425,7 +547,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D7CB070D1C8448FC00AF2DB6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D7CB07141C8448FC00AF2DB6 /* PQCheckThinSDK_ExampleTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D7CB07171C8448FC00AF2DB6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D73837FA1C6A454B0068372D /* PQCheckThinSDK_Example */;
+			targetProxy = D7CB07161C8448FC00AF2DB6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		6003F5B8195388D20070C39A /* InfoPlist.strings */ = {
@@ -531,7 +669,7 @@
 		};
 		D738380D1C6A454B0068372D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CF821FD3FCA04CBC23D1652A /* Pods-PQCheckThinSDK_Example.debug.xcconfig */;
+			baseConfigurationReference = 9632BF90CB7BD48BBA59404D /* Pods-PQCheckThinSDK_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -557,7 +695,7 @@
 		};
 		D738380E1C6A454B0068372D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BF64AC26DD400E9B0BBC160D /* Pods-PQCheckThinSDK_Example.release.xcconfig */;
+			baseConfigurationReference = A83CE88FC0BE4864C5AF69E7 /* Pods-PQCheckThinSDK_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -595,6 +733,53 @@
 			};
 			name = Release;
 		};
+		D7CB07181C8448FC00AF2DB6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 531F2319EF381D24C828F4FA /* Pods-PQCheckThinSDK_ExampleTests.debug.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_ROOT}/Headers/Private",
+				);
+				INFOPLIST_FILE = PQCheckThinSDK_ExampleTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.post-quantum.PQCheckThinSDK-ExampleTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PQCheckThinSDK_Example.app/PQCheckThinSDK_Example";
+			};
+			name = Debug;
+		};
+		D7CB07191C8448FC00AF2DB6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 600B4FE366CA1304008D4908 /* Pods-PQCheckThinSDK_ExampleTests.release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PODS_ROOT}/Headers/Private",
+				);
+				INFOPLIST_FILE = PQCheckThinSDK_ExampleTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.post-quantum.PQCheckThinSDK-ExampleTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PQCheckThinSDK_Example.app/PQCheckThinSDK_Example";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -623,6 +808,16 @@
 				D759C9B11C82848D0030742F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D7CB071A1C8448FC00AF2DB6 /* Build configuration list for PBXNativeTarget "PQCheckThinSDK_ExampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D7CB07181C8448FC00AF2DB6 /* Debug */,
+				D7CB07191C8448FC00AF2DB6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

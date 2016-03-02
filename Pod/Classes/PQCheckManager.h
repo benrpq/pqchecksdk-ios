@@ -13,9 +13,9 @@
 @protocol PQCheckManagerDelegate;
 
 /**
- *  `PQCheckManager` wraps the complexity of PQCheck into a easy-to-use class. Using this class, all you need to do to perform an authorisation or enrolment is to call the respective method and wire up the appropriate delegate methods.
+ *  `PQCheckManager` wraps the complexity of PQCheck into an easy-to-use class. Using this class, all you need to do to perform an authorisation or enrolment is to call the respective method and wire up the appropriate delegate methods.
  *
- *  Two types of customisation are available. The first one is for pacing a user while he/she is recording a selfie video. The other customisation to control whether another selfie attempt should be launched automatically in the event of failure.
+ *  Two types of customisation are available. The first one is for pacing a user while he/she is recording a selfie video. The other customisation is for controlling whether another selfie attempt should be launched automatically in the event of failure.
  */
 @interface PQCheckManager : NSObject
 
@@ -25,7 +25,7 @@
 @property (nonatomic, weak)   id<PQCheckManagerDelegate> delegate;
 
 /**
- *  The boolean value that indicates whether or not another should be attempted automatically in the event the failure on the previous attempt.
+ *  The boolean value that indicates whether or not another attempt should be made automatically in the event of failure on the previous attempt.
  *
  *  @discussion If the boolean value is `NO`, in the event of attempt failure, an alert view controller will be presented to the user asking him/her to record another selfie attempt. 
  */
@@ -99,7 +99,7 @@
 /**
  *  The delegate method that is invoked after a successful upload of an authorisation video.
  *
- *  @discussion Despite a successful upload, the authorisation may not be successful. PQCheck server may rejects the authorisation due to incorrect biometric or expired authorisation. Therefore, the `status` of the authorisation has to be inspected.
+ *  @discussion Despite a successful upload, the authorisation may not be successful. PQCheck server may reject the authorisation due to incorrect biometric or expired authorisation. Therefore, the `status` of the authorisation has to be inspected.
  *
  *  @param manager The PQCheck manager object.
  *  @param status  The status of the authorisation returned by PQCheck server
