@@ -32,6 +32,11 @@
 @property (nonatomic, copy)   NSString *digest;
 
 /**
+ *  The boolean value that whether or not an enrolment is mandatory before authorisation can be performed.
+ */
+@property (nonatomic, assign) BOOL mustHaveHistory;
+
+/**
  *  The UNIX timestamp representing the time when the authorisation becomes active.
  */
 @property (nonatomic, assign) NSTimeInterval startTime;

@@ -21,6 +21,15 @@
         
         return [[NSData alloc] initWithContentsOfFile:resource];
     }
+    // Response to an upload attempt
+    else if ([request.HTTPMethod isEqualToString:@"POST"] &&
+             [[request.URL path] isEqualToString:@"/authorisation/bcd767ff-141f-41b0-b9f4-302f7647eba1/attempt"])
+    {
+        NSBundle *bundle = [NSBundle bundleForClass:self.class];
+        NSString *resource = [bundle pathForResource:@"upload-attempt" ofType:@"json"];
+        
+        return [[NSData alloc] initWithContentsOfFile:resource];
+    }
     
     return nil;
 }
