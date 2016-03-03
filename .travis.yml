@@ -11,7 +11,7 @@ before_install:
 
 branches:
   only:
-    - thin.sdk
+    - develop
 
 script:
   - pod lib lint --allow-warnings
