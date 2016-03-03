@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "B8EA607C526E444B70B395068B241860E4B1AC7C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "B8EA607C526E444B70B395068B241860E4B1AC7C" : 0,
+    "A5BF1811FABA264F7D562E59078748EA3AC040C4" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "D3772738-F81E-48DB-8D31-9E42C18F03A8",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "B8EA607C526E444B70B395068B241860E4B1AC7C" : "PQCheckSDK\/",
+    "A5BF1811FABA264F7D562E59078748EA3AC040C4" : "PQCheckSDK\/Example\/PQCheckThinSDK_ExampleTests\/ILTesting\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "PQCheckSDK",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Example\/PQCheckSDK.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/InfiniteLoopDK\/ILTesting.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A5BF1811FABA264F7D562E59078748EA3AC040C4"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:post-quantum\/pqchecksdk-ios.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "B8EA607C526E444B70B395068B241860E4B1AC7C"
+    }
+  ]
+}

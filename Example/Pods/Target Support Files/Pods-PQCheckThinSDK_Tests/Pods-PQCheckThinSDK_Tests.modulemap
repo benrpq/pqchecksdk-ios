@@ -1,0 +1,6 @@
+framework module Pods_PQCheckThinSDK_Tests {
+  umbrella header "Pods-PQCheckThinSDK_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

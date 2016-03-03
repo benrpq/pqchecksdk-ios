@@ -1,0 +1,6 @@
+[submodule "Example/PQCheckThinSDK_ExampleTests/ILTesting"]
+	path = Example/PQCheckThinSDK_ExampleTests/ILTesting
+	url = https://github.com/InfiniteLoopDK/ILTesting.git
+[submodule "Example/PQCheckThinSDK_Tests/ILTesting"]
+	path = Example/PQCheckThinSDK_Tests/ILTesting
+	url = https://github.com/InfiniteLoopDK/ILTesting.git

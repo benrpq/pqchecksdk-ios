@@ -38,6 +38,7 @@
     return @{@"uuid": @"uuid",
              @"status": @"status",
              @"digest": @"digest",
+             @"mustHaveHistory": @"mustHaveHistory",
              @"startTime": @"startTime",
              @"expiryTime": @"expiryTime"};
 }

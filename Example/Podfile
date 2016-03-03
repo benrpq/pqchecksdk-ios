@@ -1,14 +1,32 @@
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
-target 'PQCheckSDK_Example', :exclusive => true do
+# The following commented lines are for Cocoapods 1.0.0
+#target 'PQCheckThinSDK_Example' do
+#  pod 'PQCheckSDK', :path => '../'
+#
+#  pod 'RestKit'
+#  pod 'MBProgressHUD'
+#  
+#  target 'PQCheckThinSDK_Tests' do
+#    inherit! :search_paths
+#
+#    pod 'Kiwi'
+#  end
+#end
+
+target 'PQCheckThinSDK_Example', :exclusive => true do
   pod 'PQCheckSDK', :path => '../'
+
+  pod 'RestKit'
   pod 'MBProgressHUD'
 end
-
-target 'PQCheckSDK_Tests', :exclusive => true do
+  
+target 'PQCheckThinSDK_Tests', :exclusive => true do
   pod 'PQCheckSDK', :path => '../'
 
-  pod 'Specta'
-  pod 'Expecta'
+  pod 'RestKit'
+  pod 'Kiwi'
+  pod 'OCHamcrest', '~> 5.2.0'
 end
+

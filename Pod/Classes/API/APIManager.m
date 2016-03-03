@@ -17,11 +17,14 @@
 #import "Authenticity.h"
 #import "BiometricEvaluations.h"
 #import "CancelAuthorisationRequest.h"
+#import "Enrolment.h"
 #endif
+#import "Authorisation.h"
+#import "UploadAttempt.h"
 
 static NSString* kPQCheckBaseDevelopmentURL = @"http://selfieguard-dev.elasticbeanstalk.com";
-static NSString* kPQCheckBaseUnstableURL = @"https://unstable-beta-api-pqcheck.post-quantum.com";
-static NSString* kPQCheckBaseStableURL = @"https://stable-beta-api-pqcheck.post-quantum.com";
+static NSString* kPQCheckBaseUnstableURL = @"https://beta-api-pqcheck.post-quantum.com";
+static NSString* kPQCheckBaseStableURL = @"https://api-pqcheck.post-quantum.com";
 static NSString* kPQCheckBaseDataCollectionURL = @"https://data-collection-pqcheck.post-quantum.com";
 
 static NSString* kPQCheckAPIKeyPath = @"/key";
@@ -30,6 +33,10 @@ static NSString* kPQCheckEnrolmentPath = @"/enrolment";
 
 static NSString* kPQCheckSDKDefaultProfile = @"pqcheck";
 static NSInteger kPQCheckSDKDefaultVersion = 1;
+
+static NSString* kEnrolmentVideoName = @"sample";
+static NSString* kAuthorisationVideoName = @"video";
+static NSString* kVideoExtension = @"mp4";
 
 @interface APIManager ()
 {
@@ -57,8 +64,12 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
     self = [super init];
     if (self)
     {
-        [self setPQCheckEndpoint:kUnstableEndpoint];
-        
+#ifndef THINSDK
+        [self setPQCheckEndpoint:kStableEndpoint];
+#else
+        // We need some value that is not nil
+        _endpoint = kPQCheckBaseStableURL;
+#endif
         NSURL *baseURL = [NSURL URLWithString:[self currentPQCheckEndpoint]];
         AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
         
@@ -81,7 +92,8 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
 {
     return _endpoint;
 }
-                          
+
+#ifndef THINSDK
 - (void)setPQCheckEndpoint:(PQCheckEndpoint)endpoint
 {
     // Initialize HTTPClient
@@ -102,6 +114,12 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
     }
     
     NSURL *baseURL = [NSURL URLWithString:_endpoint];
+    [self setBaseURL:baseURL];
+}
+#endif
+
+- (void)setBaseURL:(NSURL *)baseURL
+{
     AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
     [_objectManager setHTTPClient:httpClient];
 }
@@ -228,7 +246,7 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
                              }];
 }
 
-- (void)createAuthorisationWithCredential:(NSURLCredential *)credential
+- (void)createAuthorisationWithAPIKey:(APIKey *)apiKey
                            userIdentifier:(NSString *)identifier
                         authorisationHash:(NSString *)authorisationHash
                                   summary:(NSString *)summary
@@ -242,10 +260,10 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
                               version:[_version stringValue]];
         
     // Set authorisation header
-    if (credential != nil)
+    if (apiKey != nil)
     {
-        [[_objectManager HTTPClient] setAuthorizationHeaderWithUsername:[credential user]
-                                                               password:[credential password]];
+        [[_objectManager HTTPClient] setAuthorizationHeaderWithUsername:apiKey.uuid
+                                                               password:apiKey.secret];
     }
     
     // Object mapping of the request
@@ -305,17 +323,17 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
                        }];
 }
 
-- (void)viewAuthorisationRequestWithCredential:(NSURLCredential *)credential
+- (void)viewAuthorisationRequestWithAPIKey:(APIKey *)apiKey
                                           UUID:(NSString *)uuid
                                     completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock
 {
     assert(_objectManager != nil);
     
     // Set authorisation header
-    if (credential != nil)
+    if (apiKey != nil)
     {
-        [[_objectManager HTTPClient] setAuthorizationHeaderWithUsername:[credential user]
-                                                               password:[credential password]];
+        [[_objectManager HTTPClient] setAuthorizationHeaderWithUsername:apiKey.uuid
+                                                               password:apiKey.secret];
     }
 
     [self __viewAuthorisationRequestUUID:uuid completion:^(Authorisation *authorisation, NSError *error) {
@@ -323,13 +341,23 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
     }];
 }
 #else
-- (void)viewAuthorisationRequestWithUUID:(NSString *)uuid
-                              completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock
+- (void)viewAuthorisationAtURL:(NSURL *)url
+                    completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock
 {
     assert(_objectManager != nil);
     
+    NSString *uuid = [url lastPathComponent];
+    
+    // Make sure that APIManager points to a correct endpoint
+    NSString *currentEndpoint = [[APIManager sharedManager] currentPQCheckEndpoint];
+    NSURL *baseURL = [NSURL URLWithString:[[NSURL URLWithString:@"/" relativeToURL:url] absoluteString]];
+    [[APIManager sharedManager] setBaseURL:baseURL];
+    
     [self __viewAuthorisationRequestUUID:uuid completion:^(Authorisation *authorisation, NSError *error) {
         completionBlock(authorisation, error);
+        
+        // Revert the endpoint configuration
+        [[APIManager sharedManager] setBaseURL:[NSURL URLWithString:currentEndpoint]];
     }];
 }
 #endif
@@ -356,8 +384,8 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
     [authenticityMapping addAttributeMappingsFromDictionary:[Authenticity mapping]];
 #endif
     RKObjectMapping *linksMapping = [RKObjectMapping mappingForClass:[Links class]];
-    RKObjectMapping *pathMapping = [RKObjectMapping mappingForClass:[URIPath class]];
-    [pathMapping addAttributeMappingsFromDictionary:[URIPath mapping]];
+    RKObjectMapping *pathMapping = [RKObjectMapping mappingForClass:[HATEOASObject class]];
+    [pathMapping addAttributeMappingsFromDictionary:[HATEOASObject mapping]];
     
     // Define the mapping relationship
     RKPropertyMapping *mapping = nil;
@@ -462,6 +490,11 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
         return;
     }
     
+    NSURL *url = [NSURL URLWithString:authorisation.links.uploadAttemptPath.href];
+    NSURL *baseURL = [NSURL URLWithString:[[NSURL URLWithString:@"/" relativeToURL:url] absoluteString]];
+    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
+    _objectManager = [[RKObjectManager alloc] initWithHTTPClient:httpClient];
+    
     // We want to accept JSON type data, plus profile and version if available
     [self setAcceptHeaderWithMIMEType:RKMIMETypeJSON
                               profile:_profile
@@ -487,9 +520,9 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
     NSString *uploadAttemptPath = [attemptURL path];
     NSMutableURLRequest *urlRequest = [_objectManager multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:uploadAttemptPath parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         // POST the media file
-        NSString *fileName = [[authorisation uuid] stringByAppendingPathExtension:@"mp4"];
+        NSString *fileName = [[authorisation uuid] stringByAppendingPathExtension:kVideoExtension];
         NSString *MIMEType = (__bridge NSString *)(UTTypeCopyPreferredTagWithClass(kUTTypeMPEG4, kUTTagClassMIMEType));
-        [formData appendPartWithFileURL:mediaURL name:@"video" fileName:fileName mimeType:MIMEType error:nil];
+        [formData appendPartWithFileURL:mediaURL name:kAuthorisationVideoName fileName:fileName mimeType:MIMEType error:nil];
     }];
 
     RKObjectRequestOperation *operation =
@@ -505,14 +538,23 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
 }
 
 #ifndef THINSDK
-- (void)enrolUserWithIdentifier:(NSString *)userIdentifier
+- (void)enrolUserWithAPIKey:(APIKey *)apiKey
+                 userIdentifier:(NSString *)identifier
                       reference:(NSString *)reference
                      transcript:(NSString *)transcript
                        mediaURL:(NSURL *)mediaURL
-                     completion:(void (^)(NSURL *uploadURI, NSError *error))completionBlock
+                     completion:(void (^)(NSError *error))completionBlock
 {
-    // Do we have the enrolment sample?
-    BOOL isURIValid = [mediaURL isFileURL] == NO && [mediaURL checkResourceIsReachableAndReturnError:nil];
+    // Make sure that the given URL is valid and the corresponding resource exists
+    if ([mediaURL isFileURL] == NO ||
+        [mediaURL checkResourceIsReachableAndReturnError:nil] == NO)
+    {
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:NSLocalizedStringFromTable(@"The given URL is invalid, either not a file URL or the resource does not exist", @"PQCheckSDK", nil) forKey:NSLocalizedFailureReasonErrorKey];
+        NSError *error = [[NSError alloc] initWithDomain:@"PQCheckSDKErrorDomain" code:NSURLErrorBadURL userInfo:userInfo];
+        completionBlock(error);
+        
+        return;
+    }
     
     // We want to accept JSON type data, plus profile and version if available
     [self setAcceptHeaderWithMIMEType:RKMIMETypeJSON
@@ -520,8 +562,80 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
                               version:[_version stringValue]];
     
     // Object mapping of the response
-    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[UploadAttempt class]];
-    [responseMapping addAttributeMappingsFromDictionary:[UploadAttempt mapping]];
+    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[NSNull class]];
+    
+    // Register the mapping with provider using a response descriptor
+    NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
+    RKResponseDescriptor *responseDescriptor = [RKResponseDescriptor responseDescriptorWithMapping:responseMapping
+                                                                                            method:RKRequestMethodPOST
+                                                                                       pathPattern:nil
+                                                                                           keyPath:nil
+                                                                                       statusCodes:statusCodes];
+    [_objectManager addResponseDescriptor:responseDescriptor];
+
+    // Set authorisation header
+    if (apiKey != nil)
+    {
+        [[_objectManager HTTPClient] setAuthorizationHeaderWithUsername:apiKey.uuid
+                                                               password:apiKey.secret];
+    }
+    
+    Enrolment *enrolment = [[Enrolment alloc] initWithUserIdentifier:identifier reference:reference transcript:transcript];
+    
+    // Perform multipart POST request
+    NSMutableURLRequest *urlRequest = [_objectManager multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:kPQCheckEnrolmentPath parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+
+        [formData appendPartWithFormData:[enrolment.userIdentifier dataUsingEncoding:NSUTF8StringEncoding] name:@"userIdentifier"];
+        
+        [formData appendPartWithFormData:[enrolment.reference dataUsingEncoding:NSUTF8StringEncoding] name:@"reference"];
+        
+        [formData appendPartWithFormData:[enrolment.transcript dataUsingEncoding:NSUTF8StringEncoding] name:@"transcript"];
+        
+        // POST the media file
+        NSString *fileName = [kEnrolmentVideoName stringByAppendingPathExtension:kVideoExtension];
+        NSString *MIMEType = (__bridge NSString *)(UTTypeCopyPreferredTagWithClass(kUTTypeMPEG4, kUTTagClassMIMEType));
+        [formData appendPartWithFileURL:mediaURL name:kEnrolmentVideoName fileName:fileName mimeType:MIMEType error:nil];
+    }];
+    
+    RKObjectRequestOperation *operation =
+    [_objectManager objectRequestOperationWithRequest:urlRequest
+                                              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                                  completionBlock(nil);
+                                              }
+                                              failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                  completionBlock(error);
+                                              }];
+    [_objectManager enqueueObjectRequestOperation:operation];
+}
+#else
+- (void)enrolUserWithMediaURL:(NSURL *)mediaURL
+                    uploadURL:(NSURL *)uploadURL
+                   completion:(void (^)(NSError *error))completionBlock
+{
+    // Make sure that the given URL is valid and the corresponding resource exists
+    if ([mediaURL isFileURL] == NO ||
+        [mediaURL checkResourceIsReachableAndReturnError:nil] == NO)
+    {
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObject:NSLocalizedStringFromTable(@"The given URL is invalid, either not a file URL or the resource does not exist", @"PQCheckSDK", nil) forKey:NSLocalizedFailureReasonErrorKey];
+        NSError *error = [[NSError alloc] initWithDomain:@"PQCheckSDKErrorDomain" code:NSURLErrorBadURL userInfo:userInfo];
+        completionBlock(error);
+        
+        return;
+    }
+    
+    // Make sure that APIManager points to a correct endpoint
+    NSString *currentEndpoint = [[APIManager sharedManager] currentPQCheckEndpoint];
+    NSURL *baseURL = [NSURL URLWithString:[[NSURL URLWithString:@"/" relativeToURL:uploadURL] absoluteString]];
+    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
+    _objectManager = [[RKObjectManager alloc] initWithHTTPClient:httpClient];
+    
+    // We want to accept JSON type data, plus profile and version if available
+    [self setAcceptHeaderWithMIMEType:RKMIMETypeJSON
+                              profile:_profile
+                              version:[_version stringValue]];
+    
+    // Object mapping of the response
+    RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[NSNull class]];
     
     // Register the mapping with provider using a response descriptor
     NSIndexSet *statusCodes = RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful);
@@ -533,35 +647,27 @@ static NSInteger kPQCheckSDKDefaultVersion = 1;
     [_objectManager addResponseDescriptor:responseDescriptor];
     
     // Perform multipart POST request
-    NSString *enrolmentPath = [NSString stringWithFormat:@"%@", kPQCheckEnrolmentPath];
-    NSDictionary *params = @{@"userIdentifier": userIdentifier,
-                             @"reference": reference,
-                             @"transcript": transcript
-                            };
-    NSMutableURLRequest *urlRequest = [_objectManager multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:enrolmentPath parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        // POST the media file if available
-        if (isURIValid)
-        {
-            NSString *fileName = [userIdentifier stringByAppendingPathExtension:@"mp4"];
-            NSString *MIMEType = (__bridge NSString *)(UTTypeCopyPreferredTagWithClass(kUTTypeMPEG4, kUTTagClassMIMEType));
-            [formData appendPartWithFileURL:mediaURL name:userIdentifier fileName:fileName mimeType:MIMEType error:nil];
-        }
+    NSMutableURLRequest *urlRequest = [_objectManager multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:[uploadURL path] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+        
+        // POST the media file
+        NSString *fileName = [kEnrolmentVideoName stringByAppendingPathExtension:kVideoExtension];
+        NSString *MIMEType = (__bridge NSString *)(UTTypeCopyPreferredTagWithClass(kUTTypeMPEG4, kUTTagClassMIMEType));
+        [formData appendPartWithFileURL:mediaURL name:kEnrolmentVideoName fileName:fileName mimeType:MIMEType error:nil];
     }];
     
     RKObjectRequestOperation *operation =
     [_objectManager objectRequestOperationWithRequest:urlRequest
                                               success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                                  NSURL *uri = nil;
-                                                  NSHTTPURLResponse *httpResponse = operation.HTTPRequestOperation.response;
-                                                  NSString *location = [[httpResponse allHeaderFields] objectForKey:@"Location"];
-                                                  if (location)
-                                                  {
-                                                      uri = [NSURL URLWithString:location];
-                                                  }
-                                                  completionBlock(uri, nil);
+                                                  // Revert the endpoint configuration
+                                                  [[APIManager sharedManager] setBaseURL:[NSURL URLWithString:currentEndpoint]];
+
+                                                  completionBlock(nil);
                                               }
                                               failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                                  completionBlock(nil, error);
+                                                  // Revert the endpoint configuration
+                                                  [[APIManager sharedManager] setBaseURL:[NSURL URLWithString:currentEndpoint]];
+
+                                                  completionBlock(error);
                                               }];
     [_objectManager enqueueObjectRequestOperation:operation];
 }

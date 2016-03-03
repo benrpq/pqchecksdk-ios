@@ -6,6 +6,9 @@
 //  Copyright © 2016 Post-Quantum. All rights reserved.
 //
 
+#import <CoreMedia/CoreMedia.h>
+#import <AVFoundation/AVFoundation.h>
+#import <AssetsLibrary/AssetsLibrary.h>
 #import "PQCheckRecordSelfieViewController.h"
 #import "PQCheckFaceShape.h"
 #import "PQCheckDigestLabel.h"
@@ -30,7 +33,7 @@ static const NSTimeInterval kDelayBeforeDigestDismissal = 1.0f;
 static const NSTimeInterval kMinimumAcceptableRecordingDuration = 2.0f;
 static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
-@interface PQCheckRecordSelfieViewController () <PQCheckDigestLabelDelegate>
+@interface PQCheckRecordSelfieViewController () <AVCaptureFileOutputRecordingDelegate, PQCheckDigestLabelDelegate>
 {
     BOOL _isRecording;
     AVCaptureDevice *_camera;
@@ -44,12 +47,23 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     UIButton *_startStopButton;
     UIView *_dot[3];
     NSTimeInterval _startHoldTime, _endHoldTime;
-    Authorisation *_authorisation;
+    PQCheckSelfieMode _mode;
 }
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
 @end
 
 @implementation PQCheckRecordSelfieViewController
+
+- (id)initWithPQCheckSelfieMode:(PQCheckSelfieMode)mode transcript:(NSString *)transcript
+{
+    self = [super init];
+    if (self)
+    {
+        _transcript = transcript;
+        _mode = mode;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -98,6 +112,11 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     [self attemptSelfie];
 }
 
+- (PQCheckSelfieMode)currentSelfieMode
+{
+    return _mode;
+}
+
 - (void)attemptSelfie
 {
     if (self.pacingEnabled)
@@ -109,10 +128,9 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     }
 }
 
-- (void)updateDigest:(NSString *)digest
+- (void)setTranscript:(NSString *)transcript
 {
-    assert(_authorisation != nil);
-    [_authorisation setDigest:digest];
+    _transcript = transcript;
     
     [self configureDigestLabel];
 }
@@ -214,7 +232,9 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
 - (void)configureDigestLabel
 {
-    _digestLabel = [[PQCheckDigestLabel alloc] initWithDigest:_authorisation.digest];
+    assert(self.transcript != nil && self.transcript.length > 0);
+    
+    _digestLabel = [[PQCheckDigestLabel alloc] initWithDigest:self.transcript];
     _digestLabel.labelColor = [UIColor colorWithRed:13.0f/255.0f green:185.0f/255.0f blue:78.0f/255.0f alpha:1.0f];
     [self.view insertSubview:_digestLabel aboveSubview:_faceShape];
     _digestLabel.center = self.view.center;
