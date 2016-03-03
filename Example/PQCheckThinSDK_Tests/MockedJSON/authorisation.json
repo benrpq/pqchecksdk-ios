@@ -1,0 +1,15 @@
+{
+    "uuid": "bcd767ff-141f-41b0-b9f4-302f7647eba1",
+    "status": "TIMED_OUT",
+    "digest": "888460",
+    "startTime": 1447100904.708,
+    "expiryTime": 1447101084.708,
+    "_links": {
+        "self": {
+            "href": "https://pqcheck-server/authorisation/bcd767ff-141f-41b0-b9f4-302f7647eba1"
+        },
+        "upload-attempt": {
+            "href": "https://pqcheck-server/authorisation/bcd767ff-141f-41b0-b9f4-302f7647eba1/attempt"
+        }
+    }
+}

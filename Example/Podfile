@@ -8,9 +8,10 @@ use_frameworks!
 #  pod 'RestKit'
 #  pod 'MBProgressHUD'
 #  
-#  target 'PQCheckThinSDK_ExampleTests' do
+#  target 'PQCheckThinSDK_Tests' do
 #    inherit! :search_paths
 #
+#    pod 'Kiwi'
 #  end
 #end
 
@@ -21,9 +22,11 @@ target 'PQCheckThinSDK_Example', :exclusive => true do
   pod 'MBProgressHUD'
 end
   
-target 'PQCheckThinSDK_ExampleTests', :exclusive => true do
+target 'PQCheckThinSDK_Tests', :exclusive => true do
   pod 'PQCheckSDK', :path => '../'
 
   pod 'RestKit'
+  pod 'Kiwi'
+  pod 'OCHamcrest', '~> 5.2.0'
 end
 

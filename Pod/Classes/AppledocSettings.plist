@@ -30,6 +30,6 @@
 	<key>--create-docset</key>
 	<false/>
 	<key>--index-desc</key>
-	<string>../README.md</string>
+	<string>../OVERVIEW.md</string>
 </dict>
 </plist>
