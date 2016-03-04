@@ -19,6 +19,5 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ] \
   git commit -m "Published documentation from Travis CI build $TRAVIS_BUILD_NUMBER"
   git push --force --quiet \
       "https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}" \
-      $src_branch:gh-pages >/dev/null 2>&1
+      master:gh-pages >/dev/null 2>&1
 fi
-
