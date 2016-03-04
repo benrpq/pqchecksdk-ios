@@ -3,13 +3,15 @@
 
 language: objective-c
 osx_image: xcode7.2
-cache: cocoapods
+# cache: cocoapods
 podfile: Example/Podfile
 
 before_install:
   - gem uninstall cocoapods
   - gem install activesupport
-  - gem install cocoapods -v 0.38.0 # Since Travis is not always on latest version
+  - gem install bundler
+  - gem install cocoapods -v 0.38.0 # RestKit only works with this version of CocoaPods
+  - brew install appledoc
   - pod install --project-directory=Example
 
 branches:
