@@ -21,7 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		16DAE96E6DA1838799065B72 /* Pods_PQCheckThinSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A33B950114BD9C2FBBB179 /* Pods_PQCheckThinSDK_Example.framework */; };
+		16DAE96E6DA1838799065B72 /* Pods_PQCheckThinSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A33B950114BD9C2FBBB179 /* Pods_PQCheckThinSDK_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D71D25B31C87AAC800137075 /* PQCheckThinSDK_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D71D25B21C87AAC800137075 /* PQCheckThinSDK_Tests.m */; };
 		D71D25C11C87AD0800137075 /* MockedPQCheckServer.m in Sources */ = {isa = PBXBuildFile; fileRef = D71D25C01C87AD0800137075 /* MockedPQCheckServer.m */; };
 		D71D25C51C87B03600137075 /* authorisation.json in Resources */ = {isa = PBXBuildFile; fileRef = D71D25C41C87B03600137075 /* authorisation.json */; };
@@ -46,6 +46,8 @@
 		D784B8541C87BA2C00525D03 /* ILDispatchQueueAssert.m in Sources */ = {isa = PBXBuildFile; fileRef = D784B84C1C87BA2C00525D03 /* ILDispatchQueueAssert.m */; };
 		D784B8551C87BA2C00525D03 /* ILDispatchQueueMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = D784B84E1C87BA2C00525D03 /* ILDispatchQueueMatcher.m */; };
 		D78E4ECC1C88325100213E08 /* upload-attempt.json in Resources */ = {isa = PBXBuildFile; fileRef = D78E4ECB1C88325100213E08 /* upload-attempt.json */; };
+		D78E4ECF1C89F8C600213E08 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E4ECE1C89F8C600213E08 /* User.m */; };
+		D78E4ED21C8A03FA00213E08 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D78E4ED11C8A03FA00213E08 /* SettingsViewController.m */; };
 		D7A5E5251C81A0AD00190FE0 /* BankClientManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A5E5191C81A0AD00190FE0 /* BankClientManager.m */; };
 		D7A5E5261C81A0AD00190FE0 /* AccountCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A5E51C1C81A0AD00190FE0 /* AccountCollection.m */; };
 		D7A5E5271C81A0AD00190FE0 /* BankAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A5E51E1C81A0AD00190FE0 /* BankAccount.m */; };
@@ -128,6 +130,10 @@
 		D784B84E1C87BA2C00525D03 /* ILDispatchQueueMatcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ILDispatchQueueMatcher.m; sourceTree = "<group>"; };
 		D784B84F1C87BA2C00525D03 /* README.mdown */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.mdown; sourceTree = "<group>"; };
 		D78E4ECB1C88325100213E08 /* upload-attempt.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "upload-attempt.json"; sourceTree = "<group>"; };
+		D78E4ECD1C89F8C600213E08 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
+		D78E4ECE1C89F8C600213E08 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
+		D78E4ED01C8A03FA00213E08 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SettingsViewController.h; path = PQCheckThinSDK/SettingsViewController.h; sourceTree = "<group>"; };
+		D78E4ED11C8A03FA00213E08 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SettingsViewController.m; path = PQCheckThinSDK/SettingsViewController.m; sourceTree = "<group>"; };
 		D7A5E5181C81A0AD00190FE0 /* BankClientManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = BankClientManager.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		D7A5E5191C81A0AD00190FE0 /* BankClientManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BankClientManager.m; sourceTree = "<group>"; };
 		D7A5E51B1C81A0AD00190FE0 /* AccountCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountCollection.h; sourceTree = "<group>"; };
@@ -278,6 +284,8 @@
 				D73838171C6A45870068372D /* PaymentsViewController.m */,
 				D7B5B14D1C7D84DB007CD9F8 /* EnrolmentViewController.h */,
 				D7B5B14E1C7D84DB007CD9F8 /* EnrolmentViewController.m */,
+				D78E4ED01C8A03FA00213E08 /* SettingsViewController.h */,
+				D78E4ED11C8A03FA00213E08 /* SettingsViewController.m */,
 				D73838181C6A45870068372D /* PQCheckAppDelegate.h */,
 				D73838191C6A45870068372D /* PQCheckAppDelegate.m */,
 				D73838331C6A45DB0068372D /* LaunchScreen.storyboard */,
@@ -366,6 +374,8 @@
 				D7A5E5201C81A0AD00190FE0 /* Enrolment.m */,
 				D7A5E5211C81A0AD00190FE0 /* Payment.h */,
 				D7A5E5221C81A0AD00190FE0 /* Payment.m */,
+				D78E4ECD1C89F8C600213E08 /* User.h */,
+				D78E4ECE1C89F8C600213E08 /* User.m */,
 				D7A5E5231C81A0AD00190FE0 /* UserManager.h */,
 				D7A5E5241C81A0AD00190FE0 /* UserManager.m */,
 			);
@@ -608,7 +618,9 @@
 				D73838411C6A465F0068372D /* PQCheckAppDelegate.m in Sources */,
 				D73838461C6A468F0068372D /* BankAccountCell.m in Sources */,
 				D7A5E52A1C81A0AD00190FE0 /* UserManager.m in Sources */,
+				D78E4ED21C8A03FA00213E08 /* SettingsViewController.m in Sources */,
 				D73838421C6A46640068372D /* PaymentsViewController.m in Sources */,
+				D78E4ECF1C89F8C600213E08 /* User.m in Sources */,
 				D7A5E5261C81A0AD00190FE0 /* AccountCollection.m in Sources */,
 				D73838441C6A466D0068372D /* AccountsViewController.m in Sources */,
 				D73838451C6A468F0068372D /* AccountCell.m in Sources */,
@@ -746,10 +758,7 @@
 				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					THINSDK,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = PQCheckThinSDK_Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -771,10 +780,7 @@
 				ENABLE_BITCODE = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					THINSDK,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = PQCheckThinSDK_Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -795,10 +801,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PQCheckSDK/PQCheckSDK-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					THINSDK,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PODS_ROOT}/Headers/Private",
@@ -824,10 +827,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PQCheckSDK/PQCheckSDK-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					THINSDK,
-				);
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PODS_ROOT}/Headers/Private",

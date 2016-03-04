@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="FNh-vW-1Ua">
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -68,7 +69,14 @@
                             <outlet property="delegate" destination="tQI-r0-Ly2" id="UvT-eM-PSQ"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Accounts" id="49Q-ZJ-LFw"/>
+                    <navigationItem key="navigationItem" title="Accounts" id="49Q-ZJ-LFw">
+                        <barButtonItem key="leftBarButtonItem" title="Settings" id="5Yp-CJ-N3Z">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <segue destination="MIS-d5-LsB" kind="presentation" id="VkZ-7H-3G3"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vpX-B5-Gte" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -136,6 +144,65 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="87T-8S-YHV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2553" y="-597"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="acg-Tj-HQJ">
+            <objects>
+                <tableViewController id="MMP-AR-5RN" customClass="SettingsViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="znN-H0-Jxe">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="yzG-8j-izu">
+                                <rect key="frame" x="0.0" y="113.5" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yzG-8j-izu" id="TPm-2H-Agg">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="MMP-AR-5RN" id="aDk-Vg-1ZS"/>
+                            <outlet property="delegate" destination="MMP-AR-5RN" id="BX0-35-eUh"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Settings" id="akm-8o-EEH">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="ndz-cI-UCv">
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="doneButtonTapped:" destination="MMP-AR-5RN" id="cc1-Dc-bgA"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="doneButton" destination="ndz-cI-UCv" id="nmC-Ko-tAz"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="z8k-HE-v02" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2572" y="87"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="aix-i5-vV3">
+            <objects>
+                <navigationController id="MIS-d5-LsB" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="EuH-4U-7CK">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.10588235294117647" green="0.68627450980392157" blue="0.23921568627450981" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        </textAttributes>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="MMP-AR-5RN" kind="relationship" relationship="rootViewController" id="LTM-uD-0qt"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ffG-CW-32A" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1752" y="87"/>
         </scene>
         <!--Payment Detail-->
         <scene sceneID="fMZ-oh-4s2">
@@ -293,7 +360,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="It looks like you are not enrolled yet. Please tap on the Enrol button below to continue." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="24" translatesAutoresizingMaskIntoConstraints="NO" id="tgK-lh-hPv">
-                                <rect key="frame" x="40" y="149" width="540" height="115"/>
+                                <rect key="frame" x="40" y="76" width="520" height="188"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="32"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -313,14 +380,25 @@
                         </subviews>
                         <color key="backgroundColor" red="0.050980392159999999" green="0.72549019609999998" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="tgK-lh-hPv" secondAttribute="trailing" constant="20" id="0DL-Ij-OsC"/>
+                            <constraint firstItem="tgK-lh-hPv" firstAttribute="trailing" secondItem="s5c-gq-3KQ" secondAttribute="trailingMargin" constant="20" id="4qZ-pu-z2Y"/>
                             <constraint firstItem="tgK-lh-hPv" firstAttribute="centerX" secondItem="s5c-gq-3KQ" secondAttribute="centerX" constant="10" id="EbO-Hx-dt5"/>
                             <constraint firstAttribute="trailingMargin" secondItem="tgK-lh-hPv" secondAttribute="trailing" id="I6O-73-b3R"/>
                             <constraint firstItem="a8M-q5-Kai" firstAttribute="top" secondItem="Dcl-Y7-ZUK" secondAttribute="bottom" constant="210" id="WSC-MJ-gwp"/>
                             <constraint firstItem="Dcl-Y7-ZUK" firstAttribute="top" secondItem="tgK-lh-hPv" secondAttribute="bottom" constant="66" id="bUx-PS-kks"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="tgK-lh-hPv" secondAttribute="trailing" constant="20" id="j4r-0i-45Y"/>
                             <constraint firstItem="tgK-lh-hPv" firstAttribute="leading" secondItem="s5c-gq-3KQ" secondAttribute="leadingMargin" constant="20" id="lLv-GD-wZv"/>
-                            <constraint firstItem="Dcl-Y7-ZUK" firstAttribute="centerX" secondItem="tgK-lh-hPv" secondAttribute="centerX" constant="-10" id="xQP-Me-LVn"/>
-                            <constraint firstItem="tgK-lh-hPv" firstAttribute="top" secondItem="DO3-vq-PI8" secondAttribute="bottom" constant="129" id="zpC-Xh-meD"/>
+                            <constraint firstItem="Dcl-Y7-ZUK" firstAttribute="centerX" secondItem="tgK-lh-hPv" secondAttribute="centerX" id="xQP-Me-LVn"/>
+                            <constraint firstItem="tgK-lh-hPv" firstAttribute="top" secondItem="DO3-vq-PI8" secondAttribute="bottom" constant="56" id="zpC-Xh-meD"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="0DL-Ij-OsC"/>
+                                <exclude reference="4qZ-pu-z2Y"/>
+                                <exclude reference="EbO-Hx-dt5"/>
+                                <exclude reference="I6O-73-b3R"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="enrolButton" destination="Dcl-Y7-ZUK" id="VYe-Ej-KR9"/>

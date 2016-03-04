@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class User;
+
 @interface EnrolmentViewController : UIViewController
 
-@property (nonatomic, copy) NSString *userIdentifier;
+@property (nonatomic, strong) User *user;
 
 @end

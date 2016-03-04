@@ -7,22 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#ifndef THINSDK
-#import "APIKey.h"
-#endif
 
 @class Authorisation;
 @class UploadAttempt;
-
-#ifndef THINSDK
-typedef NS_ENUM(NSInteger, PQCheckEndpoint)
-{
-    kStableEndpoint = 0,
-    kUnstableEndpoint,
-    kDevelopmentEndpoint,
-    kDataCollectionEndpoint
-};
-#endif
 
 /**
  *  `APIManager` provides convenient methods to interface with PQCheck server. 
@@ -41,12 +28,6 @@ typedef NS_ENUM(NSInteger, PQCheckEndpoint)
  *  @return The default `APIManager` object
  */
 + (APIManager *)sharedManager;
-
-#ifndef THINSDK
-- (NSString *)currentPQCheckEndpoint;
-- (void)setPQCheckEndpoint:(PQCheckEndpoint)endpoint;
-- (void)setBaseURL:(NSURL *)baseURL;
-#endif
 
 /**
  *  Sets the acceptable PQCheck API profile.
@@ -68,20 +49,6 @@ typedef NS_ENUM(NSInteger, PQCheckEndpoint)
  */
 - (void)setVersion:(NSNumber *)version;
 
-#ifndef THINSDK
-- (void)createAPIKeyWithCredential:(NSURLCredential *)credential
-                         namespace:(NSString *)apiNamespace
-                        completion:(void (^)(APIKey *apiKey, NSError *error))completionBlock;
-
-- (void)createAuthorisationWithAPIKey:(APIKey *)apiKey
-                       userIdentifier:(NSString *)identifier
-                    authorisationHash:(NSString *)authorisationHash
-                              summary:(NSString *)summary
-                           completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock;
-- (void)viewAuthorisationRequestWithAPIKey:(APIKey *)apiKey
-                                      UUID:(NSString *)uuid
-                                completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock;
-#else
 /**
  *  Sends a request to view an authorisation at the given secret `url`.
  *
@@ -92,12 +59,6 @@ typedef NS_ENUM(NSInteger, PQCheckEndpoint)
  */
 - (void)viewAuthorisationAtURL:(NSURL *)url
                     completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock;
-#endif
-
-#ifndef THINSDK
-- (void)cancelAuthorisationRequestWithUUID:(NSString *)uuid
-                                completion:(void (^)(NSError *error))completionBlock;
-#endif
 
 /**
  *  Uploads a selfie video at file URL `mediaURL` to a URL specified in authorisation representation, `Authorisation`.
@@ -114,14 +75,6 @@ typedef NS_ENUM(NSInteger, PQCheckEndpoint)
                               mediaURL:(NSURL *)mediaURL
                             completion:(void (^)(UploadAttempt *uploadAttempt, NSError *error))completionBlock;
 
-#ifndef THINSDK
-- (void)enrolUserWithAPIKey:(APIKey *)apiKey
-             userIdentifier:(NSString *)identifier
-                  reference:(NSString *)reference
-                 transcript:(NSString *)transcript
-                   mediaURL:(NSURL *)mediaURL
-                 completion:(void (^)(NSError *error))completionBlock;
-#else
 /**
  *  Enrols a user by uploading a selfie video, which is located at file URL `mediaURL`, to a remote URL `uploadURL`.
  *
@@ -134,6 +87,5 @@ typedef NS_ENUM(NSInteger, PQCheckEndpoint)
 - (void)enrolUserWithMediaURL:(NSURL *)mediaURL
                     uploadURL:(NSURL *)uploadURL
                    completion:(void (^)(NSError *error))completionBlock;
-#endif
 
 @end

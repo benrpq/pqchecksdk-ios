@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '8.0'
   s.requires_arc = true
 
-  s.compiler_flags = '-DTHINSDK=1'
+  s.compiler_flags = ''
 
   s.source_files = 'Pod/Classes/**/*'
   s.resource_bundles = {

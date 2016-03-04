@@ -4,7 +4,7 @@
   "summary": "A short description of PQCheckSDK.",
   "description": "PQCheckSDK for iOS",
   "homepage": "https://github.com/post-quantum/pqchecksdk-ios.git",
-  "license": "MIT",
+  "license": "Apache Licence version 2.0",
   "authors": {
     "CJ Tjhai": "cjt@post-quantum.com"
   },
@@ -16,7 +16,7 @@
     "ios": "8.0"
   },
   "requires_arc": true,
-  "compiler_flags": "-DTHINSDK",
+  "compiler_flags": "",
   "source_files": "Pod/Classes/**/*",
   "resource_bundles": {
     "PQCheckSDK": [

@@ -20,18 +20,11 @@
 static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
 static NSString* kPQCheckUserInfoEnrolmentReference = @"reference";
 static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
-#ifdef THINSDK
 static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
-#endif
 
 @interface PQCheckManager () <PQCheckRecordSelfieDelegate>
 {
     NSString *_userIdentifier;
-#ifndef THINSDK
-    APIKey *_apiKey;
-    NSURLCredential *_adminCredential;
-    BOOL _shouldViewAuthorisation;
-#endif
     Authorisation *_authorisation;
     PQCheckRecordSelfieViewController *_selfieController;
     AVAuthorizationStatus _cameraAuthorisationStatus;
@@ -41,43 +34,6 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
 
 @implementation PQCheckManager
 
-#ifndef THINSDK
-- (id)initWithUserIdentifier:(NSString *)userIdentifier
-{
-    self = [super init];
-    if (self)
-    {
-        _userIdentifier = userIdentifier;
-        _shouldViewAuthorisation = YES;
-        _adminCredential = nil;
-        
-        [self checkCameraAndMicrophonePermissions];
-    }
-    return self;
-}
-
-- (void)setAdminCredential:(NSURLCredential *)adminCredential
-{
-    _adminCredential = adminCredential;
-}
-
-- (void)resetAPIKey
-{
-    _apiKey = nil;
-    [[A0SimpleKeychain keychain] deleteEntryForKey:kPQCheckAPIKey];
-}
-
-- (NSString *)currentNamespace
-{
-    if (_apiKey == nil)
-    {
-        return nil;
-    }
-    
-    return _apiKey.apiNamespace;
-}
-
-#else
 - (id)init
 {
     return [self initWithAuthorisation:nil];
@@ -94,24 +50,13 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
     }
     return self;
 }
-#endif
 
-#ifndef THINSDK
-- (void)performAuthorisationWithDigest:(NSString *)digest summary:(NSString *)summary
-#else
 - (void)performAuthorisationWithDigest:(NSString *)digest
-#endif
 {
     NSAssert([NSThread isMainThread], @"The method %s must be called from main thread", __PRETTY_FUNCTION__);
     
     // Do any additional setup after loading the view from its nib.
-#ifndef THINSDK
-    assert(_adminCredential != nil);
-    assert(_userIdentifier != nil && _userIdentifier.length > 0);
-    assert(summary != nil         && summary.length > 0);
-#else
     assert(digest != nil          && digest.length > 0);
-#endif
     
     // Make sure that we have a camera and microphone permission
     _cameraAuthorisationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
@@ -121,37 +66,6 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
         (_microphoneAuthorisationStatus == AVAuthorizationStatusAuthorized ||
          _microphoneAuthorisationStatus == AVAuthorizationStatusNotDetermined))
     {
-#ifndef THINSDK
-        UIView *view = [[[UIApplication sharedApplication] delegate] window];
-        
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
-        hud.mode = MBProgressHUDModeIndeterminate;
-        hud.labelText = NSLocalizedString(@"Please wait...", @"Please wait...");
-        
-        // Do I have a correct credential?
-        [self prepareManagerWithCredential:_adminCredential completion:^{
-            
-            // Create an authorisation
-            [[APIManager sharedManager] createAuthorisationWithAPIKey:_apiKey userIdentifier:_userIdentifier authorisationHash:digest summary:summary completion:^(Authorisation *authorisation, NSError *error) {
-                
-                [hud hide:YES];
-                
-                if (error == nil)
-                {
-                    _authorisation = authorisation;
-                    
-                    _selfieController = [[PQCheckRecordSelfieViewController alloc] initWithPQCheckSelfieMode:kPQCheckSelfieModeAuthorisation
-                                                                                                  transcript:_authorisation.digest];
-                    _selfieController.delegate = self;
-                    _selfieController.pacingEnabled = self.shouldPaceUser;
-                    
-                    UIViewController *viewController = [PQCheckManager topMostController];
-                    [viewController presentViewController:_selfieController animated:YES completion:nil];
-                }
-                
-            }];
-        }];
-#else
         _selfieController = [[PQCheckRecordSelfieViewController alloc] initWithPQCheckSelfieMode:kPQCheckSelfieModeAuthorisation
                                                                                       transcript:digest];
         _selfieController.delegate = self;
@@ -159,24 +73,14 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
         
         UIViewController *viewController = [PQCheckManager topMostController];
         [viewController presentViewController:_selfieController animated:YES completion:nil];
-#endif
     }
 }
 
-#ifndef THINSDK
-- (void)performEnrolmentWithReference:(NSString *)reference transcript:(NSString *)transcript
-#else
 - (void)performEnrolmentWithTranscript:(NSString *)transcript uploadURI:(NSURL *)uri
-#endif
 {
     NSAssert([NSThread isMainThread], @"The method %s must be called from main thread", __PRETTY_FUNCTION__);
     
     assert(transcript != nil      && transcript.length > 0);
-#ifndef THINSDK
-    assert(_userIdentifier != nil && _userIdentifier.length > 0);
-    assert(reference != nil       && reference.length > 0);
-    assert(_adminCredential != nil);
-#endif
     
     // Make sure that we have a camera and microphone permission
     _cameraAuthorisationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
@@ -186,29 +90,6 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
         (_microphoneAuthorisationStatus == AVAuthorizationStatusAuthorized ||
          _microphoneAuthorisationStatus == AVAuthorizationStatusNotDetermined))
     {
-#ifndef THINSDK
-        UIView *view = [[[UIApplication sharedApplication] delegate] window];
-        
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
-        hud.mode = MBProgressHUDModeIndeterminate;
-        hud.labelText = NSLocalizedString(@"Please wait...", @"Please wait...");
-        
-        // Do I have a correct credential?
-        [self prepareManagerWithCredential:_adminCredential completion:^{
-
-            [hud hide:YES];
-            
-            _selfieController = [[PQCheckRecordSelfieViewController alloc] initWithPQCheckSelfieMode:kPQCheckSelfieModeEnrolment
-                                                                                          transcript:theTranscript];
-            _selfieController.delegate = self;
-            _selfieController.pacingEnabled = self.shouldPaceUser;
-            _selfieController.userInfo = @{kPQCheckUserInfoEnrolmentReference: reference,
-                                           kPQCheckUserInfoEnrolmentTranscript: transcript};
-            
-            UIViewController *viewController = [PQCheckManager topMostController];
-            [viewController presentViewController:_selfieController animated:YES completion:nil];
-        }];
-#else
         _selfieController = [[PQCheckRecordSelfieViewController alloc] initWithPQCheckSelfieMode:kPQCheckSelfieModeEnrolment
                                                                                       transcript:transcript];
         _selfieController.delegate = self;
@@ -218,7 +99,6 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
         
         UIViewController *viewController = [PQCheckManager topMostController];
         [viewController presentViewController:_selfieController animated:YES completion:nil];
-#endif
     }
 }
 
@@ -256,49 +136,6 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
     
     return topController;
 }
-
-#ifndef THINSDK
-- (void)prepareManagerWithCredential:(NSURLCredential *)credential completion:(void (^)(void))completionBlock
-{
-    A0SimpleKeychain *keychain = [A0SimpleKeychain keychain];
-    NSData *apiData = [keychain dataForKey:kPQCheckAPIKey
-                             promptMessage:NSLocalizedString(@"Please authenticate", @"Please authenticate")];
-    if (apiData == nil)
-    {
-        // Create API-key using admin credential
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSString *namespace = [[NSUUID UUID] UUIDString];
-            [[APIManager sharedManager] createAPIKeyWithCredential:credential namespace:namespace completion:^(APIKey *apiKey, NSError *error) {
-                // Save credential to keychain
-                _apiKey = apiKey;
-                //keychain.useAccessControl = YES;
-                //keychain.defaultAccessiblity = A0SimpleKeychainItemAccessibleWhenPasscodeSetThisDeviceOnly;
-                [keychain setData:[_apiKey data] forKey:kPQCheckAPIKey];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completionBlock();
-                });
-            }];
-        });
-    }
-    else
-    {
-        _apiKey = [[APIKey alloc] initWithData:apiData];
-        completionBlock();
-    }
-}
-
-- (void)viewAuthorisation
-{
-    [[APIManager sharedManager] viewAuthorisationRequestWithAPIKey:_apiKey UUID:_authorisation.uuid completion:^(Authorisation *authorisation, NSError *error) {
-        // Need a way to do a pretty-print of Authorisation object
-        for (NSInteger index=0; index<authorisation.attempts.count; index++)
-        {
-            NSLog(@"Authorisation result (%ld): %@", (long)index, [authorisation.attempts objectAtIndex:index]);
-        }
-    }];
-}
-
-#endif
 
 - (void)checkCameraAndMicrophonePermissions
 {
@@ -345,17 +182,33 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
 
 - (void)selfieController:(PQCheckRecordSelfieViewController *)controller performsAuthorisationWithMediaAtURL:(NSURL *)mediaURL
 {
-    
     UIView *view = [[[UIApplication sharedApplication] delegate] window];
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
     hud.mode = MBProgressHUDModeIndeterminate;
     hud.labelText = NSLocalizedString(@"Validating...", @"Validating...");
     
+#ifdef DEBUG
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSURL *docURL = [self applicationDocumentsDirectory];
+        NSURL *authURL = [docURL URLByAppendingPathComponent:@"authorisation" isDirectory:YES];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[authURL path]] == NO)
+        {
+            [[NSFileManager defaultManager] createDirectoryAtURL:authURL withIntermediateDirectories:YES attributes:nil error:nil];
+        }
+        authURL = [[authURL URLByAppendingPathComponent:_authorisation.uuid] URLByAppendingPathExtension:@"mp4"];
+        [[NSFileManager defaultManager] copyItemAtURL:mediaURL toURL:authURL error:nil];
+    });
+#endif
+    
     [[APIManager sharedManager] uploadAttemptWithAuthorisation:_authorisation mediaURL:mediaURL completion:^(UploadAttempt *uploadAttempt, NSError *error) {
         
         [hud hide:YES];
         
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[NSFileManager defaultManager] removeItemAtURL:mediaURL error:nil];
+        });
+
         if (error != nil)
         {
             if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFailWithError:)])
@@ -391,13 +244,6 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
             }
         }
 
-#ifndef THINSDK
-        if (_shouldViewAuthorisation)
-        {
-            [self viewAuthorisation];
-        }
-#endif
-        
         if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFinishWithAuthorisationStatus:)])
         {
             [self.delegate PQCheckManager:self didFinishWithAuthorisationStatus:uploadAttempt.authorisationStatus];
@@ -416,39 +262,32 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
     NSString *transcript = [_selfieController.userInfo objectForKey:kPQCheckUserInfoEnrolmentTranscript];
     NSAssert(transcript != nil && transcript.length > 0, @"Enrolment transcript cannot be nil or have zero length");
     
-#ifndef THINSDK
-    NSString *reference = [_selfieController.userInfo objectForKey:kPQCheckUserInfoEnrolmentReference];
-    NSAssert(reference != nil && reference.length > 0, @"Enrolment reference cannot be nil or have zero length");
-    
-    [[APIManager sharedManager] enrolUserWithAPIKey:_apiKey userIdentifier:_userIdentifier reference:reference transcript:transcript mediaURL:mediaURL completion:^(NSError *error) {
-        
-        [hud hide:YES];
-        
-        if (error != nil)
-        {
-            if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFailWithError:)])
-            {
-                [self.delegate PQCheckManager:self didFailWithError:error];
-            }
-            
-            return;
-        }
-        
-        if ([self.delegate respondsToSelector:@selector(PQCheckManagerDidFinishEnrolment:)])
-        {
-            [self.delegate PQCheckManagerDidFinishEnrolment:self];
-        }
-        
-    }];
-#else
     NSString *uriString = [_selfieController.userInfo objectForKey:kPQCheckUserInfoEnrolmentURI];
     NSAssert(uriString != nil && uriString.length > 0, @"Enrolment URI cannot be nil or have zero length");
     
+#ifdef DEBUG
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSURL *docURL = [self applicationDocumentsDirectory];
+        NSURL *authURL = [docURL URLByAppendingPathComponent:@"enrolment" isDirectory:YES];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:[authURL path]] == NO)
+        {
+            [[NSFileManager defaultManager] createDirectoryAtURL:authURL withIntermediateDirectories:YES attributes:nil error:nil];
+        }
+        NSString *uuid = [[[controller userInfo] objectForKey:kPQCheckUserInfoEnrolmentURI] lastPathComponent];
+        authURL = [[authURL URLByAppendingPathComponent:uuid] URLByAppendingPathExtension:@"mp4"];
+        [[NSFileManager defaultManager] copyItemAtURL:mediaURL toURL:authURL error:nil];
+    });
+#endif
+
     NSURL *uploadURL = [NSURL URLWithString:uriString];
     [[APIManager sharedManager] enrolUserWithMediaURL:mediaURL uploadURL:uploadURL completion:^(NSError *error) {
         
         [hud hide:YES];
         
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[NSFileManager defaultManager] removeItemAtURL:mediaURL error:nil];
+        });
+        
         if (error != nil)
         {
             if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFailWithError:)])
@@ -465,7 +304,14 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
         }
         
     }];
-#endif
 }
+
+#ifdef DEBUG
+// Returns the URL to the application's Documents directory.
+- (NSURL *)applicationDocumentsDirectory
+{
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+#endif
 
 @end

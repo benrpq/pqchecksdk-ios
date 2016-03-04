@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class User;
+
 /**
  *  The `UserManager` class handles the users of this sample app. Each user is assigned an identifier. Before a user can use the sample app, he/she needs to go through an enrolment process. Once enrolled, he/she will be added into the set of enrolled users and will then be able to perform basic functionality as implemented in `BankClientManager` class.
  *
@@ -16,9 +18,9 @@
 @interface UserManager : NSObject
 
 /**
- *  The identifier of the current active user.
+ *  The active user object
  */
-@property (nonatomic, copy) NSString* currentUserIdentifer;
+@property (nonatomic, strong) User *activeUser;
 
 /**
  *  Returns the shared user manager object.
@@ -28,11 +30,11 @@
 + (UserManager *)defaultManager;
 
 /**
- *  Adds a user identified by `userIdentifier` to a set of enrolled users.
+ *  Adds a user to a set of enrolled users.
  *
- *  @param userIdentifier The user identifier
+ *  @param user The user object to be added
  */
-- (void)addEnrolledUser:(NSString *)userIdentifier;
+- (void)addEnrolledUser:(User *)user;
 
 /**
  *  Returns the set of enrolled users.
@@ -42,12 +44,12 @@
 - (NSSet *)enrolledUsers;
 
 /**
- *  Returns whether or not the user identified by `userIdentifier` has been enrolled.
+ *  Returns whether or not the user has been enrolled.
  *
- *  @param userIdentifier The user identifier
+ *  @param user The user object
  *
  *  @return Return YES if the user is already enrolled, NO otherwise.
  */
-- (BOOL)isUserEnrolled:(NSString *)userIdentifier;
+- (BOOL)isUserEnrolled:(User *)user;
 
 @end

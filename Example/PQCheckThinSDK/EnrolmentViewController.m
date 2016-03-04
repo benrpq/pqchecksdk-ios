@@ -13,6 +13,7 @@
 #import "EnrolmentViewController.h"
 #import "BankClientManager.h"
 #import "Enrolment.h"
+#import "User.h"
 #import "UserManager.h"
 
 @interface EnrolmentViewController () <PQCheckManagerDelegate>
@@ -42,7 +43,7 @@
 
 - (IBAction)enrolButtonTapped:(id)sender
 {
-    NSAssert(self.userIdentifier != nil && self.userIdentifier.length > 0,
+    NSAssert(self.user.identifier != nil && self.user.identifier.length > 0,
              @"userIdentifier cannot be nil or have empty length");
     
     UIView *window = [[[UIApplication sharedApplication] delegate] window];
@@ -50,7 +51,7 @@
     hud.mode = MBProgressHUDModeIndeterminate;
     hud.labelText = NSLocalizedString(@"Please Wait...", @"Please Wait...");
     
-    [[BankClientManager defaultManager] enrolUserWithUUID:self.userIdentifier completion:^(Enrolment *enrolment, NSError *error) {
+    [[BankClientManager defaultManager] enrolUserWithUUID:self.user.identifier completion:^(Enrolment *enrolment, NSError *error) {
         
         [hud hide:YES];
         
@@ -78,8 +79,8 @@
 
 - (void)PQCheckManagerDidFinishEnrolment:(PQCheckManager *)manager
 {
-    [[UserManager defaultManager] addEnrolledUser:self.userIdentifier];
-    [[UserManager defaultManager] setCurrentUserIdentifer:self.userIdentifier];
+    [[UserManager defaultManager] addEnrolledUser:self.user];
+    [[UserManager defaultManager] setActiveUser:self.user];
     
     // Enrol is successful, this view controller can now be dismissed
     [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];

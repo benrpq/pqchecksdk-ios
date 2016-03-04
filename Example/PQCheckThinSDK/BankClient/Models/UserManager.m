@@ -7,6 +7,7 @@
 //
 
 #import "UserManager.h"
+#import "User.h"
 
 @interface UserManager ()
 {
@@ -14,8 +15,8 @@
 }
 @end
 
-static NSString *kPQCheckEnrolledUserIdentifiers = @"EnrolledUserIdentifiers";
-static NSString *kPQCheckCurrentUserIdentifer = @"CurrentUserIdentifer";
+static NSString *kPQCheckEnrolledUsers = @"EnrolledUsers";
+static NSString *kPQCheckActiveUser = @"ActiveUser";
 
 @implementation UserManager
 
@@ -29,9 +30,13 @@ static NSString *kPQCheckCurrentUserIdentifer = @"CurrentUserIdentifer";
     return _userManager;
 }
 
-- (BOOL)isUserEnrolled:(NSString *)userIdentifier
+- (BOOL)isUserEnrolled:(User *)user
 {
-    return  [_enrolledSet containsObject:userIdentifier];
+    NSSet *set = [_enrolledSet objectsPassingTest:^BOOL(id  _Nonnull obj, BOOL * _Nonnull stop) {
+        User *aUser = (User *)obj;
+        return ([aUser.identifier caseInsensitiveCompare:user.identifier] == NSOrderedSame);
+    }];
+    return (set && [set count] > 0);
 }
 
 - (id)init
@@ -41,24 +46,33 @@ static NSString *kPQCheckCurrentUserIdentifer = @"CurrentUserIdentifer";
     {
         // Load a set of enrolled users
         _enrolledSet = [[NSMutableSet alloc] init];
-        NSArray *identifiers = [[NSUserDefaults standardUserDefaults] objectForKey:kPQCheckEnrolledUserIdentifiers];
-        if (identifiers)
+        NSArray *userArray = [[NSUserDefaults standardUserDefaults] objectForKey:kPQCheckEnrolledUsers];
+        if (userArray)
         {
-            _enrolledSet = [[NSMutableSet alloc] initWithArray:identifiers];
+            for (NSData *data in userArray)
+            {
+                User *aUser = [[User alloc] initWithData:data];
+                [_enrolledSet addObject:aUser];
+            }
         }
         
         // Who is the currently enrolled user?
-        _currentUserIdentifer = [[NSUserDefaults standardUserDefaults] objectForKey:kPQCheckCurrentUserIdentifer];
+        _activeUser = nil;
+        NSData *data = [[NSUserDefaults standardUserDefaults] objectForKey:kPQCheckActiveUser];
+        if (data)
+        {
+            _activeUser = [[User alloc] initWithData:data];
+        }
     }
     return self;
 }
 
-- (void)addEnrolledUser:(NSString *)userIdentifier
+- (void)addEnrolledUser:(User *)user
 {
-    [_enrolledSet addObject:userIdentifier];
+    [_enrolledSet addObject:[user data]];
     
     NSArray *array = [_enrolledSet allObjects];
-    [[NSUserDefaults standardUserDefaults] setObject:array forKey:kPQCheckEnrolledUserIdentifiers];
+    [[NSUserDefaults standardUserDefaults] setObject:array forKey:kPQCheckEnrolledUsers];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -67,11 +81,18 @@ static NSString *kPQCheckCurrentUserIdentifer = @"CurrentUserIdentifer";
     return _enrolledSet;
 }
 
-- (void)setCurrentUserIdentifer:(NSString *)currentUserIdentifer
+- (void)setActiveUser:(User *)activeUser
 {
-    _currentUserIdentifer = currentUserIdentifer;
+    _activeUser = activeUser;
     
-    [[NSUserDefaults standardUserDefaults] setObject:_currentUserIdentifer forKey:kPQCheckCurrentUserIdentifer];
+    if (activeUser == nil == 0)
+    {
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kPQCheckActiveUser];
+    }
+    else
+    {
+        [[NSUserDefaults standardUserDefaults] setObject:[activeUser data] forKey:kPQCheckActiveUser];
+    }
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

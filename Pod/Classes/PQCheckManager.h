@@ -38,14 +38,6 @@
  */
 @property (nonatomic, assign) BOOL shouldPaceUser;
 
-#ifndef THINSDK
-- (id)initWithUserIdentifier:(NSString *)userIdentifier;
-- (void)setAdminCredential:(NSURLCredential *)adminCredential;
-- (void)resetAPIKey;
-- (NSString *)currentNamespace;
-- (void)performAuthorisationWithDigest:(NSString *)digest summary:(NSString *)summary;
-- (void)performEnrolmentWithReference:(NSString *)reference transcript:(NSString *)transcript;
-#else
 /**
  *  Initialises the PQCheck manager object with an instance of `Authorisation` object.
  *
@@ -79,7 +71,6 @@
  *  @see PQCheckManagerDelegate protocol
  */
 - (void)performEnrolmentWithTranscript:(NSString *)transcript uploadURI:(NSURL *)uri;
-#endif
 
 @end
 

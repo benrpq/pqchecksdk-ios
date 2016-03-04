@@ -13,6 +13,7 @@
 #import "AccountsViewController.h"
 #import "PaymentsViewController.h"
 #import "AccountCell.h"
+#import "User.h"
 #import "UserManager.h"
 
 static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
@@ -21,7 +22,7 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
 {
     MBProgressHUD *hud;
     NSArray *_accounts;
-    NSString *_userIdentifier;
+    User *_user;
     BOOL _isLoading;
 }
 @end
@@ -35,10 +36,10 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
 	// Do any additional setup after loading the view, typically from a nib.
     _isLoading = NO;
     
-    _userIdentifier = [[UserManager defaultManager] currentUserIdentifer];
-    if (_userIdentifier == nil)
+    _user = [[UserManager defaultManager] activeUser];
+    if (_user == nil)
     {
-        _userIdentifier = [[[NSUUID UUID] UUIDString] lowercaseString];
+        _user = [[User alloc] init];
     }
     
     UIBarButtonItem *resetButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(resetAccounts)];
@@ -57,11 +58,11 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
     
     // Is this user enrolled? A user must be enrolled before he/she
     // can use the system.
-    if ([[UserManager defaultManager] isUserEnrolled:_userIdentifier] == NO)
+    if ([[UserManager defaultManager] isUserEnrolled:_user] == NO)
     {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         EnrolmentViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"EnrolmentViewController"];
-        [viewController setUserIdentifier:_userIdentifier];
+        [viewController setUser:_user];
         [viewController setModalPresentationStyle:UIModalPresentationFullScreen];
         [self presentViewController:viewController animated:YES completion:nil];
     }
@@ -113,7 +114,7 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
         PaymentsViewController *viewController = [segue destinationViewController];
         NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
         AccountCollection *account = [_accounts objectAtIndex:indexPath.row];
-        [viewController setUserUUID:_userIdentifier];
+        [viewController setUserUUID:_user.identifier];
         [viewController setPayments:[[account payments] allObjects]];
     }
 }
@@ -123,12 +124,12 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
 - (void)resetAccounts
 {
     _accounts = nil;
-    _userIdentifier = [[[NSUUID UUID] UUIDString] lowercaseString];
+    _user = [[User alloc] init];
     
     // Enrol this new user
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     EnrolmentViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"EnrolmentViewController"];
-    [viewController setUserIdentifier:_userIdentifier];
+    [viewController setUser:_user];
     [viewController setModalPresentationStyle:UIModalPresentationFullScreen];
     [self presentViewController:viewController animated:YES completion:nil];
 }
@@ -147,7 +148,7 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
     hud.labelText = NSLocalizedString(@"Please Wait...", @"Please Wait...");
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[BankClientManager defaultManager] getAccountsWithUserUUID:_userIdentifier completion:^(NSArray *accounts, NSError *error) {
+        [[BankClientManager defaultManager] getAccountsWithUserUUID:_user.identifier completion:^(NSArray *accounts, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 _isLoading = NO;
                 [hud hide:YES];
