@@ -17,7 +17,6 @@
 #import "Authenticity.h"
 #import "BiometricEvaluations.h"
 #import "CancelAuthorisationRequest.h"
-#import "Enrolment.h"
 #endif
 #import "Authorisation.h"
 #import "UploadAttempt.h"

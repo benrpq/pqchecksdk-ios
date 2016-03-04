@@ -10,8 +10,7 @@
   },
   "source": {
     "git": "https://github.com/post-quantum/pqchecksdk-ios.git",
-    "branch": "thin.sdk",
-    "tag": "0.1.0"
+    "branch": "develop"
   },
   "platforms": {
     "ios": "8.0"

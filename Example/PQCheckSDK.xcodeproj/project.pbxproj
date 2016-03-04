@@ -21,7 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		16DAE96E6DA1838799065B72 /* Pods_PQCheckThinSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A33B950114BD9C2FBBB179 /* Pods_PQCheckThinSDK_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		16DAE96E6DA1838799065B72 /* Pods_PQCheckThinSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A33B950114BD9C2FBBB179 /* Pods_PQCheckThinSDK_Example.framework */; };
 		D71D25B31C87AAC800137075 /* PQCheckThinSDK_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = D71D25B21C87AAC800137075 /* PQCheckThinSDK_Tests.m */; };
 		D71D25C11C87AD0800137075 /* MockedPQCheckServer.m in Sources */ = {isa = PBXBuildFile; fileRef = D71D25C01C87AD0800137075 /* MockedPQCheckServer.m */; };
 		D71D25C51C87B03600137075 /* authorisation.json in Resources */ = {isa = PBXBuildFile; fileRef = D71D25C41C87B03600137075 /* authorisation.json */; };
@@ -53,7 +53,7 @@
 		D7A5E5291C81A0AD00190FE0 /* Payment.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A5E5221C81A0AD00190FE0 /* Payment.m */; };
 		D7A5E52A1C81A0AD00190FE0 /* UserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D7A5E5241C81A0AD00190FE0 /* UserManager.m */; };
 		D7B5B14F1C7D84DB007CD9F8 /* EnrolmentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D7B5B14E1C7D84DB007CD9F8 /* EnrolmentViewController.m */; };
-		E37071EE913822340BC3B7FF /* Pods_PQCheckThinSDK_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31D7830DAE7EE30E139BB523 /* Pods_PQCheckThinSDK_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		E37071EE913822340BC3B7FF /* Pods_PQCheckThinSDK_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31D7830DAE7EE30E139BB523 /* Pods_PQCheckThinSDK_Tests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
