@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
 
   s.homepage         = "https://github.com/post-quantum/pqchecksdk-ios.git"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
-  s.license          = 'MIT'
+  s.license          = 'Apache Licence version 2.0'
   s.author           = { "CJ Tjhai" => "cjt@post-quantum.com" }
   s.source           = { :git => "https://github.com/post-quantum/pqchecksdk-ios.git", :branch => "develop" }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
