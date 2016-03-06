@@ -10,4 +10,6 @@
 
 @interface AccountsViewController : UITableViewController
 
+- (void)resetAccounts;
+
 @end

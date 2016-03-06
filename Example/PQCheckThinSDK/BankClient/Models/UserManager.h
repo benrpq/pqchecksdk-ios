@@ -52,4 +52,9 @@
  */
 - (BOOL)isUserEnrolled:(User *)user;
 
+/**
+ *  Triggers an update operation on UserManager object. This includes reflecting any changes on the name of an active user to the list of enrolled users.
+ */
+- (void)update;
+
 @end

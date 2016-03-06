@@ -69,9 +69,13 @@ static NSString *kPQCheckActiveUser = @"ActiveUser";
 
 - (void)addEnrolledUser:(User *)user
 {
-    [_enrolledSet addObject:[user data]];
+    [_enrolledSet addObject:user];
     
-    NSArray *array = [_enrolledSet allObjects];
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    for (User *aUser in [_enrolledSet allObjects])
+    {
+        [array addObject:[aUser data]];
+    }
     [[NSUserDefaults standardUserDefaults] setObject:array forKey:kPQCheckEnrolledUsers];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
@@ -85,7 +89,7 @@ static NSString *kPQCheckActiveUser = @"ActiveUser";
 {
     _activeUser = activeUser;
     
-    if (activeUser == nil == 0)
+    if (activeUser == nil)
     {
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kPQCheckActiveUser];
     }
@@ -93,6 +97,25 @@ static NSString *kPQCheckActiveUser = @"ActiveUser";
     {
         [[NSUserDefaults standardUserDefaults] setObject:[activeUser data] forKey:kPQCheckActiveUser];
     }
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (void)update
+{
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    for (User *aUser in [_enrolledSet allObjects])
+    {
+        if ([aUser.identifier caseInsensitiveCompare:_activeUser.identifier] == NSOrderedSame)
+        {
+            if (_activeUser.name && [_activeUser.name length] > 0 &&
+                [aUser.name isEqualToString:_activeUser.name] == NO)
+            {
+                aUser.name = _activeUser.name;
+            }
+        }
+        [array addObject:[aUser data]];
+    }
+    [[NSUserDefaults standardUserDefaults] setObject:array forKey:kPQCheckEnrolledUsers];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

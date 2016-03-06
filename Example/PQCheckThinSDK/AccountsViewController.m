@@ -35,15 +35,6 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
     
 	// Do any additional setup after loading the view, typically from a nib.
     _isLoading = NO;
-    
-    _user = [[UserManager defaultManager] activeUser];
-    if (_user == nil)
-    {
-        _user = [[User alloc] init];
-    }
-    
-    UIBarButtonItem *resetButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh target:self action:@selector(resetAccounts)];
-    self.navigationItem.rightBarButtonItem = resetButton;
 }
 
 - (void)didReceiveMemoryWarning
@@ -55,7 +46,13 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
+
+    _user = [[UserManager defaultManager] activeUser];
+    if (_user == nil)
+    {
+        _user = [[User alloc] init];
+    }
+
     // Is this user enrolled? A user must be enrolled before he/she
     // can use the system.
     if ([[UserManager defaultManager] isUserEnrolled:_user] == NO)
@@ -119,20 +116,12 @@ static NSString *kAccountToPaymentSegue = @"AccountToPaymentSegue";
     }
 }
 
-#pragma mark - Private methods
-
 - (void)resetAccounts
 {
     _accounts = nil;
-    _user = [[User alloc] init];
-    
-    // Enrol this new user
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    EnrolmentViewController *viewController = [storyboard instantiateViewControllerWithIdentifier:@"EnrolmentViewController"];
-    [viewController setUser:_user];
-    [viewController setModalPresentationStyle:UIModalPresentationFullScreen];
-    [self presentViewController:viewController animated:YES completion:nil];
 }
+
+#pragma mark - Private methods
 
 - (void)loadAccounts
 {

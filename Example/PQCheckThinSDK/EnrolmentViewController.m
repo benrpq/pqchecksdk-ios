@@ -30,7 +30,10 @@
     [super viewDidLoad];
     
     // Do any additional setup after loading the view.
-    UIColor *PQGreen = [UIColor colorWithRed:13.0f/255.0f green:185.0f/255.0f blue:78.0f/255.0f alpha:1.0f];
+    UIColor *PQGreen = [UIColor colorWithRed:13.0f/255.0f
+                                       green:185.0f/255.0f
+                                        blue:78.0f/255.0f
+                                       alpha:1.0f];
     [self.enrolButton setTitleColor:PQGreen forState:UIControlStateNormal];
     [self.enrolButton setBackgroundImage:[UIImage imageWithColor:[UIColor whiteColor]]
                                 forState:UIControlStateNormal];
