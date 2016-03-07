@@ -1,1 +1,0 @@
-../../../../../Pod/Classes/API/Request/CancelAuthorisationRequest.h
