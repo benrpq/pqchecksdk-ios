@@ -1,6 +1,6 @@
 This document shows an example application of the deployment of PQCheck in retail banking application. PQCheck is used to approve  a transaction of a high-value payment. The term **approve** in the context of PQCheck means creating a *video signature* that binds the user to his/her transaction. 
 
->**Note** The documentation for PQCheck iOS SDK in Objective C is available at [PQCheck SDK for iOS Reference](../../index.html).
+>**Note** The documentation for PQCheck iOS SDK in Objective C is available at [PQCheck SDK for iOS Reference](https://post-quantum.github.io/pqchecksdk-ios/).
 
 In this example banking application, we have three components:-
 
