@@ -26,7 +26,6 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
     NSString *_userIdentifier;
 #ifndef THINSDK
     APIKey *_apiKey;
-    NSURLCredential *_adminCredential;
     BOOL _shouldViewAuthorisation;
 #endif
     Authorisation *_authorisation;
@@ -46,22 +45,10 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
     {
         _userIdentifier = userIdentifier;
         _shouldViewAuthorisation = YES;
-        _adminCredential = nil;
         
         [self checkCameraAndMicrophonePermissions];
     }
     return self;
-}
-
-- (void)setAdminCredential:(NSURLCredential *)adminCredential
-{
-    _adminCredential = adminCredential;
-}
-
-- (void)resetAPIKey
-{
-    _apiKey = nil;
-    [[A0SimpleKeychain keychain] deleteEntryForKey:kPQCheckAPIKey];
 }
 
 - (NSString *)currentNamespace
@@ -100,7 +87,6 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
     assert(_userIdentifier != nil    && _userIdentifier.length > 0);
     assert(theSummary != nil           && theSummary.length > 0);
     assert(theAuthorisationHash != nil && theAuthorisationHash.length > 0);
-    assert(_adminCredential != nil);
 #endif
     
     // Make sure that we have a camera and microphone permission
@@ -119,7 +105,7 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
         hud.labelText = NSLocalizedString(@"Please wait...", @"Please wait...");
         
         // Do I have a correct credential?
-        [self prepareManagerWithCredential:_adminCredential completion:^{
+        [self prepareManagerWithCredentialWithCompletion:^{
             
             // Create an authorisation
             [[APIManager sharedManager] createAuthorisationWithAPIKey:_apiKey userIdentifier:_userIdentifier authorisationHash:theAuthorisationHash summary:theSummary completion:^(Authorisation *authorisation, NSError *error) {
@@ -163,7 +149,6 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
     assert(_userIdentifier != nil && _userIdentifier.length > 0);
     assert(theReference != nil    && theReference.length > 0);
     assert(theTranscript != nil   && theTranscript.length > 0);
-    assert(_adminCredential != nil);
 
     // Make sure that we have a camera and microphone permission
     _cameraAuthorisationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
@@ -180,7 +165,7 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
         hud.labelText = NSLocalizedString(@"Please wait...", @"Please wait...");
         
         // Do I have a correct credential?
-        [self prepareManagerWithCredential:_adminCredential completion:^{
+        [self prepareManagerWithCredentialWithCompletion:^{
 
             [hud hide:YES];
             
@@ -233,27 +218,22 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
 }
 
 #ifndef THINSDK
-- (void)prepareManagerWithCredential:(NSURLCredential *)credential completion:(void (^)(void))completionBlock
+- (void)prepareManagerWithCredentialWithCompletion:(void (^)(void))completionBlock
 {
     A0SimpleKeychain *keychain = [A0SimpleKeychain keychain];
     NSData *apiData = [keychain dataForKey:kPQCheckAPIKey
                              promptMessage:NSLocalizedString(@"Please authenticate", @"Please authenticate")];
     if (apiData == nil)
     {
-        // Create API-key using admin credential
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSString *namespace = [[NSUUID UUID] UUIDString];
-            [[APIManager sharedManager] createAPIKeyWithCredential:credential namespace:namespace completion:^(APIKey *apiKey, NSError *error) {
-                // Save credential to keychain
-                _apiKey = apiKey;
-                //keychain.useAccessControl = YES;
-                //keychain.defaultAccessiblity = A0SimpleKeychainItemAccessibleWhenPasscodeSetThisDeviceOnly;
-                [keychain setData:[_apiKey data] forKey:kPQCheckAPIKey];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completionBlock();
-                });
-            }];
-        });
+        /**
+         * FIXME: This is really bad :(
+         * But for time-being, it should be okay
+         **/
+        _apiKey = [[APIKey alloc] init];
+        _apiKey.uuid = @"***REMOVED***";
+        _apiKey.apiNamespace = @"***REMOVED***";
+        _apiKey.secret = @"***REMOVED***";
+        completionBlock();
     }
     else
     {

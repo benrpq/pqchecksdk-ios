@@ -9,7 +9,6 @@
 #import <MBProgressHUD/MBProgressHUD.h>
 #import <PQCheckSDK/PQCheckManager.h>
 #import "SDKExampleViewController.h"
-#import "AdminCredentials.h"
 
 static NSString *kUserIdentiferKey = @"UserIdentifier";
 
@@ -44,8 +43,6 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
 - (IBAction)authenticateButtonTapped:(id)sender
 {
     _manager = [[PQCheckManager alloc] initWithUserIdentifier:_userIdentifier];
-    NSURLCredential *adminCredential = [NSURLCredential credentialWithUser:kAdminUUID password:kAdminPassword persistence:NSURLCredentialPersistenceNone];
-    [_manager setAdminCredential:adminCredential];
     _manager.delegate = self;
     _manager.autoAttemptOnFailure = NO;
     _manager.shouldPaceUser = YES;
@@ -55,8 +52,6 @@ static NSString *kUserIdentiferKey = @"UserIdentifier";
 - (IBAction)enrolButtonTapped:(id)sender
 {
     _manager = [[PQCheckManager alloc] initWithUserIdentifier:_userIdentifier];
-    NSURLCredential *adminCredential = [NSURLCredential credentialWithUser:kAdminUUID password:kAdminPassword persistence:NSURLCredentialPersistenceNone];
-    [_manager setAdminCredential:adminCredential];
     _manager.delegate = self;
     _manager.shouldPaceUser = YES;
     [_manager performEnrolmentWithReference:@"Enrolment" transcript:@"0123456789"];

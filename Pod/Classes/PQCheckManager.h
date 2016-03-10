@@ -20,8 +20,6 @@
 
 #ifndef THINSDK
 - (id)initWithUserIdentifier:(NSString *)userIdentifier;
-- (void)setAdminCredential:(NSURLCredential *)adminCredential;
-- (void)resetAPIKey;
 - (NSString *)currentNamespace;
 #else
 - (id)initWithAuthorisation:(Authorisation *)authorisation;
