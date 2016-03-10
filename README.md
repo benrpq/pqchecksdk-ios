@@ -28,11 +28,17 @@ The unit test of PQCheck SDK depends on the following frameworks :-
 
 The `ILTesting` library is included in the SDK, the other two will be fetched automatically by CocoaPods.
 
-Due to `RestKit`, PQCheck SDK requires CocoaPods version 0.38.0, it does not work with a higher version of CocoaPods. Once `RestKit` is updated, this restriction may be lifted.
+Due to `RestKit`, PQCheck SDK requires CocoaPods version 0.38.0, it does not work with a higher version of CocoaPods. Once `RestKit` is updated, this restriction may be lifted. In order to use multiple versions of CocoaPods, please install [Bundler](http://bundler.io).
 
 ## Installation
 
-PQCheckSDK is not available through CocoaPods. To install it, follow the commands below:
+PQCheckSDK is not available through CocoaPods. To install it, simply add the following line to your Podfile:
+
+```ruby
+pod PQCheckSDK
+```
+ 
+You can also clone the repository to build the example code, as shown below:
 
 ```
 git clone https://github.com/post-quantum/pqchecksdk-ios.git
@@ -48,7 +54,7 @@ pod package PQCheckSDK.podspec
 
 ## Author
 
-CJ Tjhai, cjt@post-quantum.com
+Post-Quantum, https://post-quantum.com
 
 ## License
 

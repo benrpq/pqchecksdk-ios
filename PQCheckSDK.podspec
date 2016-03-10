@@ -9,23 +9,17 @@
 Pod::Spec.new do |s|
   s.name             = "PQCheckSDK"
   s.version          = "0.1.0"
-  s.summary          = "A short description of PQCheckSDK."
+  s.summary          = "PQCheck SDK for iOS (Objective C)"
 
-# This description is used to generate tags and improve search results.
-#   * Think: What does it do? Why did you write it? What is the focus?
-#   * Try to keep it short, snappy and to the point.
-#   * Write the description between the DESC delimiters below.
-#   * Finally, don't worry about the indent, CocoaPods strips it!  
   s.description      = <<-DESC
-                       PQCheckSDK for iOS
+                       PQCheck is a video signature system that ties individuals and organisations to an agreement, creating binding contracts at a distance. Together with PQCheck backend engine, this SDK allows you to create an iOS application that enforces sign-what-you-see principle.  
                        DESC
 
-  s.homepage         = "https://github.com/post-quantum/pqchecksdk-ios.git"
-  # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
+  s.homepage         = "https://github.com/post-quantum/pqchecksdk-ios"
   s.license          = 'Apache Licence version 2.0'
-  s.author           = { "CJ Tjhai" => "cjt@post-quantum.com" }
-  s.source           = { :git => "https://github.com/post-quantum/pqchecksdk-ios.git", :branch => "develop" }
-  # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
+  s.author           = { "Post-Quantum" => "info@post-quantum.com" }
+  s.source           = { :git => "https://github.com/post-quantum/pqchecksdk-ios.git", :branch => "develop", :tag => s.version.to_s }
+  s.social_media_url = 'https://twitter.com/post_quantum'
 
   s.platform     = :ios, '8.0'
   s.requires_arc = true
