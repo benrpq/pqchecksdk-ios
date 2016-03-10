@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>PQCheckSDK for iOS Reference</title>
+		<link rel="stylesheet" type="text/css" href="css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.2 (build 963)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="index.html">PQCheckSDK for iOS </a></h1>
+				<a id="developerHome" href="index.html">Post-Quantum</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">PQCheckSDK for iOS Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar"></ul>
+		</header>
+		<article>
+			<div id="overview_contents" role="main">
+				<div class="main-navigation navigation-top">
+					<a href="hierarchy.html">Next</a>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">PQCheckSDK for iOS Reference</h1>
+					</div>		
+				</div>
+				<div id="container">
+					
+					<div class="section section-overview index-overview">
+						
+						
+						<p>PQCheck is a video signature system which ties individuals and organisations to an agreement, creating binding contracts at a distance.</p>
+
+<p>There are three actors in the PQCheck system :-</p>
+
+<ol>
+<li>The PQCheck server or engine;</li>
+<li>Your application server;</li>
+<li>An app on the end-user&rsquo;s smart phone or computer.</li>
+</ol>
+
+
+<p>The end-user&rsquo;s app can only communicate with your application server, which in turn interacts with the PQCheck server. The end-user&rsquo;s app does not interact directly with the PQCheck server. Instead, your application server must provide a URI to the end-user&rsquo;s app in order for it to perform a specific function with the PQCheck server.</p>
+
+<p>This PQCheck SDK sits on the app on an end-user&rsquo;s iOS device. The core functionalities of PQCheck are encapsulated in <a href="Classes/PQCheckManager.html"><code>PQCheckManager</code></a> class.</p>
+
+<blockquote><p><strong>Note</strong> <a href="./example/html/index.html">PQCheck in Retail Banking</a> shows an example of how PQCheck and its iOS SDK are used in retail-banking.</p></blockquote>
+
+<p>The SDK requires iOS 8 or later and it depends on the following frameworks :-</p>
+
+<ul>
+<li><a href="https://github.com/AFNetworking/AFNetworking">AFNetworking</a> (<a href="https://github.com/AFNetworking/AFNetworking/blob/master/LICENSE">MIT licence</a>)</li>
+<li><a href="https://github.com/RestKit/RestKit">RestKit</a> (<a href="https://github.com/RestKit/RestKit/blob/development/LICENSE">Apache licence version 2.0</a>)</li>
+<li><a href="https://github.com/jdg/MBProgressHUD">MBProgressHUD</a> (<a href="https://github.com/jdg/MBProgressHUD/blob/master/LICENSE">MIT licence</a>)</li>
+<li><a href="https://github.com/auth0/SimpleKeychain">SimpleKeychain</a> (<a href="https://github.com/auth0/SimpleKeychain/blob/master/LICENSE">MIT licence</a>)</li>
+<li><a href="https://github.com/rs/SDAVAssetExportSession">SDAVAssetExportSession</a> (<a href="https://github.com/rs/SDAVAssetExportSession/blob/master/LICENSE">MIT licence</a>)
+&mdash; Included in PQCheck SDK</li>
+</ul>
+
+
+<p>The unit test of PQCheck SDK depends on the following frameworks :-</p>
+
+<ul>
+<li><a href="https://github.com/kiwi-bdd/Kiwi">Kiwi</a> (See the <a href="https://github.com/kiwi-bdd/Kiwi/blob/master/License.txt">licence</a> file)</li>
+<li><a href="https://github.com/hamcrest/OCHamcrest">OCHamrest</a> (<a href="https://github.com/hamcrest/OCHamcrest/blob/master/LICENSE.txt">BSD licence</a>)</li>
+<li><a href="https://github.com/InfiniteLoopDK/ILTesting">ILTesting</a> (Unspecified licence type)
+&mdash; Included in PQCheck SDK unit test</li>
+</ul>
+
+						
+						
+					</div>
+					
+                        
+                    
+					
+					
+					<div class="index-column">
+						<h2 class="index-title">Class References</h2>
+						<ul>
+							
+							<li><a href="Classes/APIManager.html">APIManager</a></li>
+							
+							<li><a href="Classes/Authorisation.html">Authorisation</a></li>
+							
+							<li><a href="Classes/AuthorisationStatus.html">AuthorisationStatus</a></li>
+							
+							<li><a href="Classes/HATEOASObject.html">HATEOASObject</a></li>
+							
+							<li><a href="Classes/Links.html">Links</a></li>
+							
+							<li><a href="Classes/PQCheckManager.html">PQCheckManager</a></li>
+							
+							<li><a href="Classes/PQCheckRecordSelfieViewController.html">PQCheckRecordSelfieViewController</a></li>
+							
+							<li><a href="Classes/UploadAttempt.html">UploadAttempt</a></li>
+							
+						</ul>
+					</div>
+					
+					
+						
+					<div class="index-column">
+						
+						<h2 class="index-title">Protocol References</h2>
+						<ul>
+							
+							<li><a href="Protocols/PQCheckManagerDelegate.html">PQCheckManagerDelegate</a></li>
+							
+							<li><a href="Protocols/PQCheckRecordSelfieDelegate.html">PQCheckRecordSelfieDelegate</a></li>
+							
+						</ul>
+						
+                        
+						<h2 class="index-title">Constant References</h2>
+						<ul>
+                        
+                        <li><a href="Constants/PQCheckAuthorisationStatus.html">PQCheckAuthorisationStatus</a></li>
+                        
+                        <li><a href="Constants/PQCheckSelfieMode.html">PQCheckSelfieMode</a></li>
+                        
+						</ul>
+						
+						
+					</div>
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<a href="hierarchy.html">Next</a>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2016 Post-Quantum. All rights reserved. (Last updated: 2016-03-10)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
+						
+	
+					</div>
+				</div>
+			</div>
+		</article>		
+	</body>
+</html>

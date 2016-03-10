@@ -1,0 +1,675 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="html/html; charset=utf-8" />
+		<title>APIManager Class Reference</title>
+		<meta id="xcode-display" name="xcode-display" content="render"/>
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="../css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.2 (build 963)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="../index.html">PQCheckSDK for iOS </a></h1>
+				<a id="developerHome" href="../index.html">Post-Quantum</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">APIManager Class Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar">
+				<li id="toc_button">
+					<button aria-label="Show Table of Contents" role="checkbox" class="open" id="table_of_contents"><span class="disclosure"></span>Table of Contents</button>
+				</li>
+				<li id="jumpto_button" role="navigation">
+					<select id="jumpTo">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+	
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+	
+	
+	
+	
+	
+	<option value="class_methods">Class Methods</option>
+	
+	<option value="//api/name/sharedManager">&nbsp;&nbsp;&nbsp;&nbsp;+ sharedManager</option>
+	
+	
+	
+	
+	<option value="instance_methods">Instance Methods</option>
+	
+	<option value="//api/name/enrolUserWithMediaURL:uploadURL:completion:">&nbsp;&nbsp;&nbsp;&nbsp;- enrolUserWithMediaURL:uploadURL:completion:</option>
+	
+	<option value="//api/name/setProfile:">&nbsp;&nbsp;&nbsp;&nbsp;- setProfile:</option>
+	
+	<option value="//api/name/setVersion:">&nbsp;&nbsp;&nbsp;&nbsp;- setVersion:</option>
+	
+	<option value="//api/name/uploadAttemptWithAuthorisation:mediaURL:completion:">&nbsp;&nbsp;&nbsp;&nbsp;- uploadAttemptWithAuthorisation:mediaURL:completion:</option>
+	
+	<option value="//api/name/viewAuthorisationAtURL:completion:">&nbsp;&nbsp;&nbsp;&nbsp;- viewAuthorisationAtURL:completion:</option>
+	
+	
+	
+</select>
+				</li>
+			</ul>
+		</header>
+		<nav id="tocContainer" class="isShowingTOC">
+			<ul id="toc" role="tree">
+				
+<li role="treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#overview">Overview</a></span></li>
+
+
+
+
+<li role="treeitem" id="task_treeitem"><span class="nodisclosure"></span><span class="sectionName"><a href="#tasks">Tasks</a></span><ul>
+	
+</ul></li>
+
+
+
+
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#class_methods">Class Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/sharedManager">sharedManager</a></span></li>
+	
+</ul></li>
+
+
+
+<li role="treeitem" class="children"><span class="disclosure"></span><span class="sectionName"><a href="#instance_methods">Instance Methods</a></span><ul>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/enrolUserWithMediaURL:uploadURL:completion:">enrolUserWithMediaURL:uploadURL:completion:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setProfile:">setProfile:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/setVersion:">setVersion:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/uploadAttemptWithAuthorisation:mediaURL:completion:">uploadAttemptWithAuthorisation:mediaURL:completion:</a></span></li>
+	
+	<li><span class="nodisclosure"></span><span class="sectionName"><a href="#//api/name/viewAuthorisationAtURL:completion:">viewAuthorisationAtURL:completion:</a></span></li>
+	
+</ul></li>
+
+
+			</ul>
+		</nav>
+		<article>
+			<div id="contents" class="isShowingTOC" role="main">
+				<a title="APIManager Class Reference" name="top"></a>
+				<div class="main-navigation navigation-top">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">APIManager Class Reference</h1>
+					</div>		
+				</div>
+				<div id="container">	
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">APIManager.h</td>
+</tr>
+						</tbody></table></div>
+					
+                    
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p><code>APIManager</code> provides convenient methods to interface with PQCheck server.</p>
+
+<p>The following REST APIs are encapsulated by <code>APIManager</code> class:</p>
+
+<ul>
+<li>View an authorisation at a given secret URL,</li>
+<li>Upload a selfie video in response to an authorisation, and</li>
+<li>Enrol a user by uploading a selfie video to a given remote URL.</li>
+</ul>
+
+					</div>
+					
+					
+					
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						<h2 class="subtitle subtitle-tasks">Tasks</h2>
+						
+						
+						
+						
+
+						<ul class="task-list">
+							<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/sharedManager">+&nbsp;sharedManager</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setProfile:">&ndash;&nbsp;setProfile:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/setVersion:">&ndash;&nbsp;setVersion:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/viewAuthorisationAtURL:completion:">&ndash;&nbsp;viewAuthorisationAtURL:completion:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/uploadAttemptWithAuthorisation:mediaURL:completion:">&ndash;&nbsp;uploadAttemptWithAuthorisation:mediaURL:completion:</a></code>
+	</span>
+	
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/enrolUserWithMediaURL:uploadURL:completion:">&ndash;&nbsp;enrolUserWithMediaURL:uploadURL:completion:</a></code>
+	</span>
+	
+	
+</li>
+						</ul>
+						
+					</div>
+					
+					
+					
+					
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Class Methods" name="class_methods"></a>
+						<h2 class="subtitle subtitle-methods">Class Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/sharedManager" title="sharedManager"></a>
+	<h3 class="subsubtitle method-title">sharedManager</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Returns the shared API manager object.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>+ (APIManager *)sharedManager</code></div>
+
+    
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p>The default <code>APIManager</code> object</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">APIManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+					
+					<div class="section section-methods">
+						<a title="Instance Methods" name="instance_methods"></a>
+						<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+						
+						<div class="section-method">
+	<a name="//api/name/enrolUserWithMediaURL:uploadURL:completion:" title="enrolUserWithMediaURL:uploadURL:completion:"></a>
+	<h3 class="subsubtitle method-title">enrolUserWithMediaURL:uploadURL:completion:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Enrols a user by uploading a selfie video, which is located at file URL <code>mediaURL</code>, to a remote URL <code>uploadURL</code>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)enrolUserWithMediaURL:(NSURL *)<em>mediaURL</em> uploadURL:(NSURL *)<em>uploadURL</em> completion:(void ( ^ ) ( NSError *error ))<em>completionBlock</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>mediaURL</em></dt>
+			<dd><p>The file URL at which the selfie video is located.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>uploadURL</em></dt>
+			<dd><p>The remote target URL to which the selfie video will be uploaded.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>completionBlock</em></dt>
+			<dd><p>A block object to be executed when the upload is completed. This block has no return value and takes an argument, which is an instance of <code>NSError</code> object. If this request is not successful, <code>NSError</code> object is not <code>nil</code>, otherwise it is <code>nil</code>.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>A user identifier is not required as it&rsquo;s implicitly given by the remote URL <code>uploadURL</code>.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">APIManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setProfile:" title="setProfile:"></a>
+	<h3 class="subsubtitle method-title">setProfile:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets the acceptable PQCheck API profile.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)setProfile:(NSString *)<em>profile</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>profile</em></dt>
+			<dd><p>PQCheck profile string</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>All REST endpoints have a PQCheck API profile and the client needs to indicate acceptable profile via HTTP <code>Accept</code> header. This method does the job for the client.</p>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">APIManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/setVersion:" title="setVersion:"></a>
+	<h3 class="subsubtitle method-title">setVersion:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sets the acceptable PQCheck API version.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)setVersion:(NSNumber *)<em>version</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>version</em></dt>
+			<dd><p>PQCheck API version</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>All REST endpoints have a PQCheck API version and the client needs to indicate acceptable API version via HTTP <code>Accept</code> header. This method does the job for the client.</p><div class="note"><p><strong>Note:</strong> The version value should be a single natural number.</p></div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">APIManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/uploadAttemptWithAuthorisation:mediaURL:completion:" title="uploadAttemptWithAuthorisation:mediaURL:completion:"></a>
+	<h3 class="subsubtitle method-title">uploadAttemptWithAuthorisation:mediaURL:completion:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Uploads a selfie video at file URL <code>mediaURL</code> to a URL specified in authorisation representation, <a href="../Classes/Authorisation.html"><code>Authorisation</code></a>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)uploadAttemptWithAuthorisation:(Authorisation *)<em>authorisation</em> mediaURL:(NSURL *)<em>mediaURL</em> completion:(void ( ^ ) ( UploadAttempt *uploadAttempt , NSError *error ))<em>completionBlock</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>authorisation</em></dt>
+			<dd><p>The authorisation representation.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>mediaURL</em></dt>
+			<dd><p>The file URL at which the selfie video is located.</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>completionBlock</em></dt>
+			<dd><p>A block object to be executed when the upload is completed. This block has no return value and takes two arguments: an instance of <a href="../Classes/UploadAttempt.html"><code>UploadAttempt</code></a> object and an instance of <code>NSError</code> object. If this request is not successful, <code>NSError</code> object is not <code>nil</code> and <a href="../Classes/UploadAttempt.html"><code>UploadAttempt</code></a> object is <code>nil</code>. On the other hand, if it is successful, <code>NSError</code> object is <code>nil</code> and <a href="../Classes/UploadAttempt.html"><code>UploadAttempt</code></a> object, which contains <code>number</code>, <code>status</code> and <code>nextDigest</code>, should then be used to decide a follow-up action.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		<p>Despite a successful upload, the selfie video may be rejected by PQCheck server due to incorrect biometric or expired authorisation, therefore the status of <a href="../Classes/UploadAttempt.html"><code>UploadAttempt</code></a> object needs to be inspected.</p>
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Classes/UploadAttempt.html">UploadAttempt</a> class</p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">APIManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+						<div class="section-method">
+	<a name="//api/name/viewAuthorisationAtURL:completion:" title="viewAuthorisationAtURL:completion:"></a>
+	<h3 class="subsubtitle method-title">viewAuthorisationAtURL:completion:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p>Sends a request to view an authorisation at the given secret <code>url</code>.</p>
+	</div>		
+	
+    
+
+	<div class="method-subsection method-declaration"><code>- (void)viewAuthorisationAtURL:(NSURL *)<em>url</em> completion:(void ( ^ ) ( Authorisation *authorisation , NSError *error ))<em>completionBlock</em></code></div>
+
+    
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>url</em></dt>
+			<dd><p>The secret URL of an authorisation</p></dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>completionBlock</em></dt>
+			<dd><p>A block object to be executed when this request is completed. This block has no return value and takes two arguments: an instance of <a href="../Classes/Authorisation.html"><code>Authorisation</code></a> object and an instance of <code>NSError</code> object. If this request is not successful, <code>NSError</code> object is not <code>nil</code> and <a href="../Classes/Authorisation.html"><code>Authorisation</code></a> object is <code>nil</code>. On the other hand, if it is successful, <code>NSError</code> object is <code>nil</code> and <a href="../Classes/Authorisation.html"><code>Authorisation</code></a> object, which contains <code>digest</code> and <code>upload-attempt</code> amongst other information, should then be passed to PQCheck SDK, which in turn should request a user to perform a selfie reading <code>digest</code> and submit the resulting selfie video to <code>upload-attempt</code>.</p></dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><p><a href="../Classes/Authorisation.html">Authorisation</a> class</p></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">APIManager.h</code><br />
+	</div>				
+	
+	
+</div>
+						
+					</div>
+					
+					
+                    
+                    
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2016 Post-Quantum. All rights reserved. (Last updated: 2016-03-10)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
+						
+					</div>
+				</div>
+			</div>
+		</article>
+		<script type="text/javascript">
+			function jumpToChange()
+			{
+				window.location.hash = this.options[this.selectedIndex].value;
+			}
+			
+			function toggleTOC()
+			{
+				var contents = document.getElementById('contents');
+				var tocContainer = document.getElementById('tocContainer');
+				
+				if (this.getAttribute('class') == 'open')
+				{
+					this.setAttribute('class', '');
+					contents.setAttribute('class', '');
+					tocContainer.setAttribute('class', '');
+					
+					window.name = "hideTOC";
+				}
+				else
+				{
+					this.setAttribute('class', 'open');
+					contents.setAttribute('class', 'isShowingTOC');
+					tocContainer.setAttribute('class', 'isShowingTOC');
+					
+					window.name = "";
+				}
+				return false;
+			}
+			
+			function toggleTOCEntryChildren(e)
+			{
+				e.stopPropagation();
+				var currentClass = this.getAttribute('class');
+				if (currentClass == 'children') {
+					this.setAttribute('class', 'children open');
+				}
+				else if (currentClass == 'children open') {
+					this.setAttribute('class', 'children');
+				}
+				return false;
+			}
+			
+			function tocEntryClick(e)
+			{
+				e.stopPropagation();
+				return true;
+			}
+			
+			function init()
+			{
+				var selectElement = document.getElementById('jumpTo');
+				selectElement.addEventListener('change', jumpToChange, false);
+				
+				var tocButton = document.getElementById('table_of_contents');
+				tocButton.addEventListener('click', toggleTOC, false);
+				
+				var taskTreeItem = document.getElementById('task_treeitem');
+				if (taskTreeItem.getElementsByTagName('li').length > 0)
+				{
+					taskTreeItem.setAttribute('class', 'children');
+					taskTreeItem.firstChild.setAttribute('class', 'disclosure');
+				}
+				
+				var tocList = document.getElementById('toc');
+				
+				var tocEntries = tocList.getElementsByTagName('li');
+				for (var i = 0; i < tocEntries.length; i++) {
+					tocEntries[i].addEventListener('click', toggleTOCEntryChildren, false);
+				}
+				
+				var tocLinks = tocList.getElementsByTagName('a');
+				for (var i = 0; i < tocLinks.length; i++) {
+					tocLinks[i].addEventListener('click', tocEntryClick, false);
+				}
+				
+				if (window.name == "hideTOC") {
+					toggleTOC.call(tocButton);
+				}
+			}
+			
+			window.onload = init;
+			
+			// If showing in Xcode, hide the TOC and Header
+			if (navigator.userAgent.match(/xcode/i)) {
+				document.getElementById("contents").className = "hideInXcode"
+				document.getElementById("tocContainer").className = "hideInXcode"
+				document.getElementById("top_header").className = "hideInXcode"
+			}
+			
+		</script>
+	</body>
+</html>

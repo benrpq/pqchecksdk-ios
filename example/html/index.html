@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>PQCheck in Retail Banking Example Reference</title>
+		<link rel="stylesheet" type="text/css" href="css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.2 (build 963)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="index.html">PQCheck in Retail Banking Example </a></h1>
+				<a id="developerHome" href="index.html">Post-Quantum</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">PQCheck in Retail Banking Example Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar"></ul>
+		</header>
+		<article>
+			<div id="overview_contents" role="main">
+				<div class="main-navigation navigation-top">
+					<a href="hierarchy.html">Next</a>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">PQCheck in Retail Banking Example Reference</h1>
+					</div>		
+				</div>
+				<div id="container">
+					
+					<div class="section section-overview index-overview">
+						
+						
+						<p>This document shows an example application of the deployment of PQCheck in retail banking application. PQCheck is used to approve  a transaction of a high-value payment. The term <strong>approve</strong> in the context of PQCheck means creating a <em>video signature</em> that binds the user to his/her transaction.</p>
+
+<blockquote><p><strong>Note</strong> The documentation for PQCheck iOS SDK in Objective C is available at <a href="https://post-quantum.github.io/pqchecksdk-ios/">PQCheck SDK for iOS Reference</a>.</p></blockquote>
+
+<p>In this example banking application, we have three components:-</p>
+
+<ol>
+<li>PQCheck engine or server;</li>
+<li>Bank application server;</li>
+<li>Bank mobile client application.</li>
+</ol>
+
+
+<p>The interaction amongst these components are depicted on the figure below. The PQCheckSDK for iOS sits on the bank iOS client application.
+!<a href="https://post-quantum.com/assets/images/pqcheck/architecture.png" title="Bank Deployment Architecture">Bank Deployment Architecture</a></p>
+
+<p>The bank mobile client application implements three simple functions, namely user enrolment, account/payment viewing and payment approval.</p>
+
+<h2><strong><a href="Classes/User.html">User</a> <a href="Classes/Enrolment.html">Enrolment</a></strong></h2>
+
+<p>Each user has a unique <code>userIdentifier</code> and a user has to be enrolled to PQCheck engine. The enrolment function is provided by <a href="Classes/BankClientManager.html"><code>BankClientManager</code></a> object and this is how it is done.</p>
+
+<pre><code>[[BankClientManager defaultManager] enrolUserWithUUID:userIdentifier 
+                                           completion:^(Enrolment *enrolment, NSError *error) 
+{
+    // Do your UI stuff here
+
+    if (error == nil)
+    {
+        // Now we have a valid Enrolment object, pass it to PQCheckManager 
+        // to let it completes the enrolment process
+        _manager = [[PQCheckManager alloc] init];
+        _manager.delegate = self;
+        // By default user pacing option is disabled, it can be
+        // enabled by settting shouldPaceUser parameter to YES
+        [_manager performEnrolmentWithTranscript:enrolment.transcript 
+                                       uploadURI:[NSURL URLWithString:enrolment.uri]];
+    }
+    else
+    {
+        // An error has been encountered
+    }
+}];
+</code></pre>
+
+<p>Once the enrolment process is completed, the following delegates of <code>PQCheckManager</code> will be invoked, depending on the outcome.</p>
+
+<pre><code>- (void)PQCheckManagerDidFinishEnrolment:(PQCheckManager *)manager
+{
+    // Let UserManager deals with the user
+    [[UserManager defaultManager] addEnrolledUser:userIdentifier];
+    [[UserManager defaultManager] setCurrentUserIdentifer:userIdentifier];
+
+    // Do your UI work here
+}
+
+- (void)PQCheckManager:(PQCheckManager *)manager didFailWithError:(NSError *)error
+{
+    // An error has occurred, you can present an alert here
+}
+</code></pre>
+
+<h2><strong>Get Accounts and Payments</strong></h2>
+
+<p>For each <code>userIdentifier</code>, the bank application server provides a set of accounts, each with a set of payments. They can be obtained using <code>BankClientManager</code> object as follows.</p>
+
+<pre><code>[[BankClientManager defaultManager] getAccountsWithUserUUID:userIdentifier 
+                                                 completion:^(NSArray *accounts, NSError *error) 
+{
+    // Do your UI work here
+
+    if (error)
+    {
+        // An error has occurred during fetching
+    }
+    else
+    {
+        // Now you have the set of accounts, update your UI
+    }
+}];
+</code></pre>
+
+<h2><strong>Payment Approval</strong></h2>
+
+<p>Each payment is assigned a unique <code>paymentIdentifier</code> and the process to approve a payment is described below.</p>
+
+<pre><code>// 1. Tell the bank application server that you want to approve a payment 
+// identified by paymentIdentifier. You can use BankClientManager object 
+// to do this job.
+[[BankClientManager defaultManager] approvePaymentWithUUID:paymentIdentifier 
+                                                  userUUID:userIdentifier 
+                                                completion:^(Payment *payment, NSError *error) 
+{
+    // 2. Make sure that the payment has not been approved yet.
+    if (payment.approved == YES)
+    {
+        // Stop right here. This payment has been approved, 
+        // warn the user about it
+
+        return;
+    }
+
+    // Step 3 has the following two possibilities
+    if (error == nil)
+    {
+        // 3a. Success, the Payment object contains a secret URI (approvalUri) 
+        // to an authorisation. You need to view this authorisation to obtain 
+        // the necessary information to do a selfie.
+        // You can use PQCheck SDK to view the authorisation, but BankClientManager 
+        // provides a convenient wrapper to do this job.
+        [[BankClientManager defaultManager] viewAuthorisationForPayment:payment 
+                                                             completion:^(Authorisation *authorisation, NSError *error) 
+        {
+            // Step 4 has the following two possibilities
+            if (error == nil)
+            {
+                // 4a. Ok, you have successfully viewed the authorisation, 
+                // now start a selfie process
+                _manager = [[PQCheckManager alloc] initWithAuthorisation:authorisation];
+                [_manager setDelegate:self];
+                [_manager setShouldPaceUser:YES];
+                [_manager performAuthorisationWithDigest:authorisation.digest];
+            }
+            else
+            {
+                 // 4b. Oh no, an error has occurred. 
+                 // You can show an alert to the user
+            }
+        }];
+    }
+    else
+    {
+        // 3b. Oh dear, the payment approval request is not successful. 
+        // You can show an alert to the user 
+    }
+}];
+</code></pre>
+
+<p>Once the selfie process on Step 4a above is completed, one of the following delegates of <code>PQCheckManager</code> will be invoked.</p>
+
+<pre><code>- (void)PQCheckManager:(PQCheckManager *)manager didFinishWithAuthorisationStatus:(PQCheckAuthorisationStatus)status
+{
+    // Check the status of authorisation
+    if (status == kPQCheckAuthorisationStatusSuccessful)
+    {
+        // Great, your selfie is accepted.
+        // Now, tell the bank application server that your payment 
+        // has been approved. You can use BankClientManager object 
+        // to do this and in fact it's the same call as how you 
+        // started the whole process.
+        [[BankClientManager defaultManager] approvePaymentWithUUID:paymentIdentifier 
+                                                          userUUID:userIdentifier 
+                                                        completion:^(Payment *payment, NSError *error) 
+        {
+            // Update your UI work, but remember to check 
+            // whether or not the call is successful.
+        }];
+    }
+    else if (status == kPQCheckAuthorisationStatusTimedOut)
+    {
+        // The authorisation has timed-out, you
+        // may need to request for another one
+    }
+    else if (status == kPQCheckAuthorisationStatusCancelled)
+    {
+        // The authorisation has been cancelled by the user
+    }
+    else if (status == kPQCheckAuthorisationStatusOpen)
+    {
+        // Your previous selfie was not accepted,
+        // please try again.
+    }
+}
+
+- (void)PQCheckManager:(PQCheckManager *)manager didFailWithError:(NSError *)error
+{
+    // An error has occurred while doing selfie.
+    // You should alert the user about this.
+}
+</code></pre>
+						
+						
+					</div>
+					
+                        
+                    
+					
+					
+					<div class="index-column">
+						<h2 class="index-title">Class References</h2>
+						<ul>
+							
+							<li><a href="Classes/AccountCollection.html">AccountCollection</a></li>
+							
+							<li><a href="Classes/BankAccount.html">BankAccount</a></li>
+							
+							<li><a href="Classes/BankClientManager.html">BankClientManager</a></li>
+							
+							<li><a href="Classes/Enrolment.html">Enrolment</a></li>
+							
+							<li><a href="Classes/Payment.html">Payment</a></li>
+							
+							<li><a href="Classes/User.html">User</a></li>
+							
+							<li><a href="Classes/UserManager.html">UserManager</a></li>
+							
+						</ul>
+					</div>
+					
+					
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<a href="hierarchy.html">Next</a>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2016 Post-Quantum. All rights reserved. (Last updated: 2016-03-10)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
+						
+	
+					</div>
+				</div>
+			</div>
+		</article>		
+	</body>
+</html>
