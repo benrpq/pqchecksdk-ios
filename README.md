@@ -1,6 +1,6 @@
 # PQCheckSDK for iOS (Objective C)
 
-[![Build Status](https://travis-ci.com/post-quantum/pqchecksdk-ios.svg?token=7Yb4bdxygiVURdNgDG7V&branch=develop)](https://travis-ci.com/post-quantum/pqchecksdk-ios)
+[![Build Status](https://travis-ci.org/post-quantum/pqchecksdk-ios.svg?branch=develop)](https://travis-ci.org/post-quantum/pqchecksdk-ios)
 
 ## Usage
 
@@ -32,7 +32,7 @@ Due to `RestKit`, PQCheck SDK requires CocoaPods version 0.38.0, it does not wor
 
 ## Installation
 
-PQCheckSDK is not available through CocoaPods. To install it, simply add the following line to your Podfile:
+PQCheckSDK is available through CocoaPods. To install it, simply add the following line to your Podfile:
 
 ```ruby
 pod PQCheckSDK
@@ -51,6 +51,10 @@ In order to create a framework of PQCheck SDK for iOS, you can use [CocoaPods Pa
 ```
 pod package PQCheckSDK.podspec
 ```
+
+## Reference
+
+[PQCheck in Retail Banking](http://post-quantum.github.io/pqchecksdk-ios/example/html/index.html) shows an example of how PQCheck and its iOS SDK are used in retail banking.
 
 ## Author
 
