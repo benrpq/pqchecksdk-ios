@@ -1,17 +1,19 @@
 {
   "name": "PQCheckSDK",
   "version": "0.1.0",
-  "summary": "A short description of PQCheckSDK.",
-  "description": "PQCheckSDK for iOS",
-  "homepage": "https://github.com/post-quantum/pqchecksdk-ios.git",
-  "license": "Apache Licence version 2.0",
+  "summary": "PQCheck SDK for iOS (Objective C)",
+  "description": "PQCheck is a video signature system that ties individuals and organisations to an agreement, creating binding contracts at a distance. Together with PQCheck backend engine, this SDK allows you to create an iOS application that enforces sign-what-you-see principle.",
+  "homepage": "https://github.com/post-quantum/pqchecksdk-ios",
+  "license": "Apache Licence, Version 2.0",
   "authors": {
-    "CJ Tjhai": "cjt@post-quantum.com"
+    "Post-Quantum": "info@post-quantum.com"
   },
   "source": {
     "git": "https://github.com/post-quantum/pqchecksdk-ios.git",
-    "branch": "develop"
+    "branch": "develop",
+    "tag": "0.1.0"
   },
+  "social_media_url": "https://twitter.com/post_quantum",
   "platforms": {
     "ios": "8.0"
   },

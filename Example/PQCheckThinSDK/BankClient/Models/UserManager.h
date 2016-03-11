@@ -38,11 +38,18 @@
 + (UserManager *)defaultManager;
 
 /**
- *  Adds a user to a set of enrolled users.
+ *  Adds a user to the set of enrolled users.
  *
  *  @param user The user object to be added
  */
 - (void)addEnrolledUser:(User *)user;
+
+/**
+ *  Deletes an enrolled user
+ *
+ *  @param user The user object to be deleted
+ */
+- (void)deleteEnrolledUser:(User *)user;
 
 /**
  *  Returns the set of enrolled users.

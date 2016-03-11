@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "PQCheckSDK"
-  s.version          = "0.1.0"
+  s.version          = "0.1.1"
   s.summary          = "PQCheck SDK for iOS (Objective C)"
 
   s.description      = <<-DESC
@@ -33,9 +33,8 @@ Pod::Spec.new do |s|
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.ios.frameworks = 'SystemConfiguration', 'MobileCoreServices'
-  s.dependency 'AFNetworking'
-  s.dependency 'RestKit'
-  s.dependency 'RestKit/Testing'
-  s.dependency 'SimpleKeychain'
-  s.dependency 'MBProgressHUD'
+  s.dependency 'AFNetworking', '1.3.4'
+  s.dependency 'RestKit', '0.26.0'
+  s.dependency 'SimpleKeychain', '0.7.0'
+  s.dependency 'MBProgressHUD', '0.9.2'
 end

@@ -154,10 +154,47 @@
     }
     else if (section == 1 && [enrolledUsers count] > 0)
     {
-        return NSLocalizedString(@"Tap to select an active user", @"Tap to select an active user");
+        return NSLocalizedString(@"Tap to select an active user or swipe to delete a user.", @"Tap to select an active user or swipe to delete a user.");
     }
 
     return nil;
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 1)
+    {
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 1)
+    {
+        return UITableViewCellEditingStyleDelete;
+    }
+    
+    return UITableViewCellEditingStyleNone;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 1 && editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        User *user = [enrolledUsers objectAtIndex:indexPath.row];
+        [[UserManager defaultManager] deleteEnrolledUser:user];
+        enrolledUsers = [[[UserManager defaultManager] enrolledUsers] allObjects];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 #pragma mark - UITableViewDelegate
@@ -180,7 +217,7 @@
         User *user = [enrolledUsers objectAtIndex:indexPath.row];
         [[UserManager defaultManager] setActiveUser:user];
         
-        [self.tableView reloadData];
+        [tableView reloadData];
     }
     else if (indexPath.section == 2)
     {

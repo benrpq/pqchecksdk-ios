@@ -88,6 +88,27 @@ static NSString *kPQCheckActiveUser = @"ActiveUser";
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
+- (void)deleteEnrolledUser:(User *)user
+{
+    NSMutableSet *set = [[NSMutableSet alloc] init];
+    for (User *aUser in [_enrolledSet allObjects])
+    {
+        if ([aUser.identifier caseInsensitiveCompare:user.identifier] != NSOrderedSame)
+        {
+            [set addObject:aUser];
+        }
+    }
+    _enrolledSet = [[NSMutableSet alloc] initWithSet:set];
+    
+    // Are we deleting an active user?
+    if ([_activeUser.identifier caseInsensitiveCompare:user.identifier] == NSOrderedSame)
+    {
+        // Pick an arbitrary user as the new active user
+        User *aUser = [[_enrolledSet allObjects] firstObject];
+        [self setActiveUser:aUser];
+    }
+}
+
 - (NSSet *)enrolledUsers
 {
     return _enrolledSet;
