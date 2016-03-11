@@ -50,12 +50,7 @@ static NSString*  kDefaultProfile = @"pqcheck";
     self = [super init];
     if (self)
     {
-        // NOTE:
-        // iOS has a strict security requirements. By default, a HTTP connection is not allowed by
-        // default. In order to override this behaviour, we need to add an entry in Info.plist file:
-        // 1. Add NSAppTransportSecurity row as a Dictionary
-        // 2. Add NSAllowsArbitraryLoads as a child of (1) and set it to Boolean YES
-        NSURL *baseURL = [NSURL URLWithString:@"http://bank-demo.post-quantum.com"];
+        NSURL *baseURL = [NSURL URLWithString:@"https://bank-demo.post-quantum.com"];
         AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
         
         _objectManager = [[RKObjectManager alloc] initWithHTTPClient:httpClient];
