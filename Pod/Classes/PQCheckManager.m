@@ -225,14 +225,13 @@ static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
                              promptMessage:NSLocalizedString(@"Please authenticate", @"Please authenticate")];
     if (apiData == nil)
     {
-        /**
-         * FIXME: This is really bad :(
-         * But for time-being, it should be okay
-         **/
+        /*******
+         ******* Please set your API key here
+         *******/
         _apiKey = [[APIKey alloc] init];
-        _apiKey.uuid = @"***REMOVED***";
-        _apiKey.apiNamespace = @"***REMOVED***";
-        _apiKey.secret = @"***REMOVED***";
+        _apiKey.uuid = @"********** REMOVED **************";
+        _apiKey.apiNamespace = @"********** REMOVED **************";
+        _apiKey.secret = @"********** REMOVED **************";
         completionBlock();
     }
     else

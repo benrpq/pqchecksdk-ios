@@ -8,10 +8,24 @@
 
 #import <Foundation/Foundation.h>
 
+/**
+ *  An API key is needed to perform authorised calls to PQCheck backend
+ */
 @interface APIKey : NSObject
 
+/**
+ *  The namespace of an API key
+ */
 @property (nonatomic, copy) NSString *apiNamespace;
+
+/**
+ *  The UUID (username) of an API key
+ */
 @property (nonatomic, copy) NSString *uuid;
+
+/**
+ *  The secret (password) of an API key
+ */
 @property (nonatomic, copy) NSString *secret;
 
 - (id)initWithData:(NSData *)data;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0700"
+   LastUpgradeVersion = "0720"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E57FD6496936492B3FFCC305C8E25501"
+               BlueprintIdentifier = "C3E954E2A40FB38349E9C86A97D8D130"
                BuildableName = "PQCheckSDK.framework"
                BlueprintName = "PQCheckSDK"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "E57FD6496936492B3FFCC305C8E25501"
+            BlueprintIdentifier = "C3E954E2A40FB38349E9C86A97D8D130"
             BuildableName = "PQCheckSDK.framework"
             BlueprintName = "PQCheckSDK"
             ReferencedContainer = "container:Pods.xcodeproj">

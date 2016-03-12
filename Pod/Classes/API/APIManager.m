@@ -266,8 +266,8 @@ static NSString* kVideoExtension = @"mp4";
     RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Authorisation class]];
     [responseMapping addAttributeMappingsFromDictionary:[Authorisation mapping]];
     RKObjectMapping *linksMapping = [RKObjectMapping mappingForClass:[Links class]];
-    RKObjectMapping *pathMapping = [RKObjectMapping mappingForClass:[URIPath class]];
-    [pathMapping addAttributeMappingsFromDictionary:[URIPath mapping]];
+    RKObjectMapping *pathMapping = [RKObjectMapping mappingForClass:[HATEOASObject class]];
+    [pathMapping addAttributeMappingsFromDictionary:[HATEOASObject mapping]];
     
     // Define the mapping relationship
     RKPropertyMapping *mapping = nil;
@@ -361,8 +361,8 @@ static NSString* kVideoExtension = @"mp4";
     [authenticityMapping addAttributeMappingsFromDictionary:[Authenticity mapping]];
 #endif
     RKObjectMapping *linksMapping = [RKObjectMapping mappingForClass:[Links class]];
-    RKObjectMapping *pathMapping = [RKObjectMapping mappingForClass:[URIPath class]];
-    [pathMapping addAttributeMappingsFromDictionary:[URIPath mapping]];
+    RKObjectMapping *pathMapping = [RKObjectMapping mappingForClass:[HATEOASObject class]];
+    [pathMapping addAttributeMappingsFromDictionary:[HATEOASObject mapping]];
     
     // Define the mapping relationship
     RKPropertyMapping *mapping = nil;

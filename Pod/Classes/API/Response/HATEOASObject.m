@@ -1,14 +1,14 @@
 //
-//  HRef.m
+//  HATEOASObject
 //  PQCheckSDK
 //
 //  Created by CJ Tjhai on 22/01/2016.
 //  Copyright © 2016 Post-Quantum. All rights reserved.
 //
 
-#import "URIPath.h"
+#import "HATEOASObject.h"
 
-@implementation URIPath
+@implementation HATEOASObject
 
 - (NSString *)description
 {

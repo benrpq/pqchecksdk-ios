@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "summary": "A short description of PQCheckSDK.",
   "description": "",
-  "homepage": "https://github.com/<GITHUB_USERNAME>/PQCheckSDK",
+  "homepage": "https://github.com/post-quantum/pqchecksdk-ios.git",
   "license": "MIT",
   "authors": {
     "CJ Tjhai": "cjt@post-quantum.com"
   },
   "source": {
-    "git": "https://github.com/<GITHUB_USERNAME>/PQCheckSDK.git",
-    "tag": "0.1.0"
+    "git": "https://github.com/post-quantum/pqchecksdk-ios.git",
+    "branch": "sdk"
   },
   "platforms": {
     "ios": "8.0"
