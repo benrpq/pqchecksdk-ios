@@ -90,6 +90,26 @@ typedef NS_ENUM(NSUInteger, PQCheckSelfieMode)
  */
 - (PQCheckSelfieMode)currentSelfieMode;
 
+/**
+ *  Sets a custom overlay view, which will be shown while capturing selfie
+ */
+- (void)setCustomOverlayView:(UIView *)overlayView;
+
+/**
+ *  Enable solid overlay with a given color and opacity
+ *
+ *  @param color   The color of the overlay view
+ *  @param opacity The opacity of the overlay view
+ */
+- (void)enableSolidOverlayWithColor:(UIColor *)color opacity:(CGFloat)opacity;
+
+/**
+ *  Enable transparent overlay
+ *
+ *  @param color The color of the facial border line
+ */
+- (void)enableTransparentOverlayWithLineColor:(UIColor *)color;
+
 @end
 
 /**

@@ -15,7 +15,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "AuthorisationStatus.h"
+#import <PQCheckSDK/PQCheckRecordSelfieViewController.h>
+#import <PQCheckSDK/AuthorisationStatus.h>
 
 @class Authorisation;
 @protocol PQCheckManagerDelegate;
@@ -45,6 +46,15 @@
  *  @discussion If the boolean value is `NO`, the user needs to perform a press-and-hold action in order to record a selfie. Otherwise, the recording of selfie will start after a short delay with the transcript shown digit-by-digit and will finish after the last digit of the transcript is shown.
  */
 @property (nonatomic, assign) BOOL shouldPaceUser;
+
+/**
+ *  Returns the selfie view controller for customisation purposes
+ *
+ *  @see class PQCheckSelfieViewController
+ *
+ *  @return Return the selfie view controller instance associated with this manager
+ */
+- (PQCheckRecordSelfieViewController *)selfieViewController;
 
 /**
  *  Initialises the PQCheck manager object with an instance of `Authorisation` object.

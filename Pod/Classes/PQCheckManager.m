@@ -19,7 +19,6 @@
 #import <SimpleKeychain/SimpleKeychain.h>
 #import <MBProgressHUD/MBProgressHUD.h>
 #import "PQCheckManager.h"
-#import "PQCheckRecordSelfieViewController.h"
 #import "API/APIManager.h"
 #import "API/Response/Authorisation.h"
 #import "API/Response/UploadAttempt.h"
@@ -41,6 +40,11 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
 @end
 
 @implementation PQCheckManager
+
+- (PQCheckRecordSelfieViewController *)selfieViewController
+{
+    return _selfieController;
+}
 
 - (id)init
 {
