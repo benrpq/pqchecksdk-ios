@@ -77,11 +77,14 @@ typedef NS_ENUM(NSUInteger, PQCheckSelfieMode)
                      transcript:(NSString *)transcript;
 
 /**
- *  Attempts a selfie recording and on completion, one of the delegates of `PQCheckRecordSelfieDelegate` protocol will be invoked.
+ *  Repeats a selfie recording attempt and on completion, one of the delegates of `PQCheckRecordSelfieDelegate` protocol will be invoked.
+ *
+ *  @discussion
+ *  This method should only be performed if and only if the initial selfie failed.
  *
  *  @see PQCheckRecordSelfieDelegate protocol
  */
-- (void)attemptSelfie;
+- (void)reattemptSelfie;
 
 /**
  *  Returns the currently selected selfie mode.

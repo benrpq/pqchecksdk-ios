@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "12F7C2077B61A624376BFFC8"
+               BlueprintIdentifier = "9D5C1A006D80F8D512908F81"
                BuildableName = "PQCheckSDK.framework"
                BlueprintName = "PQCheckSDK"
                ReferencedContainer = "container:Pods.xcodeproj">
