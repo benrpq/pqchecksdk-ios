@@ -75,7 +75,9 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     if (self)
     {
         _transcript = transcript;
+        _customOverlayView = nil;
         _mode = mode;
+        
     }
     return self;
 }
@@ -139,6 +141,34 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     _transcript = transcript;
     
     [self configureDigestLabel];
+}
+
+- (void)setCustomOverlayView:(UIView *)overlayView
+{
+    _customOverlayView = overlayView;
+}
+
+- (void)enableSolidOverlayWithColor:(UIColor *)color opacity:(CGFloat)opacity
+{
+    if (_customOverlayView == nil)
+    {
+        [_faceShape removeFromSuperview];
+        _faceShape.solidBackground = YES;
+        _faceShape.outerFillColor = color;
+        _faceShape.outerFillOpacity = opacity;
+        [self.view insertSubview:_faceShape belowSubview:_digestLabel];
+    }
+}
+
+- (void)enableTransparentOverlayWithLineColor:(UIColor *)color
+{
+    if (_customOverlayView == nil)
+    {
+        [_faceShape removeFromSuperview];
+        _faceShape.solidBackground = NO;
+        _faceShape.lineColor = color;
+        [self.view insertSubview:_faceShape belowSubview:_digestLabel];
+    }
 }
 
 - (IBAction)recordButtonToggled:(id)sender
@@ -327,11 +357,19 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
 - (void)configureFaceShape
 {
-    // The frame of _faceShape will be overwritten by its default value
-    _faceShape = [[PQCheckFaceShape alloc] initWithFrame:CGRectZero];
-    _faceShape.outerFillColor = [UIColor whiteColor];
-    _faceShape.outerFillOpacity = 0.95f;
-    [self.view addSubview:_faceShape];
+    if (_customOverlayView == nil)
+    {
+        // The frame of _faceShape will be overwritten by its default value
+        _faceShape = [[PQCheckFaceShape alloc] initWithFrame:CGRectZero];
+        _faceShape.outerFillColor = [UIColor whiteColor];
+        _faceShape.outerFillOpacity = 0.95f;
+        [self.view addSubview:_faceShape];
+    }
+    else
+    {
+        [self.view addSubview:_customOverlayView];
+    }
+        
 }
 
 - (void)configureStartStopButton

@@ -18,6 +18,9 @@
 
 @interface PQCheckFaceShape : UIView
 
+@property (nonatomic, assign) BOOL solidBackground;
+@property (nonatomic, assign) CGFloat lineWidth;
+@property (nonatomic, strong) UIColor *lineColor;
 @property (nonatomic, strong) UIColor *outerFillColor;
 @property (nonatomic, assign) CGFloat  outerFillOpacity;
 

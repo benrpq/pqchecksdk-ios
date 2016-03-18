@@ -18,10 +18,10 @@
 
 static const CGFloat kHorizontalOvalRatio = 0.6f;
 static const CGFloat kVerticalOvalRatio = 0.5f;
+static const CGFloat kDefaultLineWidth = 4.0f;
+static const CGFloat kDefaultDashLength = 8.0f;
 
 @implementation PQCheckFaceShape
-
-@synthesize outerFillColor;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -29,8 +29,11 @@ static const CGFloat kVerticalOvalRatio = 0.5f;
     self = [super initWithFrame:screenFrame];
     if (self)
     {
-        self.outerFillColor = [UIColor whiteColor];
-        self.outerFillOpacity = 1.0f;
+        _outerFillColor = [UIColor whiteColor];
+        _outerFillOpacity = 1.0f;
+        _solidBackground = NO;
+        _lineWidth = kDefaultLineWidth;
+        _lineColor = [UIColor colorWithWhite:1.0f alpha:1.0f];
         self.backgroundColor = [UIColor clearColor];
         self.userInteractionEnabled = NO;
     }
@@ -38,6 +41,18 @@ static const CGFloat kVerticalOvalRatio = 0.5f;
 }
 
 - (void)drawRect:(CGRect)rect
+{
+    if (self.solidBackground)
+    {
+        [self drawSolidRect:rect];
+    }
+    else
+    {
+        [self drawTransaprentRect:rect];
+    }
+}
+
+- (void)drawSolidRect:(CGRect)rect
 {
     CGSize size = rect.size;
     CGFloat ovalWidth = kHorizontalOvalRatio*size.width;
@@ -54,6 +69,25 @@ static const CGFloat kVerticalOvalRatio = 0.5f;
     CGContextSetBlendMode(context, kCGBlendModeDestinationOut);
     [path fill];
     CGContextSetBlendMode(context, kCGBlendModeNormal);
+}
+
+- (void)drawTransaprentRect:(CGRect)rect
+{
+    CGSize size = rect.size;
+    CGFloat ovalWidth = kHorizontalOvalRatio*size.width;
+    CGFloat ovalHeight = kVerticalOvalRatio*size.height;
+    CGFloat ovalXOffset = (size.width - ovalWidth)/2.0f;
+    CGFloat ovalYOffset = (size.height - ovalHeight)/2.0f;
+    CGRect ovalFrame = CGRectMake(ovalXOffset, ovalYOffset, ovalWidth, ovalHeight);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGFloat lengths[] = { kDefaultDashLength, 2*kDefaultDashLength };
+    CGContextSetLineCap(context, kCGLineCapRound);
+    CGContextSetLineDash(context, 0.0f, lengths, sizeof(lengths)/sizeof(CGFloat));
+    CGContextSetLineWidth(context, self.lineWidth);
+    CGContextSetStrokeColorWithColor(context, self.lineColor.CGColor);
+    CGContextAddEllipseInRect(context, ovalFrame);
+    CGContextStrokePath(context);
 }
 
 @end
