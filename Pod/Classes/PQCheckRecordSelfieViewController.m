@@ -34,14 +34,15 @@ static const int32_t kAudioSamplingRate = 22050;
 static const int32_t kAudioNumberOfChannels = 1;
 static const int32_t kMinimumFreeDiskSpaceLimit = 1048576;
 static const CGFloat kDigestLabelVerticalOffset = 40.0f;
-static const NSTimeInterval kDotAnimationInterval = 0.85f;
-static const NSTimeInterval kDotAnimationDelayInterval = 1.0f;
 static const NSTimeInterval kPaceRate = 0.85f;
 static const NSTimeInterval kDelayBeforeDigestDismissal = 1.0f;
 static const NSTimeInterval kMinimumAcceptableRecordingDuration = 2.0f;
+static const int32_t kFaceLockedThreshold = 32;
+static const CGFloat kFaceLockIndicatorHeight = 8.0f;
+static const int32_t kFaceAngleTolerance = 5;
 static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
-@interface PQCheckRecordSelfieViewController () <AVCaptureFileOutputRecordingDelegate, PQCheckDigestLabelDelegate>
+@interface PQCheckRecordSelfieViewController () <AVCaptureFileOutputRecordingDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, PQCheckDigestLabelDelegate>
 {
     BOOL _isRecording;
     AVCaptureDevice *_camera;
@@ -50,10 +51,16 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     AVCaptureDeviceInput *_cameraInput;
     AVCaptureDeviceInput *_microphoneInput;
     AVCaptureMovieFileOutput *_movieFileOutput;
+    AVCaptureVideoDataOutput *_videoDataOutput;
+    dispatch_queue_t _videoDataOutputQueue;
+    CIDetector *_faceDetector;
     PQCheckDigestLabel *_digestLabel;
     PQCheckFaceShape *_faceShape;
     UIButton *_startStopButton;
-    UIView *_dot[3];
+    UIView *_lockIndicatorView;
+    NSUInteger _faceLockCounter;
+    BOOL _faceLocked;
+    UIView *_customOverlayView;
     NSTimeInterval _startHoldTime, _endHoldTime;
     PQCheckSelfieMode _mode;
 }
@@ -80,27 +87,10 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     
     [self registerNotificationListeners];
     
-    NSError *error = nil;
-    if ([self configureCaptureDevice:&error])
-    {
-        error = nil;
-        if ([self configureCaptureSession:&error])
-        {
-            [self configureOutputProperties];
-            [self configureCaptureQuality];
-        }
-    }
+    _faceLockCounter = 0;
+    _faceDetector = nil;
     
-    assert(_captureSession != nil);
-    [self configurePreviewLayer];
-    [self configureFaceShape];
-    [self configureDigestLabel];
-    if (self.pacingEnabled == NO)
-    {
-        [self configureStartStopButton];
-    }
-    
-    [_captureSession startRunning];
+    [self setUpAVCapture];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -110,6 +100,8 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
 - (void)dealloc
 {
+    [self tearDownAVCapture];
+
     [self unregisterNotificationListeners];
 }
 
@@ -117,7 +109,10 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
 {
     [super viewDidAppear:animated];
 
-    [self attemptSelfie];
+    if (self.pacingEnabled)
+    {
+        [self faceSearchAndStartRecording];
+    }
 }
 
 - (PQCheckSelfieMode)currentSelfieMode
@@ -125,15 +120,18 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     return _mode;
 }
 
-- (void)attemptSelfie
+- (void)reattemptSelfie
 {
-    if (self.pacingEnabled)
-    {
-        [self startRecordingAnimationCompletion:^{
-            [self startRecording];
-            [_digestLabel showAnimatedWithDelayInterval:kPaceRate];
-        }];
-    }
+    [self tearDownAVCapture];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self setUpAVCapture];
+        
+        if (self.pacingEnabled)
+        {
+            [self faceSearchAndStartRecording];
+        }
+    });
 }
 
 - (void)setTranscript:(NSString *)transcript
@@ -147,6 +145,8 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
 {
     [_digestLabel show];
 }
+
+#pragma mark - AVCaptureFileOutputRecordingDelegate
 
 - (void)                   captureOutput:(AVCaptureFileOutput *)captureOutput
      didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL
@@ -238,6 +238,79 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     }
 }
 
+#pragma mark - AVCaptureVideoDataOutputSampleBufferDelegate
+
+- (void)    captureOutput:(AVCaptureOutput *)captureOutput
+    didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer
+           fromConnection:(AVCaptureConnection *)connection
+{
+    // Get the image
+    CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+    CFDictionaryRef attachments = CMCopyDictionaryOfAttachments(kCFAllocatorDefault, sampleBuffer, kCMAttachmentMode_ShouldPropagate);
+    CIImage *ciImage = [[CIImage alloc] initWithCVPixelBuffer:pixelBuffer options:(__bridge NSDictionary *)attachments];
+    if (attachments)
+    {
+        CFRelease(attachments);
+    }
+    
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    NSDictionary *imageOptions = @{CIDetectorImageOrientation: [self exifOrientation:orientation]};
+    
+    NSArray *features = [_faceDetector featuresInImage:ciImage options:imageOptions];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_faceLocked == NO)
+        {
+            // Conditions:
+            // 1. One facial feature only
+            // 2. 0.0 face angle
+            // 3. Has mouth
+            // 4. Has left and right eyes
+            if (features != nil && [features count] == 1)
+            {
+                for (CIFaceFeature *faceFeature in features)
+                {
+                    NSInteger angle = (NSInteger)fabsf(faceFeature.faceAngle);
+                    if (angle <= kFaceAngleTolerance && faceFeature.hasMouthPosition &&
+                        faceFeature.hasLeftEyePosition && faceFeature.hasRightEyePosition)
+                    {
+                        _faceLockCounter++;
+                    }
+                    else
+                    {
+                        _faceLockCounter = 0;
+                    }
+                }
+                
+                if (_faceLockCounter > kFaceLockedThreshold)
+                {
+                    _faceLocked = YES;
+                    
+                    // Start recording
+                    [_captureSession removeOutput:_videoDataOutput];
+                    if ([_captureSession canAddOutput:_movieFileOutput])
+                    {
+                        [_captureSession addOutput:_movieFileOutput];
+                        
+                        [self startRecording];
+                        [_digestLabel showAnimatedWithDelayInterval:kPaceRate];
+                    }
+                }
+            }
+            else
+            {
+                // Reset the counter, we need to get at least 64 samples
+                _faceLockCounter = 0;
+            }
+        }
+        
+        [_lockIndicatorView setBackgroundColor:[UIColor colorWithRed:((CGFloat)kFaceLockedThreshold - _faceLockCounter)/(CGFloat)kFaceLockedThreshold green:_faceLockCounter/(CGFloat)kFaceLockedThreshold blue:0.0f alpha:1.0f]];
+        
+    });
+}
+
+#pragma mark - Private methods
+
 - (void)configureDigestLabel
 {
     assert(self.transcript != nil && self.transcript.length > 0);
@@ -300,64 +373,19 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
                forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)startRecordingAnimationCompletion:(void (^)(void))completionBlock
+- (void)faceSearchAndStartRecording
 {
-    CGSize viewSize = self.view.frame.size;
-    CGFloat buttonDimension = 0.1*viewSize.height;
-    CGRect frame = CGRectMake(0.0, 0.0, buttonDimension, buttonDimension);
-    UIColor *greenColour = [UIColor colorWithRed:13.0f/255.0f green:185.0f/255.0f blue:78.0f/255.0f alpha:1.0f];
-    
-    _dot[0] = [[UIView alloc] initWithFrame:frame];
-    _dot[0].backgroundColor = greenColour;
-    _dot[0].layer.cornerRadius = 0.5*buttonDimension;
-    _dot[0].layer.opacity = 0.0f;
-    [self.view addSubview:_dot[0]];
-    
-    _dot[1] = [[UIView alloc] initWithFrame:frame];
-    _dot[1].backgroundColor = greenColour;
-    _dot[1].layer.cornerRadius = 0.5*buttonDimension;
-    _dot[1].layer.opacity = 0.0f;
-    [self.view addSubview:_dot[1]];
-
-    _dot[2] = [[UIView alloc] initWithFrame:frame];
-    _dot[2].backgroundColor = greenColour;
-    _dot[2].layer.cornerRadius = 0.5*buttonDimension;
-    _dot[2].layer.opacity = 0.0f;
-    [self.view addSubview:_dot[2]];
-
-    // Configure the location of the dots
-    [_dot[1] setCenter:self.view.center];
-    frame = _dot[1].frame;
-    frame.origin.y = self.view.frame.size.height - (1.5*buttonDimension);
-    _dot[1].frame = frame;
-    
-    frame = _dot[0].frame;
-    frame.origin.y = _dot[1].frame.origin.y;
-    frame.origin.x = _dot[1].frame.origin.x - (1.5*buttonDimension);
-    _dot[0].frame = frame;
-    
-    frame = _dot[2].frame;
-    frame.origin.y = _dot[1].frame.origin.y;
-    frame.origin.x = _dot[1].frame.origin.x + (1.5*buttonDimension);
-    _dot[2].frame = frame;
-    
-    [UIView animateWithDuration:kDotAnimationInterval delay:kDotAnimationDelayInterval options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-        _dot[0].layer.opacity = 1.0f;
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:kDotAnimationInterval delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-            _dot[1].layer.opacity = 1.0f;
-        } completion:^(BOOL finished) {
-            [UIView animateWithDuration:kDotAnimationInterval delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-                _dot[2].layer.opacity = 1.0f;
-            } completion:^(BOOL finished) {
-                completionBlock();
-                
-                [_dot[0] removeFromSuperview];
-                [_dot[1] removeFromSuperview];
-                [_dot[2] removeFromSuperview];
-            }];
-        }];
-    }];
+    if (self.pacingEnabled)
+    {
+        NSDictionary *detectorOptions = [[NSDictionary alloc] initWithObjectsAndKeys:CIDetectorAccuracyLow, CIDetectorAccuracy, nil];
+        _faceDetector = [CIDetector detectorOfType:CIDetectorTypeFace context:nil options:detectorOptions];
+        _faceLockCounter = 0;
+        
+        [self configureView];
+        
+        [_captureSession removeOutput:_movieFileOutput];
+        [self configureVideoDataOutput];
+    }
 }
 
 - (BOOL)configureCaptureDevice:(NSError **)error
@@ -505,6 +533,27 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     }
 }
 
+- (void)configureVideoDataOutput
+{
+    _videoDataOutput = [[AVCaptureVideoDataOutput alloc] init];
+    
+    // BGRA works better with CoreGraphics and OpenGL
+    NSDictionary *rgbOutputSettings = @{(id)kCVPixelBufferPixelFormatTypeKey: [NSNumber numberWithInt:kCMPixelFormat_32BGRA]};
+    [_videoDataOutput setVideoSettings:rgbOutputSettings];
+    [_videoDataOutput setAlwaysDiscardsLateVideoFrames:YES]; // Discard frames if the data output queue is blocked
+    
+    // Create a serial dispatch queue to process the video frames in an orderly/serial fashion
+    _videoDataOutputQueue = dispatch_queue_create("com.post-quantum.pqcheck.video_data_output.queue", DISPATCH_QUEUE_SERIAL);
+    [_videoDataOutput setSampleBufferDelegate:self queue:_videoDataOutputQueue];
+    
+    if ([_captureSession canAddOutput:_videoDataOutput])
+    {
+        [_captureSession addOutput:_videoDataOutput];
+    }
+    
+    [[_videoDataOutput connectionWithMediaType:AVMediaTypeVideo] setEnabled:YES];
+}
+
 - (void)configurePreviewLayer
 {
     assert(_captureSession != nil);
@@ -577,6 +626,103 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
         }
     }
 }
+
+- (NSNumber *) exifOrientation: (UIDeviceOrientation) orientation
+{
+    int exifOrientation;
+    /* kCGImagePropertyOrientation values
+     The intended display orientation of the image. If present, this key is a CFNumber value with the same value as defined
+     by the TIFF and EXIF specifications -- see enumeration of integer constants.
+     The value specified where the origin (0,0) of the image is located. If not present, a value of 1 is assumed.
+     
+     used when calling featuresInImage: options: The value for this key is an integer NSNumber from 1..8 as found in kCGImagePropertyOrientation.
+     If present, the detection will be done based on that orientation but the coordinates in the returned features will still be based on those of the image. */
+    
+    enum {
+        PHOTOS_EXIF_0ROW_TOP_0COL_LEFT			= 1, //   1  =  0th row is at the top, and 0th column is on the left (THE DEFAULT).
+        PHOTOS_EXIF_0ROW_TOP_0COL_RIGHT			= 2, //   2  =  0th row is at the top, and 0th column is on the right.
+        PHOTOS_EXIF_0ROW_BOTTOM_0COL_RIGHT      = 3, //   3  =  0th row is at the bottom, and 0th column is on the right.
+        PHOTOS_EXIF_0ROW_BOTTOM_0COL_LEFT       = 4, //   4  =  0th row is at the bottom, and 0th column is on the left.
+        PHOTOS_EXIF_0ROW_LEFT_0COL_TOP          = 5, //   5  =  0th row is on the left, and 0th column is the top.
+        PHOTOS_EXIF_0ROW_RIGHT_0COL_TOP         = 6, //   6  =  0th row is on the right, and 0th column is the top.
+        PHOTOS_EXIF_0ROW_RIGHT_0COL_BOTTOM      = 7, //   7  =  0th row is on the right, and 0th column is the bottom.
+        PHOTOS_EXIF_0ROW_LEFT_0COL_BOTTOM       = 8  //   8  =  0th row is on the left, and 0th column is the bottom.
+    };
+    
+    switch (orientation) {
+        case UIDeviceOrientationPortraitUpsideDown:  // Device oriented vertically, home button on the top
+            exifOrientation = PHOTOS_EXIF_0ROW_LEFT_0COL_BOTTOM;
+            break;
+        case UIDeviceOrientationLandscapeLeft:       // Device oriented horizontally, home button on the right
+            exifOrientation = PHOTOS_EXIF_0ROW_BOTTOM_0COL_RIGHT;
+            break;
+        case UIDeviceOrientationLandscapeRight:      // Device oriented horizontally, home button on the left
+            exifOrientation = PHOTOS_EXIF_0ROW_TOP_0COL_LEFT;
+            break;
+        case UIDeviceOrientationPortrait:            // Device oriented vertically, home button on the bottom
+        default:
+            exifOrientation = PHOTOS_EXIF_0ROW_RIGHT_0COL_TOP;
+            break;
+    }
+    return [NSNumber numberWithInt:exifOrientation];
+}
+
+- (void)setUpAVCapture
+{
+    NSError *error = nil;
+    if ([self configureCaptureDevice:&error])
+    {
+        error = nil;
+        if ([self configureCaptureSession:&error])
+        {
+            [self configureOutputProperties];
+            [self configureCaptureQuality];
+            
+            [_captureSession startRunning];
+        }
+    }
+    
+    assert(_captureSession != nil);
+    [self configurePreviewLayer];
+    [self configureFaceShape];
+    [self configureDigestLabel];
+    if (self.pacingEnabled == NO)
+    {
+        [self configureStartStopButton];
+    }
+}
+
+- (void)tearDownAVCapture
+{
+    [_lockIndicatorView removeFromSuperview];
+    
+    [_videoDataOutput setSampleBufferDelegate:nil queue:_videoDataOutputQueue];
+    _videoDataOutputQueue = nil;
+    _videoDataOutput = nil;
+    _faceDetector = nil;
+    
+    _faceLocked = NO;
+    _faceLockCounter = 0;
+    
+    _camera = nil;
+    _microphone = nil;
+    _captureSession = nil;
+    _cameraInput = nil;
+    _microphoneInput = nil;
+    _movieFileOutput = nil;
+}
+
+- (void)configureView
+{
+    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
+    _lockIndicatorView = [[UIView alloc] initWithFrame:CGRectMake(0.0,
+                                                                  screenSize.height-kFaceLockIndicatorHeight,
+                                                                  screenSize.width,
+                                                                  kFaceLockIndicatorHeight)];
+    [_lockIndicatorView setBackgroundColor:[UIColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:1.0f]];
+    [self.view addSubview:_lockIndicatorView];
+}
+
 
 #pragma mark - Notification handlers and listeners
 

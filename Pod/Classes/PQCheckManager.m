@@ -233,7 +233,7 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
             [controller setTranscript:uploadAttempt.nextDigest];
             if (self.autoAttemptOnFailure)
             {
-                [controller attemptSelfie];
+                [controller reattemptSelfie];
             }
             else
             {
@@ -243,7 +243,7 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
                     [[viewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
                 }];
                 UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes, please", @"Yes, please") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    [controller attemptSelfie];
+                    [controller reattemptSelfie];
                 }];
                 [alertController addAction:noAction];
                 [alertController addAction:yesAction];
