@@ -48,6 +48,20 @@
 @property (nonatomic, assign) BOOL shouldPaceUser;
 
 /**
+ *  The boolean value that indicates whether or not the manager operates in offline mode.
+ *
+ *  @discussion This mode is useful during development
+ */
+@property (nonatomic, assign) BOOL offlineMode;
+
+/**
+ *  The authorisation status that should be returned by an attempt in offline mode
+ *
+ *  @discussion This property is ignored if `offlineMode` is `NO`
+ */
+@property (nonatomic, assign) PQCheckAuthorisationStatus offlineAuthorisationStatus;
+
+/**
  *  Returns the selfie view controller for customisation purposes
  *
  *  @see class PQCheckSelfieViewController
@@ -81,7 +95,7 @@
 /**
  *  Performs a user enrolment with the given `transcript`. The URL to upload the enrolment video is specified by `uri`.
  *
- *  @discussion Enroling a user requires the user to record a selfie video reading a `transcript`. The resulting video will then be uploaded to a URL given by `uri`. If the upload is successful, the delegate method `PQCheckManagerDidFinishEnrolment:` will be invoked. On the other hand, if the upload has failed or there is an error during recording, the delegate method `PQCheckManager:didFailWithError:` will be invoked instead.
+ *  @discussion Enrolling a user requires the user to record a selfie video reading a `transcript`. The resulting video will then be uploaded to a URL given by `uri`. If the upload is successful, the delegate method `PQCheckManagerDidFinishEnrolment:` will be invoked. On the other hand, if the upload has failed or there is an error during recording, the delegate method `PQCheckManager:didFailWithError:` will be invoked instead.
  *
  *  @param transcript The transcript that the user should read while recording a selfie video
  *  @param uri        The URL to which the selfie video should be uploaded.

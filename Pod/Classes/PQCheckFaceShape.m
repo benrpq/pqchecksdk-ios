@@ -18,7 +18,7 @@
 
 static const CGFloat kHorizontalOvalRatio = 0.6f;
 static const CGFloat kVerticalOvalRatio = 0.5f;
-static const CGFloat kDefaultLineWidth = 4.0f;
+static const CGFloat kDefaultLineWidth = 8.0f;
 static const CGFloat kDefaultDashLength = 8.0f;
 
 @implementation PQCheckFaceShape
@@ -81,13 +81,19 @@ static const CGFloat kDefaultDashLength = 8.0f;
     CGRect ovalFrame = CGRectMake(ovalXOffset, ovalYOffset, ovalWidth, ovalHeight);
     
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGFloat lengths[] = { kDefaultDashLength, 2*kDefaultDashLength };
+    CGFloat lengths[] = { kDefaultDashLength, 4*kDefaultDashLength };
     CGContextSetLineCap(context, kCGLineCapRound);
     CGContextSetLineDash(context, 0.0f, lengths, sizeof(lengths)/sizeof(CGFloat));
     CGContextSetLineWidth(context, self.lineWidth);
     CGContextSetStrokeColorWithColor(context, self.lineColor.CGColor);
     CGContextAddEllipseInRect(context, ovalFrame);
     CGContextStrokePath(context);
+}
+
+- (void)setLineColor:(UIColor *)lineColor
+{
+    _lineColor = lineColor;
+    [self setNeedsDisplay];
 }
 
 @end

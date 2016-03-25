@@ -28,6 +28,7 @@ static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
 static NSString* kPQCheckUserInfoEnrolmentReference = @"reference";
 static NSString* kPQCheckUserInfoEnrolmentTranscript = @"transcript";
 static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
+static const CGFloat kDefaultOfflineDelayInterval = 3.0f;
 
 @interface PQCheckManager () <PQCheckRecordSelfieDelegate>
 {
@@ -53,14 +54,21 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
 
 - (id)initWithAuthorisation:(Authorisation *)authorisation
 {
+    NSLog(@"********** %s", __PRETTY_FUNCTION__);
     self = [super init];
     if (self)
     {
         _authorisation = authorisation;
+        _offlineAuthorisationStatus = kPQCheckAuthorisationStatusSuccessful;
         
         [self checkCameraAndMicrophonePermissions];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    NSLog(@"********** %s", __PRETTY_FUNCTION__);
 }
 
 - (void)performAuthorisationWithDigest:(NSString *)digest
@@ -134,6 +142,8 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
     {
         [self.delegate PQCheckManager:self didFailWithError:error];
     }
+    _selfieController.delegate = nil;
+    _selfieController = nil;
 }
 
 #pragma mark - Private methods
@@ -176,13 +186,20 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
     
     if ([title length] > 0 && [message length] > 0)
     {
+        __unsafe_unretained PQCheckManager *weakSelf = self;
         UIViewController *viewController = [PQCheckManager topMostController];
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            [[viewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+            [[viewController presentingViewController] dismissViewControllerAnimated:YES completion:^{
+                _selfieController.delegate = nil;
+                _selfieController = nil;
+            }];
         }];
         UIAlertAction *settingsAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Settings", @"Settings") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [[viewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+            [[viewController presentingViewController] dismissViewControllerAnimated:YES completion:^{
+                _selfieController.delegate = nil;
+                _selfieController = nil;
+            }];
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
         }];
         [alertController addAction:cancelAction];
@@ -212,55 +229,93 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
         [[NSFileManager defaultManager] copyItemAtURL:mediaURL toURL:authURL error:nil];
     });
 #endif
-    
-    [[APIManager sharedManager] uploadAttemptWithAuthorisation:_authorisation mediaURL:mediaURL completion:^(UploadAttempt *uploadAttempt, NSError *error) {
-        
-        [hud hide:YES];
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [[NSFileManager defaultManager] removeItemAtURL:mediaURL error:nil];
-        });
 
-        if (error != nil)
-        {
-            if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFailWithError:)])
+    if (self.offlineMode == NO)
+    {
+        __unsafe_unretained PQCheckManager *weakSelf = self;
+        APIManager *apiManager = [[APIManager alloc] init];
+        [apiManager uploadAttemptWithAuthorisation:_authorisation mediaURL:mediaURL completion:^(UploadAttempt *uploadAttempt, NSError *error) {
+            
+            [hud hide:YES];
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[NSFileManager defaultManager] removeItemAtURL:mediaURL error:nil];
+            });
+
+            if (error != nil)
             {
-                [self.delegate PQCheckManager:self didFailWithError:error];
+                _selfieController.delegate = nil;
+                _selfieController = nil;
+                if ([weakSelf.delegate respondsToSelector:@selector(PQCheckManager:didFailWithError:)])
+                {
+                    [weakSelf.delegate PQCheckManager:weakSelf didFailWithError:error];
+                }
+                
+                return;
             }
             
-            return;
-        }
-        
-        if (uploadAttempt.authorisationStatus == kPQCheckAuthorisationStatusOpen)
-        {
-            [_authorisation setDigest:uploadAttempt.nextDigest];
-            [controller setTranscript:uploadAttempt.nextDigest];
-            if (self.autoAttemptOnFailure)
+            if (uploadAttempt.authorisationStatus == kPQCheckAuthorisationStatusOpen)
             {
-                [controller reattemptSelfie];
+                [_authorisation setDigest:uploadAttempt.nextDigest];
+                [_selfieController setTranscript:uploadAttempt.nextDigest];
+                if (weakSelf.autoAttemptOnFailure)
+                {
+                    [_selfieController reattemptSelfie];
+                }
+                else
+                {
+                    UIViewController *viewController = [PQCheckManager topMostController];
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Attempt Failed", @"Attempt Failed") message:NSLocalizedString(@"Your attempt was not successful, would you like to try again?", @"Your attempt was not successful, would you like to try again?") preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *noAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"No, thanks", @"No, thanks") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                        [viewController dismissViewControllerAnimated:YES completion:^{
+                            _selfieController.delegate = nil;
+                            _selfieController = nil;
+                            if ([weakSelf.delegate respondsToSelector:@selector(PQCheckManager:didFinishWithAuthorisationStatus:)])
+                            {
+                                [weakSelf.delegate PQCheckManager:weakSelf didFinishWithAuthorisationStatus:uploadAttempt.authorisationStatus];
+                            }
+                        }];
+                    }];
+                    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes, please", @"Yes, please") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        [_selfieController reattemptSelfie];
+                    }];
+                    [alertController addAction:noAction];
+                    [alertController addAction:yesAction];
+                    
+                    [viewController presentViewController:alertController animated:YES completion:nil];
+                }
             }
             else
             {
-                UIViewController *viewController = [PQCheckManager topMostController];
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Attempt Failed", @"Attempt Failed") message:NSLocalizedString(@"Your attempt was not successful, would you like to try again?", @"Your attempt was not successful, would you like to try again?") preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *noAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"No, thanks", @"No, thanks") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    [[viewController presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-                }];
-                UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"Yes, please", @"Yes, please") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    [controller reattemptSelfie];
-                }];
-                [alertController addAction:noAction];
-                [alertController addAction:yesAction];
-                
-                [viewController presentViewController:alertController animated:YES completion:nil];
+                _selfieController.delegate = nil;
+                _selfieController = nil;
+                if ([weakSelf.delegate respondsToSelector:@selector(PQCheckManager:didFinishWithAuthorisationStatus:)])
+                {
+                    [weakSelf.delegate PQCheckManager:weakSelf didFinishWithAuthorisationStatus:uploadAttempt.authorisationStatus];
+                }
             }
-        }
+        }];
+    }
+    else
+    {
+        _selfieController.delegate = nil;
+        _selfieController = nil;
 
-        if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFinishWithAuthorisationStatus:)])
-        {
-            [self.delegate PQCheckManager:self didFinishWithAuthorisationStatus:uploadAttempt.authorisationStatus];
-        }
-    }];
+        __unsafe_unretained PQCheckManager *weakSelf = self;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kDefaultOfflineDelayInterval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [hud hide:YES];
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[NSFileManager defaultManager] removeItemAtURL:mediaURL error:nil];
+            });
+            
+            if ([weakSelf.delegate respondsToSelector:@selector(PQCheckManager:didFinishWithAuthorisationStatus:)])
+            {
+                [weakSelf.delegate PQCheckManager:weakSelf didFinishWithAuthorisationStatus:weakSelf.offlineAuthorisationStatus];
+            }
+            
+        });
+    }
 }
 
 - (void)selfieController:(PQCheckRecordSelfieViewController *)controller performsEnrolmentWithMediaAtURL:(NSURL *)mediaURL
@@ -269,7 +324,7 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
     hud.mode = MBProgressHUDModeIndeterminate;
-    hud.labelText = NSLocalizedString(@"Enroling...", @"Enroling...");
+    hud.labelText = NSLocalizedString(@"Enrolling...", @"Enrolling...");
     
     NSString *transcript = [_selfieController.userInfo objectForKey:kPQCheckUserInfoEnrolmentTranscript];
     NSAssert(transcript != nil && transcript.length > 0, @"Enrolment transcript cannot be nil or have zero length");
@@ -291,31 +346,52 @@ static NSString* kPQCheckUserInfoEnrolmentURI = @"uri";
     });
 #endif
 
-    NSURL *uploadURL = [NSURL URLWithString:uriString];
-    [[APIManager sharedManager] enrolUserWithMediaURL:mediaURL uploadURL:uploadURL completion:^(NSError *error) {
-        
-        [hud hide:YES];
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [[NSFileManager defaultManager] removeItemAtURL:mediaURL error:nil];
-        });
-        
-        if (error != nil)
-        {
-            if ([self.delegate respondsToSelector:@selector(PQCheckManager:didFailWithError:)])
+    if (self.offlineMode == NO)
+    {
+        __unsafe_unretained PQCheckManager *weakSelf = self;
+        NSURL *uploadURL = [NSURL URLWithString:uriString];
+        [[APIManager sharedManager] enrolUserWithMediaURL:mediaURL uploadURL:uploadURL completion:^(NSError *error) {
+            
+            [hud hide:YES];
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[NSFileManager defaultManager] removeItemAtURL:mediaURL error:nil];
+            });
+            
+            if (error != nil)
             {
-                [self.delegate PQCheckManager:self didFailWithError:error];
+                if ([weakSelf.delegate respondsToSelector:@selector(PQCheckManager:didFailWithError:)])
+                {
+                    [weakSelf.delegate PQCheckManager:weakSelf didFailWithError:error];
+                }
+                
+                return;
             }
             
-            return;
-        }
-        
-        if ([self.delegate respondsToSelector:@selector(PQCheckManagerDidFinishEnrolment:)])
-        {
-            [self.delegate PQCheckManagerDidFinishEnrolment:self];
-        }
-        
-    }];
+            if ([weakSelf.delegate respondsToSelector:@selector(PQCheckManagerDidFinishEnrolment:)])
+            {
+                [weakSelf.delegate PQCheckManagerDidFinishEnrolment:weakSelf];
+            }
+            
+        }];
+    }
+    else
+    {
+        __unsafe_unretained PQCheckManager *weakSelf = self;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kDefaultOfflineDelayInterval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [hud hide:YES];
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[NSFileManager defaultManager] removeItemAtURL:mediaURL error:nil];
+            });
+            
+            if ([weakSelf.delegate respondsToSelector:@selector(PQCheckManagerDidFinishEnrolment:)])
+            {
+                [weakSelf.delegate PQCheckManagerDidFinishEnrolment:weakSelf];
+            }
+            
+        });
+    }
 }
 
 #ifdef DEBUG

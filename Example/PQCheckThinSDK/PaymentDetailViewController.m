@@ -53,6 +53,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc
+{
+    NSLog(@"********** %s", __PRETTY_FUNCTION__);
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -161,14 +166,17 @@
 
 - (void)PQCheckManager:(PQCheckManager *)manager didFailWithError:(NSError *)error
 {
+    _manager.delegate = nil;
+    _manager = nil;
     [self dismissViewControllerAnimated:YES completion:^{
-        
         [self presentAlertViewControllerWithError:error];
     }];
 }
 
 - (void)PQCheckManager:(PQCheckManager *)manager didFinishWithAuthorisationStatus:(PQCheckAuthorisationStatus)status
 {
+    _manager.delegate = nil;
+    _manager = nil;
     UIView *view = [[[UIApplication sharedApplication] delegate] window];
     if (status == kPQCheckAuthorisationStatusSuccessful)
     {

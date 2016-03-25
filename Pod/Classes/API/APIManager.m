@@ -36,9 +36,9 @@ static NSString* kVideoExtension = @"mp4";
 @interface APIManager ()
 {
     NSString *_endpoint;
-    RKObjectManager *_objectManager;
     NSString *_profile;
     NSNumber *_version;
+    NSURL *_baseURL;
 }
 @end
 
@@ -62,11 +62,7 @@ static NSString* kVideoExtension = @"mp4";
         // We need some value that is not nil
         _endpoint = kPQCheckBaseStableURL;
         
-        NSURL *baseURL = [NSURL URLWithString:[self currentPQCheckEndpoint]];
-        AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
-        
-        _objectManager = [[RKObjectManager alloc] initWithHTTPClient:httpClient];
-        
+        _baseURL = [NSURL URLWithString:[self currentPQCheckEndpoint]];
         _profile = kPQCheckSDKDefaultProfile;
         _version = @(kPQCheckSDKDefaultVersion);
         
@@ -87,8 +83,7 @@ static NSString* kVideoExtension = @"mp4";
 
 - (void)setBaseURL:(NSURL *)baseURL
 {
-    AFHTTPClient* httpClient = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
-    [_objectManager setHTTPClient:httpClient];
+    _baseURL = baseURL;
 }
 
 - (void)setProfile:(NSString *)profile
@@ -101,11 +96,12 @@ static NSString* kVideoExtension = @"mp4";
     _version = version;
 }
 
-- (void)setAcceptHeaderWithMIMEType:(NSString *)MIMEType
-                            profile:(NSString *)profile
-                            version:(NSString *)version
+- (void)setAcceptHeaderForObjectManager:(RKObjectManager *)objectManager
+                           withMIMEType:(NSString *)MIMEType
+                                profile:(NSString *)profile
+                                version:(NSString *)version
 {
-    if (_objectManager == nil)
+    if (objectManager == nil)
     {
         return;
     }
@@ -127,39 +123,42 @@ static NSString* kVideoExtension = @"mp4";
     // We want to accept JSON type data
     if ([acceptHeader length] > 0)
     {
-        [_objectManager setAcceptHeaderWithMIMEType:acceptHeader];
+        [objectManager setAcceptHeaderWithMIMEType:acceptHeader];
     }
 }
 
 - (void)viewAuthorisationAtURL:(NSURL *)url
                     completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock
 {
-    assert(_objectManager != nil);
-    
     NSString *uuid = [url lastPathComponent];
     
     // Make sure that APIManager points to a correct endpoint
-    NSString *currentEndpoint = [[APIManager sharedManager] currentPQCheckEndpoint];
+    NSString *currentEndpoint = [self currentPQCheckEndpoint];
     NSURL *baseURL = [NSURL URLWithString:[[NSURL URLWithString:@"/" relativeToURL:url] absoluteString]];
-    [[APIManager sharedManager] setBaseURL:baseURL];
+    [self setBaseURL:baseURL];
     
-    [self __viewAuthorisationRequestUUID:uuid completion:^(Authorisation *authorisation, NSError *error) {
+    __weak APIManager *weakSelf = self;
+    [weakSelf __viewAuthorisationRequestUUID:uuid completion:^(Authorisation *authorisation, NSError *error) {
         completionBlock(authorisation, error);
         
         // Revert the endpoint configuration
-        [[APIManager sharedManager] setBaseURL:[NSURL URLWithString:currentEndpoint]];
+        [weakSelf setBaseURL:[NSURL URLWithString:currentEndpoint]];
     }];
 }
 
 - (void)__viewAuthorisationRequestUUID:(NSString *)uuid
                             completion:(void (^)(Authorisation *authorisation, NSError *error))completionBlock
 {
-    [_objectManager setRequestSerializationMIMEType:RKMIMETypeJSON];
+    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:_baseURL];
+    RKObjectManager *objectManager = [[RKObjectManager alloc] initWithHTTPClient:httpClient];
+    
+    [objectManager setRequestSerializationMIMEType:RKMIMETypeJSON];
     
     // We want to accept JSON type data, plus profile and version if available
-    [self setAcceptHeaderWithMIMEType:RKMIMETypeJSON
-                              profile:_profile
-                              version:[_version stringValue]];
+    [self setAcceptHeaderForObjectManager:objectManager
+                             withMIMEType:RKMIMETypeJSON
+                                  profile:_profile
+                                  version:[_version stringValue]];
     
     // Object mapping of the response
     RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[Authorisation class]];
@@ -191,18 +190,18 @@ static NSString* kVideoExtension = @"mp4";
                                                                                        pathPattern:nil
                                                                                            keyPath:nil
                                                                                        statusCodes:statusCodes];
-    [_objectManager addResponseDescriptor:responseDescriptor];
+    [objectManager addResponseDescriptor:responseDescriptor];
     
     // Perform GET request
     NSString *authorisationPath = [NSString stringWithFormat:@"%@/%@", kPQCheckAuthorisationPath, uuid];
-    [_objectManager getObjectsAtPath:authorisationPath
-                          parameters:nil
-                             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                 Authorisation *authorisation = [mappingResult firstObject];
-                                 completionBlock(authorisation, nil);
-                             } failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                 completionBlock(nil, error);
-                             }];
+    [objectManager getObjectsAtPath:authorisationPath
+                         parameters:nil
+                            success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                Authorisation *authorisation = [mappingResult firstObject];
+                                completionBlock(authorisation, nil);
+                            } failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                completionBlock(nil, error);
+                            }];
 }
 
 - (void)uploadAttemptWithAuthorisation:(Authorisation *)authorisation
@@ -221,14 +220,15 @@ static NSString* kVideoExtension = @"mp4";
     }
     
     NSURL *url = [NSURL URLWithString:authorisation.links.uploadAttemptPath.href];
-    NSURL *baseURL = [NSURL URLWithString:[[NSURL URLWithString:@"/" relativeToURL:url] absoluteString]];
-    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
-    _objectManager = [[RKObjectManager alloc] initWithHTTPClient:httpClient];
+    _baseURL = [NSURL URLWithString:[[NSURL URLWithString:@"/" relativeToURL:url] absoluteString]];
+    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:_baseURL];
+    RKObjectManager *objectManager = [[RKObjectManager alloc] initWithHTTPClient:httpClient];
     
     // We want to accept JSON type data, plus profile and version if available
-    [self setAcceptHeaderWithMIMEType:RKMIMETypeJSON
-                              profile:_profile
-                              version:[_version stringValue]];
+    [self setAcceptHeaderForObjectManager:objectManager
+                             withMIMEType:RKMIMETypeJSON
+                                  profile:_profile
+                                  version:[_version stringValue]];
     
     // Object mapping of the response
     RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[UploadAttempt class]];
@@ -243,12 +243,12 @@ static NSString* kVideoExtension = @"mp4";
                                                                                        pathPattern:nil
                                                                                            keyPath:nil
                                                                                        statusCodes:statusCodes];
-    [_objectManager addResponseDescriptor:responseDescriptor];
+    [objectManager addResponseDescriptor:responseDescriptor];
     
     // Perform multipart POST request
     NSURL *attemptURL = [NSURL URLWithString:[[[authorisation links] uploadAttemptPath] href]];
     NSString *uploadAttemptPath = [attemptURL path];
-    NSMutableURLRequest *urlRequest = [_objectManager multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:uploadAttemptPath parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    NSMutableURLRequest *urlRequest = [objectManager multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:uploadAttemptPath parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         // POST the media file
         NSString *fileName = [[authorisation uuid] stringByAppendingPathExtension:kVideoExtension];
         NSString *MIMEType = (__bridge NSString *)(UTTypeCopyPreferredTagWithClass(kUTTypeMPEG4, kUTTagClassMIMEType));
@@ -256,7 +256,7 @@ static NSString* kVideoExtension = @"mp4";
     }];
 
     RKObjectRequestOperation *operation =
-    [_objectManager objectRequestOperationWithRequest:urlRequest
+    [objectManager objectRequestOperationWithRequest:urlRequest
                                               success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
                                                   UploadAttempt *uploadAttempt = [mappingResult firstObject];
                                                   completionBlock(uploadAttempt, nil);
@@ -264,7 +264,7 @@ static NSString* kVideoExtension = @"mp4";
                                               failure:^(RKObjectRequestOperation *operation, NSError *error) {
                                                   completionBlock(nil, error);
                                               }];
-    [_objectManager enqueueObjectRequestOperation:operation];
+    [objectManager enqueueObjectRequestOperation:operation];
 }
 
 - (void)enrolUserWithMediaURL:(NSURL *)mediaURL
@@ -283,15 +283,16 @@ static NSString* kVideoExtension = @"mp4";
     }
     
     // Make sure that APIManager points to a correct endpoint
-    NSString *currentEndpoint = [[APIManager sharedManager] currentPQCheckEndpoint];
-    NSURL *baseURL = [NSURL URLWithString:[[NSURL URLWithString:@"/" relativeToURL:uploadURL] absoluteString]];
-    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:baseURL];
-    _objectManager = [[RKObjectManager alloc] initWithHTTPClient:httpClient];
+    NSString *currentEndpoint = [self currentPQCheckEndpoint];
+    _baseURL = [NSURL URLWithString:[[NSURL URLWithString:@"/" relativeToURL:uploadURL] absoluteString]];
+    AFHTTPClient *httpClient = [[AFHTTPClient alloc] initWithBaseURL:_baseURL];
+    RKObjectManager *objectManager = [[RKObjectManager alloc] initWithHTTPClient:httpClient];
     
     // We want to accept JSON type data, plus profile and version if available
-    [self setAcceptHeaderWithMIMEType:RKMIMETypeJSON
-                              profile:_profile
-                              version:[_version stringValue]];
+    [self setAcceptHeaderForObjectManager:objectManager
+                             withMIMEType:RKMIMETypeJSON
+                                  profile:_profile
+                                  version:[_version stringValue]];
     
     // Object mapping of the response
     RKObjectMapping *responseMapping = [RKObjectMapping mappingForClass:[NSNull class]];
@@ -303,10 +304,10 @@ static NSString* kVideoExtension = @"mp4";
                                                                                        pathPattern:nil
                                                                                            keyPath:nil
                                                                                        statusCodes:statusCodes];
-    [_objectManager addResponseDescriptor:responseDescriptor];
+    [objectManager addResponseDescriptor:responseDescriptor];
     
     // Perform multipart POST request
-    NSMutableURLRequest *urlRequest = [_objectManager multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:[uploadURL path] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    NSMutableURLRequest *urlRequest = [objectManager multipartFormRequestWithObject:nil method:RKRequestMethodPOST path:[uploadURL path] parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         
         // POST the media file
         NSString *fileName = [kEnrolmentVideoName stringByAppendingPathExtension:kVideoExtension];
@@ -314,21 +315,22 @@ static NSString* kVideoExtension = @"mp4";
         [formData appendPartWithFileURL:mediaURL name:kEnrolmentVideoName fileName:fileName mimeType:MIMEType error:nil];
     }];
     
+    __weak APIManager *weakSelf = self;
     RKObjectRequestOperation *operation =
-    [_objectManager objectRequestOperationWithRequest:urlRequest
-                                              success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
-                                                  // Revert the endpoint configuration
-                                                  [[APIManager sharedManager] setBaseURL:[NSURL URLWithString:currentEndpoint]];
-
-                                                  completionBlock(nil);
-                                              }
-                                              failure:^(RKObjectRequestOperation *operation, NSError *error) {
-                                                  // Revert the endpoint configuration
-                                                  [[APIManager sharedManager] setBaseURL:[NSURL URLWithString:currentEndpoint]];
-
-                                                  completionBlock(error);
-                                              }];
-    [_objectManager enqueueObjectRequestOperation:operation];
+    [objectManager objectRequestOperationWithRequest:urlRequest
+                                             success:^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+                                                 // Revert the endpoint configuration
+                                                 [weakSelf setBaseURL:[NSURL URLWithString:currentEndpoint]];
+                                                 
+                                                 completionBlock(nil);
+                                             }
+                                             failure:^(RKObjectRequestOperation *operation, NSError *error) {
+                                                 // Revert the endpoint configuration
+                                                 [weakSelf setBaseURL:[NSURL URLWithString:currentEndpoint]];
+                                                 
+                                                 completionBlock(error);
+                                             }];
+    [objectManager enqueueObjectRequestOperation:operation];
 }
 
 @end

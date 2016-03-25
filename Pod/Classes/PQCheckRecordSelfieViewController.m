@@ -17,6 +17,7 @@
 #import <CoreMedia/CoreMedia.h>
 #import <AVFoundation/AVFoundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
+#import <MBProgressHUD/MBProgressHUD.h>
 #import "PQCheckRecordSelfieViewController.h"
 #import "PQCheckFaceShape.h"
 #import "PQCheckDigestLabel.h"
@@ -36,7 +37,8 @@ static const int32_t kMinimumFreeDiskSpaceLimit = 1048576;
 static const CGFloat kDigestLabelVerticalOffset = 40.0f;
 static const NSTimeInterval kPaceRate = 0.85f;
 static const NSTimeInterval kDelayBeforeDigestDismissal = 1.0f;
-static const NSTimeInterval kMinimumAcceptableRecordingDuration = 2.0f;
+static const NSTimeInterval kMinimumAcceptableRecordingDuration = 1.0f;
+static const NSTimeInterval kDelayBetweenReattempt = 1.0f;
 static const int32_t kFaceLockedThreshold = 32;
 static const CGFloat kFaceLockIndicatorHeight = 8.0f;
 static const int32_t kFaceAngleTolerance = 5;
@@ -57,9 +59,9 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     PQCheckDigestLabel *_digestLabel;
     PQCheckFaceShape *_faceShape;
     UIButton *_startStopButton;
-    UIView *_lockIndicatorView;
     NSUInteger _faceLockCounter;
     BOOL _faceLocked;
+    UIColor *_faceShapeColor;
     UIView *_customOverlayView;
     NSTimeInterval _startHoldTime, _endHoldTime;
     PQCheckSelfieMode _mode;
@@ -71,13 +73,13 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
 - (id)initWithPQCheckSelfieMode:(PQCheckSelfieMode)mode transcript:(NSString *)transcript
 {
+    NSLog(@"++++++++++ %s", __PRETTY_FUNCTION__);
     self = [super init];
     if (self)
     {
         _transcript = transcript;
         _customOverlayView = nil;
         _mode = mode;
-        
     }
     return self;
 }
@@ -91,7 +93,8 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     
     _faceLockCounter = 0;
     _faceDetector = nil;
-    
+    _faceShapeColor = [UIColor whiteColor];
+
     [self setUpAVCapture];
 }
 
@@ -100,10 +103,11 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     // Dispose of any resources that can be recreated.
 }
 
-- (void)dealloc
-{
+-(void)dealloc {
+    NSLog(@"++++++++++ %s", __PRETTY_FUNCTION__);
+    
     [self tearDownAVCapture];
-
+    
     [self unregisterNotificationListeners];
 }
 
@@ -124,14 +128,34 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
 - (void)reattemptSelfie
 {
-    [self tearDownAVCapture];
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:window animated:YES];
+    hud.mode = MBProgressHUDModeIndeterminate;
+
+    if (self.pacingEnabled)
+    {
+        [_captureSession removeOutput:_movieFileOutput];
+        [_videoDataOutput setSampleBufferDelegate:nil queue:_videoDataOutputQueue];
+        _videoDataOutputQueue = nil;
+        _videoDataOutput = nil;
+        _faceDetector = nil;
+        _faceLocked = NO;
+        _faceLockCounter = 0;
+    }
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self setUpAVCapture];
+    __unsafe_unretained PQCheckRecordSelfieViewController *weakSelf = self;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kDelayBetweenReattempt * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
-        if (self.pacingEnabled)
+        [hud hide:YES];
+        
+        if (weakSelf.pacingEnabled)
         {
-            [self faceSearchAndStartRecording];
+            [weakSelf faceSearchAndStartRecording];
+        }
+        else
+        {
+            [_startStopButton setEnabled:YES];
+            [_startStopButton setHidden:NO];
         }
     });
 }
@@ -167,6 +191,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
         [_faceShape removeFromSuperview];
         _faceShape.solidBackground = NO;
         _faceShape.lineColor = color;
+        _faceShapeColor = color;
         [self.view insertSubview:_faceShape belowSubview:_digestLabel];
     }
 }
@@ -191,6 +216,16 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
         if (value)
         {
             recordingWasSuccessful = [value boolValue];
+        }
+    }
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:[outputFileURL path]] == NO)
+    {
+        recordingWasSuccessful = NO;
+        if (error == nil)
+        {
+            NSDictionary *userInfo = [NSDictionary dictionaryWithObject:NSLocalizedStringFromTable(@"The recorded media is not found, perhaps it's too short", @"PQCheckSDK", nil) forKey:NSLocalizedFailureReasonErrorKey];
+            error = [[NSError alloc] initWithDomain:@"PQCheckSDKErrorDomain" code:404 userInfo:userInfo];
         }
     }
     
@@ -224,6 +259,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
                                   AVSampleRateKey: @(kAudioSamplingRate),
                                   AVEncoderBitRateKey: @(kAverageAudioBitRate),
                                   };
+        __unsafe_unretained PQCheckRecordSelfieViewController *weakSelf = self;
         [encoder exportAsynchronouslyWithCompletionHandler:^{
             if (encoder.status == AVAssetExportSessionStatusCompleted)
             {
@@ -232,7 +268,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
                 NSLog(@"File-size: %@ bytes", [fileAttributes objectForKey:NSFileSize]);
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.delegate selfieViewController:self didFinishWithMediaURL:targetURL];
+                    [weakSelf.delegate selfieViewController:self didFinishWithMediaURL:targetURL];
                 });
             }
             else if (encoder.status == AVAssetExportSessionStatusCancelled)
@@ -243,7 +279,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
                 NSError *error = [[NSError alloc] initWithDomain:@"PQCheckSDKErrorDomain" code:400 userInfo:userInfo];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.delegate selfieViewController:self didFailWithError:error];
+                    [weakSelf.delegate selfieViewController:weakSelf didFailWithError:error];
                 });
             }
             else
@@ -252,7 +288,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
                 NSError *error = [[NSError alloc] initWithDomain:@"PQCheckSDKErrorDomain" code:encoder.error.code userInfo:encoder.error.userInfo];
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.delegate selfieViewController:self didFailWithError:error];
+                    [weakSelf.delegate selfieViewController:weakSelf didFailWithError:error];
                 });
             }
         }];
@@ -261,9 +297,10 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     {
         NSLog(@"Recording is not successful, error: %@", [error localizedDescription]);
 
+        __unsafe_unretained PQCheckRecordSelfieViewController *weakSelf = self;
         NSError *sdkError = [[NSError alloc] initWithDomain:@"PQCheckSDKErrorDomain" code:error.code userInfo:error.userInfo];
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self.delegate selfieViewController:self didFailWithError:sdkError];
+            [weakSelf.delegate selfieViewController:weakSelf didFailWithError:sdkError];
         });
     }
 }
@@ -288,6 +325,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     
     NSArray *features = [_faceDetector featuresInImage:ciImage options:imageOptions];
     
+    __unsafe_unretained PQCheckRecordSelfieViewController *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_faceLocked == NO)
         {
@@ -315,6 +353,8 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
                 if (_faceLockCounter > kFaceLockedThreshold)
                 {
                     _faceLocked = YES;
+
+                    [_faceShape setLineColor:_faceShapeColor];
                     
                     // Start recording
                     [_captureSession removeOutput:_videoDataOutput];
@@ -322,9 +362,14 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
                     {
                         [_captureSession addOutput:_movieFileOutput];
                         
-                        [self startRecording];
+                        [weakSelf startRecording];
                         [_digestLabel showAnimatedWithDelayInterval:kPaceRate];
                     }
+                    
+                    [_videoDataOutput setSampleBufferDelegate:nil queue:_videoDataOutputQueue];
+                    _videoDataOutputQueue = nil;
+                    _videoDataOutput = nil;
+                    _faceDetector = nil;
                 }
             }
             else
@@ -334,8 +379,11 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
             }
         }
         
-        [_lockIndicatorView setBackgroundColor:[UIColor colorWithRed:((CGFloat)kFaceLockedThreshold - _faceLockCounter)/(CGFloat)kFaceLockedThreshold green:_faceLockCounter/(CGFloat)kFaceLockedThreshold blue:0.0f alpha:1.0f]];
-        
+        if (_faceLocked == NO)
+        {
+            UIColor *color = [UIColor colorWithRed:((CGFloat)kFaceLockedThreshold - _faceLockCounter)/(CGFloat)kFaceLockedThreshold green:_faceLockCounter/(CGFloat)kFaceLockedThreshold blue:0.0f alpha:1.0f];
+            [_faceShape setLineColor:color];
+        }
     });
 }
 
@@ -346,7 +394,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     assert(self.transcript != nil && self.transcript.length > 0);
     
     _digestLabel = [[PQCheckDigestLabel alloc] initWithDigest:self.transcript];
-    _digestLabel.labelColor = [UIColor colorWithRed:13.0f/255.0f green:185.0f/255.0f blue:78.0f/255.0f alpha:1.0f];
+    _digestLabel.labelColor = [UIColor whiteColor];
     [self.view insertSubview:_digestLabel aboveSubview:_faceShape];
     _digestLabel.center = self.view.center;
     CGRect frame = _digestLabel.frame;
@@ -361,7 +409,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     {
         // The frame of _faceShape will be overwritten by its default value
         _faceShape = [[PQCheckFaceShape alloc] initWithFrame:CGRectZero];
-        _faceShape.outerFillColor = [UIColor whiteColor];
+        _faceShape.outerFillColor = _faceShapeColor;
         _faceShape.outerFillOpacity = 0.95f;
         [self.view addSubview:_faceShape];
     }
@@ -418,8 +466,6 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
         NSDictionary *detectorOptions = [[NSDictionary alloc] initWithObjectsAndKeys:CIDetectorAccuracyLow, CIDetectorAccuracy, nil];
         _faceDetector = [CIDetector detectorOfType:CIDetectorTypeFace context:nil options:detectorOptions];
         _faceLockCounter = 0;
-        
-        [self configureView];
         
         [_captureSession removeOutput:_movieFileOutput];
         [self configureVideoDataOutput];
@@ -650,6 +696,9 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
 {
     if (self.isPacingEnabled == NO)
     {
+        [_startStopButton setEnabled:NO];
+        [_startStopButton setHidden:YES];
+        
         // Press-and-hold, this indicates the ending of a hold action
         _endHoldTime = [[NSDate date] timeIntervalSince1970];
         
@@ -661,6 +710,9 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
         if (delta < kMinimumAcceptableRecordingDuration)
         {
             // The recording is way too short, we should ignore the video
+            NSString *outputPath = [NSTemporaryDirectory() stringByAppendingPathComponent:kDefaultMovieOutputName];
+            NSURL *url = [[NSURL alloc] initFileURLWithPath:outputPath isDirectory:NO];
+            [[NSFileManager defaultManager] removeItemAtURL:url error:nil];
         }
     }
 }
@@ -732,8 +784,6 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
 - (void)tearDownAVCapture
 {
-    [_lockIndicatorView removeFromSuperview];
-    
     [_videoDataOutput setSampleBufferDelegate:nil queue:_videoDataOutputQueue];
     _videoDataOutputQueue = nil;
     _videoDataOutput = nil;
@@ -749,18 +799,6 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     _microphoneInput = nil;
     _movieFileOutput = nil;
 }
-
-- (void)configureView
-{
-    CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-    _lockIndicatorView = [[UIView alloc] initWithFrame:CGRectMake(0.0,
-                                                                  screenSize.height-kFaceLockIndicatorHeight,
-                                                                  screenSize.width,
-                                                                  kFaceLockIndicatorHeight)];
-    [_lockIndicatorView setBackgroundColor:[UIColor colorWithRed:1.0f green:0.0f blue:0.0f alpha:1.0f]];
-    [self.view addSubview:_lockIndicatorView];
-}
-
 
 #pragma mark - Notification handlers and listeners
 
@@ -789,6 +827,8 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kDelayBeforeDigestDismissal * NSEC_PER_SEC)),
                    dispatch_get_main_queue(), ^{
         [_digestLabel dismiss];
+        _digestLabel.delegate = nil;
+        _digestLabel = nil;
     });
     [self stopRecording];
 }
