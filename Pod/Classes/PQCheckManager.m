@@ -233,11 +233,10 @@ static const CGFloat kDefaultOfflineDelayInterval = 3.0f;
     if (self.offlineMode == NO)
     {
         __unsafe_unretained PQCheckManager *weakSelf = self;
-        APIManager *apiManager = [[APIManager alloc] init];
-        [apiManager uploadAttemptWithAuthorisation:_authorisation mediaURL:mediaURL completion:^(UploadAttempt *uploadAttempt, NSError *error) {
+        [[APIManager sharedManager] uploadAttemptWithAuthorisation:_authorisation mediaURL:mediaURL completion:^(UploadAttempt *uploadAttempt, NSError *error) {
             
             [hud hide:YES];
-            
+
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [[NSFileManager defaultManager] removeItemAtURL:mediaURL error:nil];
             });

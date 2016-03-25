@@ -52,6 +52,11 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc
+{
+    NSLog(@"********** %s", __PRETTY_FUNCTION__);
+}
+
 - (IBAction)enrolButtonTapped:(id)sender
 {
     NSAssert(self.user.identifier != nil && self.user.identifier.length > 0,
@@ -62,15 +67,17 @@
     hud.mode = MBProgressHUDModeIndeterminate;
     hud.labelText = NSLocalizedString(@"Please Wait...", @"Please Wait...");
     
+    __weak __typeof__(EnrolmentViewController) *weakSelf = self;
     [[BankClientManager defaultManager] enrolUserWithUUID:self.user.identifier completion:^(Enrolment *enrolment, NSError *error) {
         
+        __typeof__(EnrolmentViewController) *strongSelf = weakSelf;
         [hud hide:YES];
         
         if (error == nil)
         {
             // Let PQCheckManager completes the enrolment process
             _manager = [[PQCheckManager alloc] init];
-            _manager.delegate = self;
+            _manager.delegate = strongSelf;
             [_manager performEnrolmentWithTranscript:enrolment.transcript uploadURI:[NSURL URLWithString:enrolment.uri]];
             //
             // NOTE: Customisation can only be called after a call to enrolment is done
@@ -85,7 +92,7 @@
             }];
             [alertController addAction:okAction];
             
-            [self presentViewController:alertController animated:YES completion:nil];
+            [strongSelf presentViewController:alertController animated:YES completion:nil];
         }
     }];
 }
@@ -98,19 +105,29 @@
     [[UserManager defaultManager] setActiveUser:self.user];
     
     // Enrol is successful, this view controller can now be dismissed
-    [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+    [[self presentingViewController] dismissViewControllerAnimated:YES completion:^{
+        _manager.delegate = nil;
+        _manager = nil;
+    }];
 }
 
 - (void)PQCheckManager:(PQCheckManager *)manager didFailWithError:(NSError *)error
 {
+    __weak __typeof__(EnrolmentViewController) *weakSelf = self;
     [self dismissViewControllerAnimated:YES completion:^{
+        
+        __typeof__(EnrolmentViewController) *strongSelf = weakSelf;
+
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Error", @"Error") message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"OK", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             // Do nothing
         }];
         [alertController addAction:okAction];
         
-        [self presentViewController:alertController animated:YES completion:nil];
+        [strongSelf presentViewController:alertController animated:YES completion:^{
+            _manager.delegate = nil;
+            _manager = nil;
+        }];
     }];
 }
 

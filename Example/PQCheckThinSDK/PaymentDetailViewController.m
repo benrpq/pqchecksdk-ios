@@ -166,17 +166,18 @@
 
 - (void)PQCheckManager:(PQCheckManager *)manager didFailWithError:(NSError *)error
 {
-    _manager.delegate = nil;
-    _manager = nil;
+    __weak __typeof__(PaymentDetailViewController) *weakSelf = self;
     [self dismissViewControllerAnimated:YES completion:^{
-        [self presentAlertViewControllerWithError:error];
+        __typeof__(PaymentDetailViewController) *strongSelf = weakSelf;
+        [strongSelf presentAlertViewControllerWithError:error completion:^{
+            _manager.delegate = nil;
+            _manager = nil;
+        }];
     }];
 }
 
 - (void)PQCheckManager:(PQCheckManager *)manager didFinishWithAuthorisationStatus:(PQCheckAuthorisationStatus)status
 {
-    _manager.delegate = nil;
-    _manager = nil;
     UIView *view = [[[UIApplication sharedApplication] delegate] window];
     if (status == kPQCheckAuthorisationStatusSuccessful)
     {
@@ -185,18 +186,23 @@
         hud.labelText = NSLocalizedString(@"Success, updating status", @"Success, updating status");
 
         // Cool, selfie is accepted, now patch the payment again so that the approved status is committed on the server
+        __weak __typeof__(PaymentDetailViewController) *weakSelf = self;
         [self dismissViewControllerAnimated:YES completion:^{
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [[BankClientManager defaultManager] approvePaymentWithUUID:self.payment.uuid userUUID:self.userUUID completion:^(Payment *payment, NSError *error) {
+                
+                __typeof__(PaymentDetailViewController) *strongSelf = weakSelf;
+                [[BankClientManager defaultManager] approvePaymentWithUUID:strongSelf.payment.uuid userUUID:strongSelf.userUUID completion:^(Payment *payment, NSError *error) {
                     
                     if (error == nil)
                     {
-                        self.payment.approved = payment.approved;
+                        strongSelf.payment.approved = payment.approved;
                         dispatch_async(dispatch_get_main_queue(), ^{
                             
                             [hud hide:YES];
-                            [self.navigationController popViewControllerAnimated:YES];
+                            [strongSelf.navigationController popViewControllerAnimated:YES];
+                            _manager.delegate = nil;
+                            _manager = nil;
                             
                         });
                     }
@@ -213,8 +219,12 @@
         [hud hide:YES afterDelay:1.0f];
         
         self.payment.approved = NO;
+        __weak __typeof__(PaymentDetailViewController) *weakSelf = self;
         [self dismissViewControllerAnimated:YES completion:^{
-            [self.navigationController popViewControllerAnimated:YES];
+            __typeof__(PaymentDetailViewController) *strongSelf = weakSelf;
+            [strongSelf.navigationController popViewControllerAnimated:YES];
+            _manager.delegate = nil;
+            _manager = nil;
         }];
     }
     else if (status == kPQCheckAuthorisationStatusCancelled)
@@ -225,8 +235,12 @@
         [hud hide:YES afterDelay:1.0f];
         
         self.payment.approved = NO;
+        __weak __typeof__(PaymentDetailViewController) *weakSelf = self;
         [self dismissViewControllerAnimated:YES completion:^{
-            [self.navigationController popViewControllerAnimated:YES];
+            __typeof__(PaymentDetailViewController) *strongSelf = weakSelf;
+            [strongSelf.navigationController popViewControllerAnimated:YES];
+            _manager.delegate = nil;
+            _manager = nil;
         }];
     }
     else if (status == kPQCheckAuthorisationStatusOpen)
@@ -235,6 +249,8 @@
         hud.mode = MBProgressHUDModeText;
         hud.labelText = NSLocalizedString(@"Please try again", @"Please try again");
         [hud hide:YES afterDelay:1.0f];
+        _manager.delegate = nil;
+        _manager = nil;
     }
 }
 
@@ -250,6 +266,7 @@
     _hud.mode = MBProgressHUDModeIndeterminate;
     _hud.labelText = NSLocalizedString(@"Please Wait...", @"Please Wait...");
 
+    __weak __typeof__(PaymentDetailViewController) *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         [[BankClientManager defaultManager] approvePaymentWithUUID:self.payment.uuid userUUID:self.userUUID completion:^(Payment *payment, NSError *error) {
@@ -262,8 +279,12 @@
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
+                    __typeof__(PaymentDetailViewController) *strongSelf = weakSelf;
                     [[MBProgressHUD HUDForView:window] hide:YES];
-                    [self presentAlertViewControllerWithError:error];
+                    [strongSelf presentAlertViewControllerWithError:error completion:^{
+                        _manager.delegate = nil;
+                        _manager = nil;
+                    }];
                 });
                 
                 return;
@@ -275,18 +296,22 @@
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         
+                        __typeof__(PaymentDetailViewController) *strongSelf = weakSelf;
                         [[MBProgressHUD HUDForView:window] hide:YES];
                         
                         if (error == nil)
                         {
                             _manager = [[PQCheckManager alloc] initWithAuthorisation:authorisation];
-                            [_manager setDelegate:self];
+                            [_manager setDelegate:strongSelf];
                             [_manager setShouldPaceUser:YES];
                             [_manager performAuthorisationWithDigest:authorisation.digest];
                         }
                         else
                         {
-                            [self presentAlertViewControllerWithError:error];
+                            [strongSelf presentAlertViewControllerWithError:error completion:^{
+                                _manager.delegate = nil;
+                                _manager = nil;
+                            }];
                         }
                     });
                 }];
@@ -295,9 +320,13 @@
             {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
+                    __typeof__(PaymentDetailViewController) *strongSelf = weakSelf;
                     [[MBProgressHUD HUDForView:window] hide:YES];
                     
-                    [self presentAlertViewControllerWithError:error];
+                    [strongSelf presentAlertViewControllerWithError:error completion:^{
+                        _manager.delegate = nil;
+                        _manager = nil;
+                    }];
                 });
             }
             
@@ -305,7 +334,7 @@
     });
 }
 
-- (void)presentAlertViewControllerWithError:(NSError *)error
+- (void)presentAlertViewControllerWithError:(NSError *)error completion:(void (^)())completionBlock
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -315,7 +344,9 @@
         }];
         [alertController addAction:okAction];
         
-        [self presentViewController:alertController animated:YES completion:nil];
+        [self presentViewController:alertController animated:YES completion:^{
+            completionBlock();
+        }];
     });
 }
 
