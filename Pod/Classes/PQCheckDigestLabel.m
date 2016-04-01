@@ -18,7 +18,7 @@
 
 static const CGFloat kDefaultFontSize = 64.0f;
 static const CGFloat kDefaultLabelHeight = 64.0f;
-static const CGFloat kWidthMargin = 10.0f;
+static const CGFloat kWidthMargin = 20.0f;
 static const NSInteger kFontReductionTrialLimit = 10;
 
 @interface PQCheckDigestLabel ()
@@ -40,6 +40,11 @@ static const NSInteger kFontReductionTrialLimit = 10;
         _animationIndex = 0;
         _isAnimating = NO;
         _labelColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor colorWithRed:13.0f/255.0f
+                                               green:185.0f/255.0f
+                                                blue:78.0f/255.0f
+                                               alpha:1.0f];
+        self.hidden = YES;
         
         [self configureView];
     }
@@ -48,6 +53,7 @@ static const NSInteger kFontReductionTrialLimit = 10;
 
 - (void)show
 {
+    self.hidden = NO;
     _isAnimating = YES;
     for (NSInteger index=0; index<[_digest length]; index++)
     {
@@ -62,6 +68,7 @@ static const NSInteger kFontReductionTrialLimit = 10;
 
 - (void)showAnimatedWithDelayInterval:(NSTimeInterval)interval
 {
+    self.hidden = NO;
     _isAnimating = YES;
     _animationIndex = 0;
     if (_animationIndex < [_digest length])
@@ -96,6 +103,8 @@ static const NSInteger kFontReductionTrialLimit = 10;
             label.layer.opacity = 0.0f;
         }
     }
+    
+    self.hidden = YES;
 
     return YES;
 }
@@ -141,7 +150,7 @@ static const NSInteger kFontReductionTrialLimit = 10;
     NSInteger trial = 0;
     do
     {
-        width = 0.0f;
+        width = kWidthMargin / 2.0f;
         for (int i=0; i<[_digest length]; i++)
         {
             UILabel *label = [self viewWithTag:i+1];
@@ -160,7 +169,7 @@ static const NSInteger kFontReductionTrialLimit = 10;
     while (width + kWidthMargin > size.width &&
            trial < kFontReductionTrialLimit);
 
-    CGRect frame = CGRectMake(0.0, 0.0, width, height);
+    CGRect frame = CGRectMake(0.0, 0.0, width + kWidthMargin, height);
     self.frame = frame;
 }
 
@@ -173,8 +182,6 @@ static const NSInteger kFontReductionTrialLimit = 10;
     label.backgroundColor = [UIColor clearColor];
     label.textColor = self.labelColor;
     label.layer.opacity = 0.0f;
-    label.layer.shadowOpacity = 0.5f;
-    label.layer.shadowOffset = CGSizeMake(0.0, 1.0f);
     
     return label;
 }

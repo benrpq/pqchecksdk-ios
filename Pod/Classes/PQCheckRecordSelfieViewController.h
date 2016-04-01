@@ -94,6 +94,12 @@ typedef NS_ENUM(NSUInteger, PQCheckSelfieMode)
 - (PQCheckSelfieMode)currentSelfieMode;
 
 /**
+ *  Set the background colour of the area where the transcript
+ *  and instruction is shown.
+ */
+- (void)setTranscriptBackgroundColor:(UIColor *)color;
+
+/**
  *  Sets a custom overlay view, which will be shown while capturing selfie
  */
 - (void)setCustomOverlayView:(UIView *)overlayView;

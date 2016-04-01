@@ -35,11 +35,13 @@ static const int32_t kAudioSamplingRate = 22050;
 static const int32_t kAudioNumberOfChannels = 1;
 static const int32_t kMinimumFreeDiskSpaceLimit = 1048576;
 static const CGFloat kDigestLabelVerticalOffset = 40.0f;
+static const CGFloat kInstructionLabelVerticalOffset = 40.0f;
+static const CGFloat kDelayBeforeStartRecording = 1.0f;
 static const NSTimeInterval kPaceRate = 0.85f;
 static const NSTimeInterval kDelayBeforeDigestDismissal = 1.0f;
 static const NSTimeInterval kMinimumAcceptableRecordingDuration = 1.0f;
 static const NSTimeInterval kDelayBetweenReattempt = 1.0f;
-static const int32_t kFaceLockedThreshold = 32;
+static const int32_t kFaceLockedThreshold = 64;
 static const CGFloat kFaceLockIndicatorHeight = 8.0f;
 static const int32_t kFaceAngleTolerance = 15;
 static NSString* const kDefaultMovieOutputName = @"output.mp4";
@@ -56,6 +58,8 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     AVCaptureVideoDataOutput *_videoDataOutput;
     dispatch_queue_t _videoDataOutputQueue;
     CIDetector *_faceDetector;
+    UILabel *_instructionLabel;
+    UIColor *_transcriptBackgroundColor;
     PQCheckDigestLabel *_digestLabel;
     PQCheckFaceShape *_faceShape;
     UIButton *_startStopButton;
@@ -94,6 +98,10 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     _faceLockCounter = 0;
     _faceDetector = nil;
     _faceShapeColor = [UIColor whiteColor];
+    _transcriptBackgroundColor = [UIColor colorWithRed:13.0f/255.0f
+                                                 green:185.0f/255.0f
+                                                  blue:78.0f/255.0f
+                                                 alpha:1.0f];
 
     [self setUpAVCapture];
 }
@@ -165,6 +173,21 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     _transcript = transcript;
     
     [self configureDigestLabel];
+}
+
+- (void)setTranscriptBackgroundColor:(UIColor *)color
+{
+    _transcriptBackgroundColor = color;
+    
+    if (_instructionLabel)
+    {
+        _instructionLabel.backgroundColor = color;
+    }
+    
+    if (_digestLabel)
+    {
+        _digestLabel.backgroundColor = color;
+    }
 }
 
 - (void)setCustomOverlayView:(UIView *)overlayView
@@ -327,8 +350,11 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     
     __unsafe_unretained PQCheckRecordSelfieViewController *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         if (_faceLocked == NO)
         {
+            _instructionLabel.hidden = NO;
+            
             // Conditions:
             // 1. One facial feature only
             // 2. 0.0 face angle
@@ -350,6 +376,20 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
                     }
                 }
                 
+                if (_faceLockCounter < kFaceLockedThreshold/3)
+                {
+                    _instructionLabel.text = NSLocalizedString(@"Align your face", @"Align your face");
+                }
+                else if (_faceLockCounter < kFaceLockedThreshold)
+                {
+                    _instructionLabel.text = NSLocalizedString(@"Great, hold still", @"Great, hold still");
+                }
+                else
+                {
+                    _instructionLabel.text = NSLocalizedString(@"Read out the number!", @"Reaad out the number!");
+                }
+                [_instructionLabel setNeedsDisplay];
+                
                 if (_faceLockCounter > kFaceLockedThreshold)
                 {
                     _faceLocked = YES;
@@ -362,8 +402,13 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
                     {
                         [_captureSession addOutput:_movieFileOutput];
                         
-                        [weakSelf startRecording];
-                        [_digestLabel showAnimatedWithDelayInterval:kPaceRate];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kDelayBeforeStartRecording * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            _instructionLabel.text = @"";
+                            _instructionLabel.hidden = YES;
+                            
+                            [weakSelf startRecording];
+                            [_digestLabel showAnimatedWithDelayInterval:kPaceRate];
+                        });
                     }
                     
                     [_videoDataOutput setSampleBufferDelegate:nil queue:_videoDataOutputQueue];
@@ -376,6 +421,9 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
             {
                 // Reset the counter, we need to get at least 64 samples
                 _faceLockCounter = 0;
+                _instructionLabel.hidden = NO;
+                _instructionLabel.text = NSLocalizedString(@"Align your face", @"Align your face");
+                [_instructionLabel setNeedsDisplay];
             }
         }
         
@@ -395,12 +443,31 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     
     _digestLabel = [[PQCheckDigestLabel alloc] initWithDigest:self.transcript];
     _digestLabel.labelColor = [UIColor whiteColor];
+    _digestLabel.backgroundColor = _transcriptBackgroundColor;
     [self.view insertSubview:_digestLabel aboveSubview:_faceShape];
     _digestLabel.center = self.view.center;
     CGRect frame = _digestLabel.frame;
     frame.origin.y = kDigestLabelVerticalOffset;
     _digestLabel.frame = frame;
     _digestLabel.delegate = self;
+}
+
+- (void)configureInstructionLabel
+{
+    CGSize size = [UIScreen mainScreen].bounds.size;
+    CGRect frame = CGRectMake(0.0f, 0.0f, size.width * 0.8, 40.0f);
+    _instructionLabel = [[UILabel alloc] initWithFrame:frame];
+    _instructionLabel.textColor = [UIColor whiteColor];
+    _instructionLabel.backgroundColor = _transcriptBackgroundColor;
+    _instructionLabel.font = [UIFont fontWithName:@"Avenir-Book" size:24.0f];
+    _instructionLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:_instructionLabel];
+    _instructionLabel.center = self.view.center;
+    frame = _instructionLabel.frame;
+    frame.origin.y = kInstructionLabelVerticalOffset;
+    _instructionLabel.frame = frame;
+    _instructionLabel.text = @"";
+    _instructionLabel.hidden = YES;
 }
 
 - (void)configureFaceShape
@@ -776,6 +843,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     [self configurePreviewLayer];
     [self configureFaceShape];
     [self configureDigestLabel];
+    [self configureInstructionLabel];
     if (self.pacingEnabled == NO)
     {
         [self configureStartStopButton];
