@@ -17,6 +17,11 @@
 #import <Foundation/Foundation.h>
 #import <PQCheckSDK/PQCheckRecordSelfieViewController.h>
 #import <PQCheckSDK/AuthorisationStatus.h>
+#import <PQCheckSDK/Authorisation.h>
+#import <PQCheckSDK/APIManager.h>
+
+
+
 
 @class Authorisation;
 @protocol PQCheckManagerDelegate;
@@ -55,11 +60,18 @@
 @property (nonatomic, assign) BOOL offlineMode;
 
 /**
+ *  Thumbnail imagae from the enrollment video reference.
+ *
+ *  @discussion Selfie image
+ */
+
+/**
  *  The authorisation status that should be returned by an attempt in offline mode
  *
  *  @discussion This property is ignored if `offlineMode` is `NO`
  */
 @property (nonatomic, assign) PQCheckAuthorisationStatus offlineAuthorisationStatus;
+
 
 /**
  *  Returns the selfie view controller for customisation purposes
@@ -68,7 +80,8 @@
  *
  *  @return Return the selfie view controller instance associated with this manager
  */
-- (PQCheckRecordSelfieViewController *)selfieViewController;
+
+@property (nullable, nonatomic) PQCheckRecordSelfieViewController *selfieViewController;
 
 /**
  *  Initialises the PQCheck manager object with an instance of `Authorisation` object.
@@ -79,7 +92,7 @@
  *
  *  @see Authorisation class
  */
-- (id)initWithAuthorisation:(Authorisation *)authorisation;
+- (nullable id)initWithAuthorisation:(nullable Authorisation *)authorisation;
 
 /**
  *  Performs an authorisation with the transcript given by `digest`.
@@ -90,7 +103,7 @@
  *
  *  @see PQCheckManagerDelegate protocol
  */
-- (void)performAuthorisationWithDigest:(NSString *)digest;
+- (void)performAuthorisationWithDigest:(nonnull NSString *)digest;
 
 /**
  *  Performs a user enrolment with the given `transcript`. The URL to upload the enrolment video is specified by `uri`.
@@ -102,7 +115,7 @@
  *
  *  @see PQCheckManagerDelegate protocol
  */
-- (void)performEnrolmentWithTranscript:(NSString *)transcript uploadURI:(NSURL *)uri;
+- (void)performEnrolmentWithTranscript:(nonnull NSString *)transcript uploadURI:(nonnull NSURL *)uri;
 
 @end
 
@@ -117,7 +130,7 @@
  *
  *  @param manager The PQCheck manager object.
  */
-- (void)PQCheckManagerDidFinishEnrolment:(PQCheckManager *)manager;
+- (void)PQCheckManagerDidFinishEnrolment:(nullable PQCheckManager *)manager;
 
 /**
  *  The delegate method that is invoked after a successful upload of an authorisation video.
@@ -129,7 +142,7 @@
  *
  *  @see PQCheckAuthorisationStatus class
  */
-- (void)PQCheckManager:(PQCheckManager *)manager didFinishWithAuthorisationStatus:(PQCheckAuthorisationStatus)status;
+- (void)PQCheckManager:(nullable PQCheckManager *)manager didFinishWithAuthorisationStatus:( PQCheckAuthorisationStatus)status;
 
 /**
  *  The delegate method that is invoked in the event of upload failure or error in recording selfie video.
@@ -137,5 +150,5 @@
  *  @param manager The PQCheck manager object.
  *  @param error   The NSError object detailing the error.
  */
-- (void)PQCheckManager:(PQCheckManager *)manager didFailWithError:(NSError *)error;
+- (void)PQCheckManager:(nullable PQCheckManager *)manager didFailWithError:(nullable NSError *)error;
 @end

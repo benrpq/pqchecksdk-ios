@@ -41,7 +41,7 @@ static const NSTimeInterval kMinimumAcceptableRecordingDuration = 1.0f;
 static const NSTimeInterval kDelayBetweenReattempt = 1.0f;
 static const int32_t kFaceLockedThreshold = 32;
 static const CGFloat kFaceLockIndicatorHeight = 8.0f;
-static const int32_t kFaceAngleTolerance = 5;
+static const int32_t kFaceAngleTolerance = 15;
 static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
 @interface PQCheckRecordSelfieViewController () <AVCaptureFileOutputRecordingDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, PQCheckDigestLabelDelegate>
