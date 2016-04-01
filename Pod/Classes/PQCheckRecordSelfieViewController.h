@@ -66,6 +66,11 @@ typedef NS_ENUM(NSUInteger, PQCheckSelfieMode)
 @property (nonatomic, strong) NSDictionary *userInfo;
 
 /**
+ *  The boolean value that controls whether or not instructions screen to be shown.
+ */
+@property (nonatomic, assign) BOOL shouldShowInstructions;
+
+/**
  *  Initialises the view-controller by specifing the `mode` of selfie and `transcript`.
  *
  *  @param mode       The mode of selfie
@@ -94,10 +99,10 @@ typedef NS_ENUM(NSUInteger, PQCheckSelfieMode)
 - (PQCheckSelfieMode)currentSelfieMode;
 
 /**
- *  Set the background colour of the area where the transcript
+ *  Set the background colour of the banner area where the transcript
  *  and instruction is shown.
  */
-- (void)setTranscriptBackgroundColor:(UIColor *)color;
+- (void)setBannerBackgroundColor:(UIColor *)color;
 
 /**
  *  Sets a custom overlay view, which will be shown while capturing selfie

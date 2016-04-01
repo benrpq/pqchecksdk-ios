@@ -78,11 +78,17 @@
             // Let PQCheckManager completes the enrolment process
             _manager = [[PQCheckManager alloc] init];
             _manager.delegate = strongSelf;
+            _manager.shouldPaceUser = YES;
             [_manager performEnrolmentWithTranscript:enrolment.transcript uploadURI:[NSURL URLWithString:enrolment.uri]];
             //
             // NOTE: Customisation can only be called after a call to enrolment is done
             //
             [_manager.selfieViewController enableSolidOverlayWithColor:[UIColor whiteColor] opacity:0.75f];
+            [[_manager selfieViewController] setShouldShowInstructions:YES];
+            [[_manager selfieViewController] setBannerBackgroundColor:[UIColor colorWithRed:13.0f/255.0f
+                                                                                      green:185.0f/255.0f
+                                                                                       blue:78.0f/255.0f
+                                                                                      alpha:1.0f]];
         }
         else
         {

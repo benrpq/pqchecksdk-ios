@@ -306,7 +306,11 @@
                             [_manager setShouldPaceUser:YES];
                             [_manager performAuthorisationWithDigest:authorisation.digest];
                             // This call can only be made after performAuthorisationWithDigest is completed
-                            [[_manager selfieViewController] setTranscriptBackgroundColor:[UIColor redColor]];
+                            [[_manager selfieViewController] setShouldShowInstructions:YES];
+                            [[_manager selfieViewController] setBannerBackgroundColor:[UIColor colorWithRed:13.0f/255.0f
+                                                                                                      green:185.0f/255.0f
+                                                                                                       blue:78.0f/255.0f
+                                                                                                      alpha:1.0f]];
                         }
                         else
                         {

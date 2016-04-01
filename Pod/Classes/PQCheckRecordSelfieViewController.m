@@ -59,7 +59,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     dispatch_queue_t _videoDataOutputQueue;
     CIDetector *_faceDetector;
     UILabel *_instructionLabel;
-    UIColor *_transcriptBackgroundColor;
+    UIColor *_bannerBackgroundColor;
     PQCheckDigestLabel *_digestLabel;
     PQCheckFaceShape *_faceShape;
     UIButton *_startStopButton;
@@ -67,6 +67,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     BOOL _faceLocked;
     UIColor *_faceShapeColor;
     UIView *_customOverlayView;
+    UIView *_howToView;
     NSTimeInterval _startHoldTime, _endHoldTime;
     PQCheckSelfieMode _mode;
 }
@@ -98,10 +99,10 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     _faceLockCounter = 0;
     _faceDetector = nil;
     _faceShapeColor = [UIColor whiteColor];
-    _transcriptBackgroundColor = [UIColor colorWithRed:13.0f/255.0f
-                                                 green:185.0f/255.0f
-                                                  blue:78.0f/255.0f
-                                                 alpha:1.0f];
+    _bannerBackgroundColor = [UIColor colorWithRed:13.0f/255.0f
+                                             green:185.0f/255.0f
+                                              blue:78.0f/255.0f
+                                             alpha:1.0f];
 
     [self setUpAVCapture];
 }
@@ -125,7 +126,14 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
     if (self.pacingEnabled)
     {
-        [self faceSearchAndStartRecording];
+        if (self.shouldShowInstructions)
+        {
+            [self showInstructionScreen];
+        }
+        else
+        {
+            [self faceSearchAndStartRecording];
+        }
     }
 }
 
@@ -175,9 +183,9 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     [self configureDigestLabel];
 }
 
-- (void)setTranscriptBackgroundColor:(UIColor *)color
+- (void)setBannerBackgroundColor:(UIColor *)color
 {
-    _transcriptBackgroundColor = color;
+    _bannerBackgroundColor = color;
     
     if (_instructionLabel)
     {
@@ -443,7 +451,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     
     _digestLabel = [[PQCheckDigestLabel alloc] initWithDigest:self.transcript];
     _digestLabel.labelColor = [UIColor whiteColor];
-    _digestLabel.backgroundColor = _transcriptBackgroundColor;
+    _digestLabel.backgroundColor = _bannerBackgroundColor;
     [self.view insertSubview:_digestLabel aboveSubview:_faceShape];
     _digestLabel.center = self.view.center;
     CGRect frame = _digestLabel.frame;
@@ -458,7 +466,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     CGRect frame = CGRectMake(0.0f, 0.0f, size.width * 0.8, 40.0f);
     _instructionLabel = [[UILabel alloc] initWithFrame:frame];
     _instructionLabel.textColor = [UIColor whiteColor];
-    _instructionLabel.backgroundColor = _transcriptBackgroundColor;
+    _instructionLabel.backgroundColor = _bannerBackgroundColor;
     _instructionLabel.font = [UIFont fontWithName:@"Avenir-Book" size:24.0f];
     _instructionLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:_instructionLabel];
@@ -524,6 +532,84 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     [_startStopButton addTarget:self
                          action:@selector(recordButtonTouchUp:)
                forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)showInstructionScreen
+{
+    CGSize size = [[UIScreen mainScreen] bounds].size;
+    CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
+    _howToView = [[UIView alloc] initWithFrame:rect];
+    _howToView.backgroundColor = _bannerBackgroundColor;
+    
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+    UIImage *leftImage = [UIImage imageNamed:@"how_to_left" inBundle:bundle compatibleWithTraitCollection:nil];
+    UIImageView *leftImageView = [[UIImageView alloc] initWithImage:leftImage];
+    leftImageView.contentMode = UIViewContentModeScaleAspectFit;
+    CGFloat imageWidth = (size.width - 40.0f)/2.0f;
+    CGSize imageSize = CGSizeMake(imageWidth, imageWidth*(435.0f/294.0f));
+    leftImageView.frame = CGRectMake(0.0f, 0.0f, imageSize.width, imageSize.height);
+    [_howToView addSubview:leftImageView];
+    leftImageView.center = _howToView.center;
+    CGRect frame = leftImageView.frame;
+    frame.origin.x = 10.0f;
+    frame.origin.y -= (64.0f + 10.0f)/2.0f;
+    leftImageView.frame = frame;
+    
+    UIImage *rightImage = [UIImage imageNamed:@"how_to_right" inBundle:bundle compatibleWithTraitCollection:nil];
+    UIImageView *rightImageView = [[UIImageView alloc] initWithImage:rightImage];
+    rightImageView.contentMode = UIViewContentModeScaleAspectFit;
+    rightImageView.frame = CGRectMake(0.0f, 0.0f, imageSize.width, imageSize.height);
+    [_howToView addSubview:rightImageView];
+    rightImageView.center = _howToView.center;
+    frame = rightImageView.frame;
+    frame.origin.x = size.width - imageSize.width - 10.0f;
+    frame.origin.y -= (64.0f + 10.0f)/2.0f;
+    rightImageView.frame = frame;
+    
+    frame = CGRectMake(leftImageView.frame.origin.x,
+                       leftImageView.frame.origin.y + imageSize.height + 10.0f,
+                       imageSize.width,
+                       64.0f);
+    UILabel *leftLabel = [[UILabel alloc] initWithFrame:frame];
+    leftLabel.backgroundColor = [UIColor clearColor];
+    leftLabel.font = [UIFont fontWithName:@"Avenir-Book" size:24.0f];
+    leftLabel.adjustsFontSizeToFitWidth = YES;
+    leftLabel.textColor = [UIColor whiteColor];
+    leftLabel.numberOfLines = -1;
+    leftLabel.textAlignment = NSTextAlignmentCenter;
+    leftLabel.text = NSLocalizedString(@"Align your face within the dotted line", @"Align your face within the dotted line");
+    [_howToView addSubview:leftLabel];
+
+    frame = CGRectMake(rightImageView.frame.origin.x,
+                       rightImageView.frame.origin.y + imageSize.height + 10.0f,
+                       imageSize.width,
+                       64.0f);
+    UILabel *rightLabel = [[UILabel alloc] initWithFrame:frame];
+    rightLabel.backgroundColor = [UIColor clearColor];
+    rightLabel.font = [UIFont fontWithName:@"Avenir-Book" size:24.0f];
+    rightLabel.adjustsFontSizeToFitWidth = YES;
+    rightLabel.textColor = [UIColor whiteColor];
+    rightLabel.numberOfLines = -1;
+    rightLabel.textAlignment = NSTextAlignmentCenter;
+    rightLabel.text = NSLocalizedString(@"Read out each number as it is shown", @"Read out each number as it is shown");
+    [_howToView addSubview:rightLabel];
+    
+    UIButton *dismissButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *image = [UIImage imageNamed:@"arrow_down" inBundle:bundle compatibleWithTraitCollection:nil];
+    [dismissButton setImage:image forState:UIControlStateNormal];
+    [dismissButton setFrame:CGRectMake(size.width - 60, size.height - 60, 40.0f, 40.0f)];
+    [dismissButton addTarget:self action:@selector(dismissButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [_howToView addSubview:dismissButton];
+    
+    frame = _howToView.frame;
+    frame.origin.y = size.height;
+    _howToView.frame = frame;
+    [self.view addSubview:_howToView];
+    [UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^{
+        CGRect viewFrame = _howToView.frame;
+        viewFrame.origin.y = 0.0f;
+        _howToView.frame = viewFrame;
+    } completion:nil];
 }
 
 - (void)faceSearchAndStartRecording
@@ -782,6 +868,23 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
             [[NSFileManager defaultManager] removeItemAtURL:url error:nil];
         }
     }
+}
+
+- (void)dismissButtonTapped:(id)sender
+{
+    [UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^{
+        CGSize size = [[UIScreen mainScreen] bounds].size;
+        CGRect viewFrame = _howToView.frame;
+        viewFrame.origin.y = size.height;
+        _howToView.frame = viewFrame;
+    } completion:^(BOOL finished) {
+        [_howToView removeFromSuperview];
+        
+        if (self.pacingEnabled)
+        {
+            [self faceSearchAndStartRecording];
+        }
+    }];
 }
 
 - (NSNumber *) exifOrientation: (UIDeviceOrientation) orientation
