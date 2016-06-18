@@ -21,7 +21,7 @@
 #import "PQCheckManager.h"
 #import "API/APIManager.h"
 #import "API/Response/UploadAttempt.h"
-
+#import "NSString+Utils.h"
 
 static NSString* kPQCheckAPIKey = @"PQCheckAPIKey";
 static NSString* kPQCheckUserInfoEnrolmentReference = @"reference";
@@ -40,18 +40,23 @@ static const CGFloat kDefaultOfflineDelayInterval = 3.0f;
 
 @implementation PQCheckManager
 
-- (id)init
++ (PQCheckManager *)defaultManager
 {
-    return [self initWithAuthorisation:nil];
+    static PQCheckManager *_defaultManager = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _defaultManager = [[PQCheckManager alloc] init];
+    });
+    return _defaultManager;
 }
 
-- (id)initWithAuthorisation:(Authorisation *)authorisation
+- (id)init
 {
     NSLog(@"********** %s", __PRETTY_FUNCTION__);
     self = [super init];
     if (self)
     {
-        _authorisation = authorisation;
+        _authorisation = nil;
         _offlineAuthorisationStatus = kPQCheckAuthorisationStatusSuccessful;
         
         [self checkCameraAndMicrophonePermissions];
@@ -64,12 +69,14 @@ static const CGFloat kDefaultOfflineDelayInterval = 3.0f;
     NSLog(@"********** %s", __PRETTY_FUNCTION__);
 }
 
-- (void)performAuthorisationWithDigest:(NSString *)digest
+- (void)performAuthorisation:(Authorisation *)authorisation
 {
     NSAssert([NSThread isMainThread], @"The method %s must be called from main thread", __PRETTY_FUNCTION__);
     
     // Do any additional setup after loading the view from its nib.
-    assert(digest != nil          && digest.length > 0);
+    assert(authorisation != nil);
+    
+    _authorisation = authorisation;
     
     // Make sure that we have a camera and microphone permission
     _cameraAuthorisationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
@@ -80,9 +87,9 @@ static const CGFloat kDefaultOfflineDelayInterval = 3.0f;
          _microphoneAuthorisationStatus == AVAuthorizationStatusNotDetermined))
     {
         self.selfieViewController = [[PQCheckRecordSelfieViewController alloc] initWithPQCheckSelfieMode:kPQCheckSelfieModeAuthorisation
-                                                                                      transcript:digest];
+                                                                                      transcript:_authorisation.digest];
         self.selfieViewController.delegate = self;
-       self.selfieViewController.pacingEnabled = self.shouldPaceUser;
+        self.selfieViewController.pacingEnabled = self.shouldPaceUser;
         
         UIViewController *viewController = [PQCheckManager topMostController];
         [viewController presentViewController:self.selfieViewController animated:YES completion:nil];
@@ -93,7 +100,7 @@ static const CGFloat kDefaultOfflineDelayInterval = 3.0f;
 {
     NSAssert([NSThread isMainThread], @"The method %s must be called from main thread", __PRETTY_FUNCTION__);
     
-    assert(transcript != nil      && transcript.length > 0);
+    assert([NSString isStringNilEmptyOrNewLine:transcript] == NO);
     
     // Make sure that we have a camera and microphone permission
     _cameraAuthorisationStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
@@ -322,10 +329,10 @@ static const CGFloat kDefaultOfflineDelayInterval = 3.0f;
     hud.labelText = NSLocalizedString(@"Enrolling...", @"Enrolling...");
     
     NSString *transcript = [self.selfieViewController.userInfo objectForKey:kPQCheckUserInfoEnrolmentTranscript];
-    NSAssert(transcript != nil && transcript.length > 0, @"Enrolment transcript cannot be nil or have zero length");
+    NSAssert([NSString isStringNilEmptyOrNewLine:transcript] == NO, @"Enrolment transcript cannot be nil or have zero length");
     
     NSString *uriString = [self.selfieViewController.userInfo objectForKey:kPQCheckUserInfoEnrolmentURI];
-    NSAssert(uriString != nil && uriString.length > 0, @"Enrolment URI cannot be nil or have zero length");
+    NSAssert([NSString isStringNilEmptyOrNewLine:uriString] == NO, @"Enrolment URI cannot be nil or have zero length");
     
 #ifdef DEBUG
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -346,8 +353,6 @@ static const CGFloat kDefaultOfflineDelayInterval = 3.0f;
 
     if (self.offlineMode == NO)
     {
-        __weak typeof(PQCheckManager) *weakSelf = self;
-        
         NSURL *uploadURL = [NSURL URLWithString:uriString];
         [[APIManager sharedManager] enrolUserWithMediaURL:mediaURL uploadURL:uploadURL completion:^(NSError *error) {
             
@@ -378,8 +383,6 @@ static const CGFloat kDefaultOfflineDelayInterval = 3.0f;
     }
     else
     {
-        __weak typeof(PQCheckManager) *weakSelf = self;
-
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kDefaultOfflineDelayInterval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
 
             typeof(PQCheckManager) *strongSelf = self;

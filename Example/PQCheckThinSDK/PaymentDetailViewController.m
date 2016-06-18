@@ -301,11 +301,10 @@
                         
                         if (error == nil)
                         {
-                            _manager = [[PQCheckManager alloc] initWithAuthorisation:authorisation];
+                            _manager = [[PQCheckManager alloc] init];
                             [_manager setDelegate:strongSelf];
                             [_manager setShouldPaceUser:YES];
-                            [_manager performAuthorisationWithDigest:authorisation.digest];
-                            // This call can only be made after performAuthorisationWithDigest is completed
+                            [_manager performAuthorisation:authorisation];
                             [[_manager selfieViewController] setShouldShowInstructions:YES];
                             [[_manager selfieViewController] setBannerBackgroundColor:[UIColor colorWithRed:13.0f/255.0f
                                                                                                       green:185.0f/255.0f

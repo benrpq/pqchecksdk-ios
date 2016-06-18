@@ -21,9 +21,11 @@
 #import "PQCheckRecordSelfieViewController.h"
 #import "PQCheckFaceShape.h"
 #import "PQCheckDigestLabel.h"
+#import "PQCheckSettings.h"
 #import "SDAVAssetExportSession.h"
 #import "UIImage+Additions.h"
 #import "UIColor+Additions.h"
+#import "NSString+Utils.h"
 
 static const Float64 kMaximumRecordingDurationInSeconds = 15.0;
 static const int32_t kVideoFramePerSecond = 10;
@@ -41,9 +43,9 @@ static const NSTimeInterval kPaceRate = 0.85f;
 static const NSTimeInterval kDelayBeforeDigestDismissal = 1.0f;
 static const NSTimeInterval kMinimumAcceptableRecordingDuration = 1.0f;
 static const NSTimeInterval kDelayBetweenReattempt = 1.0f;
-static const int32_t kFaceLockedThreshold = 64;
-static const CGFloat kFaceLockIndicatorHeight = 8.0f;
-static const int32_t kFaceAngleTolerance = 15;
+static const int32_t kDefaultFaceLockedThreshold = 64;
+static const int32_t kDefaultFaceLockedAngleTolerance = 15;
+static NSString* const kDefaultBannerBackgroundColourHexString = @"#0db94e";
 static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
 @interface PQCheckRecordSelfieViewController () <AVCaptureFileOutputRecordingDelegate, AVCaptureVideoDataOutputSampleBufferDelegate, PQCheckDigestLabelDelegate>
@@ -70,6 +72,8 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     UIView *_howToView;
     NSTimeInterval _startHoldTime, _endHoldTime;
     PQCheckSelfieMode _mode;
+    NSInteger _faceLockedThreshold;
+    NSInteger _faceLockedAngleTolerance;
 }
 @property (nonatomic, strong) AVCaptureVideoPreviewLayer *previewLayer;
 @end
@@ -85,6 +89,17 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
         _transcript = transcript;
         _customOverlayView = nil;
         _mode = mode;
+        _faceLockedThreshold = [PQCheckSettings PQCheckFaceLockThreshold];
+        if (_faceLockedThreshold <= 0)
+        {
+            _faceLockedThreshold = kDefaultFaceLockedThreshold;
+        }
+
+        _faceLockedAngleTolerance = [PQCheckSettings PQCheckFaceLockAngleTolerance];
+        if (_faceLockedAngleTolerance <= 0)
+        {
+            _faceLockedAngleTolerance = kDefaultFaceLockedAngleTolerance;
+        }
     }
     return self;
 }
@@ -99,10 +114,13 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     _faceLockCounter = 0;
     _faceDetector = nil;
     _faceShapeColor = [UIColor whiteColor];
-    _bannerBackgroundColor = [UIColor colorWithRed:13.0f/255.0f
-                                             green:185.0f/255.0f
-                                              blue:78.0f/255.0f
-                                             alpha:1.0f];
+    
+    NSString *hexString = [PQCheckSettings PQCheckBannerBackgroundColourHexString];
+    if ([NSString isStringNilEmptyOrNewLine:hexString])
+    {
+        hexString = kDefaultBannerBackgroundColourHexString;
+    }
+    _bannerBackgroundColor = [UIColor colorFromHexString:hexString];
 
     [self setUpAVCapture];
 }
@@ -373,7 +391,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
                 for (CIFaceFeature *faceFeature in features)
                 {
                     NSInteger angle = (NSInteger)fabsf(faceFeature.faceAngle);
-                    if (angle <= kFaceAngleTolerance && faceFeature.hasMouthPosition &&
+                    if (angle <= _faceLockedAngleTolerance && faceFeature.hasMouthPosition &&
                         faceFeature.hasLeftEyePosition && faceFeature.hasRightEyePosition)
                     {
                         _faceLockCounter++;
@@ -384,11 +402,11 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
                     }
                 }
                 
-                if (_faceLockCounter < kFaceLockedThreshold/3)
+                if (_faceLockCounter < _faceLockedThreshold/3)
                 {
                     _instructionLabel.text = NSLocalizedString(@"Align your face", @"Align your face");
                 }
-                else if (_faceLockCounter < kFaceLockedThreshold)
+                else if (_faceLockCounter < _faceLockedThreshold)
                 {
                     _instructionLabel.text = NSLocalizedString(@"Great, hold still", @"Great, hold still");
                 }
@@ -398,7 +416,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
                 }
                 [_instructionLabel setNeedsDisplay];
                 
-                if (_faceLockCounter > kFaceLockedThreshold)
+                if (_faceLockCounter > _faceLockedThreshold)
                 {
                     _faceLocked = YES;
 
@@ -437,7 +455,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
         
         if (_faceLocked == NO)
         {
-            UIColor *color = [UIColor colorWithRed:((CGFloat)kFaceLockedThreshold - _faceLockCounter)/(CGFloat)kFaceLockedThreshold green:_faceLockCounter/(CGFloat)kFaceLockedThreshold blue:0.0f alpha:1.0f];
+            UIColor *color = [UIColor colorWithRed:((CGFloat)_faceLockedThreshold - _faceLockCounter)/(CGFloat)_faceLockedThreshold green:_faceLockCounter/(CGFloat)_faceLockedThreshold blue:0.0f alpha:1.0f];
             [_faceShape setLineColor:color];
         }
     });
@@ -605,7 +623,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
     frame.origin.y = size.height;
     _howToView.frame = frame;
     [self.view addSubview:_howToView];
-    [UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^{
+    [UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
         CGRect viewFrame = _howToView.frame;
         viewFrame.origin.y = 0.0f;
         _howToView.frame = viewFrame;
@@ -872,7 +890,7 @@ static NSString* const kDefaultMovieOutputName = @"output.mp4";
 
 - (void)dismissButtonTapped:(id)sender
 {
-    [UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationCurveEaseIn animations:^{
+    [UIView animateWithDuration:0.25f delay:0.0f options:UIViewAnimationOptionCurveEaseIn animations:^{
         CGSize size = [[UIScreen mainScreen] bounds].size;
         CGRect viewFrame = _howToView.frame;
         viewFrame.origin.y = size.height;

@@ -15,6 +15,7 @@
  */
 
 #import "UIColor+Additions.h"
+#import "NSString+Utils.h"
 
 @implementation UIColor (Additions)
 
@@ -38,6 +39,24 @@
                           brightness:b * 0.75
                                alpha:a];
     return nil;
+}
+
++ (UIColor *)colorFromHexString:(NSString *)hexString
+{
+    if ([NSString isStringNilEmptyOrNewLine:hexString])
+    {
+        return nil;
+    }
+    
+    unsigned rgbValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:[hexString uppercaseString]];
+    NSCharacterSet *nonHexCharacters = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789ABCDEF"] invertedSet];
+    [scanner setCharactersToBeSkipped:nonHexCharacters];
+    
+    BOOL validScan = [scanner scanHexInt:&rgbValue];
+    return validScan ? [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0
+                                       green:((rgbValue & 0xFF00) >> 8)/255.0
+                                        blue:(rgbValue & 0xFF)/255.0 alpha:1.0] : nil;
 }
 
 @end

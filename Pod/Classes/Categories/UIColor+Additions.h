@@ -18,7 +18,25 @@
 
 @interface UIColor (Additions)
 
+/**
+ * Given a UIColor instance, returns a lighter-coloured version of the instance
+ */
 - (UIColor *)lighterColor;
+
+/**
+ * Given a UIColor instance, returns a darker-coloured version of the instance
+ */
 - (UIColor *)darkerColor;
+
+/**
+ *  Instantiates a new colour from the supplied `hexString`.
+ *
+ *  @param hexString The colour representing in the format of
+ *                   #rrggbb where rr, gg and bb are the red,
+ *                   gree and blue colour components respectively.
+ *
+ *  @return UIColor object with the specified colour
+ */
++ (UIColor *)colorFromHexString:(NSString *)hexString;
 
 @end

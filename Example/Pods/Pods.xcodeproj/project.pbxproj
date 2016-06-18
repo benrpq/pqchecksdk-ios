@@ -523,6 +523,10 @@
 		D72580C4E6C43BB12FB547E9B69E7A54 /* AFNetworkActivityIndicatorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 974D917BBCD61C68B1E9B5E6E4E4609A /* AFNetworkActivityIndicatorManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D76B216A295B170D9A38AF573187C326 /* HCIsTrueFalse.m in Sources */ = {isa = PBXBuildFile; fileRef = 056CAB81EA80CB3FD9C08B929E910E38 /* HCIsTrueFalse.m */; };
 		D775C3EA1CAEE45F00492C37 /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D775C3E91CAEE45F00492C37 /* Media.xcassets */; };
+		D7971F6D1CBCC2C200C48DB5 /* NSString+Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = D7971F6B1CBCC2C200C48DB5 /* NSString+Utils.h */; };
+		D7971F6E1CBCC2C200C48DB5 /* NSString+Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = D7971F6C1CBCC2C200C48DB5 /* NSString+Utils.m */; };
+		D7971F721CBCCD9B00C48DB5 /* PQCheckSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = D7971F701CBCCD9B00C48DB5 /* PQCheckSettings.h */; };
+		D7971F731CBCCD9B00C48DB5 /* PQCheckSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = D7971F711CBCCD9B00C48DB5 /* PQCheckSettings.m */; };
 		D7DC565821183188E0B6043F8E34976F /* SDAVAssetExportSession.podspec in Sources */ = {isa = PBXBuildFile; fileRef = 65ADF97AEE082628F88D1CE83F976C52 /* SDAVAssetExportSession.podspec */; };
 		D84A42944DC5A1DD8384CDB3CD81A285 /* KWConformToProtocolMatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 38F0A6385BC70793F7959C3C3146E3D6 /* KWConformToProtocolMatcher.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		D936D4890C149E97A9DB14BAE77584DB /* KWContextNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 00FA2D8C9A3615E9B96604576DA332C9 /* KWContextNode.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -1391,6 +1395,11 @@
 		D7622CD93D1703054A5AA605FF5D1E1C /* AFImageRequestOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFImageRequestOperation.m; path = AFNetworking/AFImageRequestOperation.m; sourceTree = "<group>"; };
 		D775C3E81CAEE43D00492C37 /* .gitkeep */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		D775C3E91CAEE45F00492C37 /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		D7971F6B1CBCC2C200C48DB5 /* NSString+Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Utils.h"; sourceTree = "<group>"; };
+		D7971F6C1CBCC2C200C48DB5 /* NSString+Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Utils.m"; sourceTree = "<group>"; };
+		D7971F701CBCCD9B00C48DB5 /* PQCheckSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PQCheckSettings.h; sourceTree = "<group>"; };
+		D7971F711CBCCD9B00C48DB5 /* PQCheckSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PQCheckSettings.m; sourceTree = "<group>"; };
+		D7971F741CBCCEB700C48DB5 /* PQCheckSDK.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = PQCheckSDK.plist; sourceTree = "<group>"; };
 		D7C58314F9BEEE5114122368F4B5A5E2 /* OCHamcrest-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "OCHamcrest-umbrella.h"; sourceTree = "<group>"; };
 		D7E15B047142841AC02C68D0385741FE /* TransitionKit-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "TransitionKit-prefix.pch"; sourceTree = "<group>"; };
 		D8764302143B937B6B3C33B5C108FE90 /* RKObjectRequestOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RKObjectRequestOperation.h; path = Code/Network/RKObjectRequestOperation.h; sourceTree = "<group>"; };
@@ -1675,6 +1684,7 @@
 				41DE2E4795BD2AFFAE9CA52A2BB9541B /* PQCheckRecordSelfieViewController.m */,
 				CA4DFBDEDBC7A964785770F450879DBF /* API */,
 				D7DCF2453FADF2126CDA9617FEE473C6 /* Categories */,
+				D7971F6F1CBCCD9B00C48DB5 /* Settings */,
 				1B52937B23A3F34CFC9126504FAB72F8 /* SDAVAssetExportSession */,
 			);
 			path = Classes;
@@ -2303,6 +2313,16 @@
 			path = Assets;
 			sourceTree = "<group>";
 		};
+		D7971F6F1CBCCD9B00C48DB5 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				D7971F741CBCCEB700C48DB5 /* PQCheckSDK.plist */,
+				D7971F701CBCCD9B00C48DB5 /* PQCheckSettings.h */,
+				D7971F711CBCCD9B00C48DB5 /* PQCheckSettings.m */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		D7DCF2453FADF2126CDA9617FEE473C6 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
@@ -2310,6 +2330,8 @@
 				7825A167B1E22A311BEC12F4F5EC61B3 /* UIColor+Additions.m */,
 				147A99013525E87F9914BFE2FE578A25 /* UIImage+Additions.h */,
 				3167ED298A081EB898ABC86F520F16B5 /* UIImage+Additions.m */,
+				D7971F6B1CBCC2C200C48DB5 /* NSString+Utils.h */,
+				D7971F6C1CBCC2C200C48DB5 /* NSString+Utils.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -2903,8 +2925,10 @@
 				37E90CDFC462BE26811137C593D2DA34 /* Links.h in Headers */,
 				83D6D2A617F8024D4B0DFA75505034DD /* PQCheckDigestLabel.h in Headers */,
 				78570A41BE320FCE2E875A22B77AAE0A /* PQCheckFaceShape.h in Headers */,
+				D7971F721CBCCD9B00C48DB5 /* PQCheckSettings.h in Headers */,
 				EBDD471808D7CA7241F9980691B93288 /* PQCheckManager.h in Headers */,
 				D660064ECFA2AA6D881413E08BCED822 /* PQCheckRecordSelfieViewController.h in Headers */,
+				D7971F6D1CBCC2C200C48DB5 /* NSString+Utils.h in Headers */,
 				4AFDBC528DBED84610C156FC2336F526 /* PQCheckSDK-umbrella.h in Headers */,
 				F52D483F279172DB524803CFF46600F3 /* SDAVAssetExportSession.h in Headers */,
 				59735978E040D9750666E7E803E942F8 /* UIColor+Additions.h in Headers */,
@@ -3304,7 +3328,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0730;
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -3379,6 +3403,8 @@
 				389423064590BF655D9E9981D4C70C1C /* HATEOASObject.m in Sources */,
 				A64DF27F2D97892CA884D34791E3A369 /* LICENSE in Sources */,
 				525CF05FA4BE9B1147E7A299D7F552F4 /* Links.m in Sources */,
+				D7971F6E1CBCC2C200C48DB5 /* NSString+Utils.m in Sources */,
+				D7971F731CBCCD9B00C48DB5 /* PQCheckSettings.m in Sources */,
 				489768B15DEEF2D28DB33DE5DE6387C6 /* PQCheckDigestLabel.m in Sources */,
 				F9D44290BD56B7B84A43382624254524 /* PQCheckFaceShape.m in Sources */,
 				ED9FB5DD44D19FF0B96C3D01B1FED467 /* PQCheckManager.m in Sources */,
@@ -3938,6 +3964,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/ISO8601DateFormatterValueTransformer/ISO8601DateFormatterValueTransformer.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = ISO8601DateFormatterValueTransformer;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -3967,6 +3994,7 @@
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Pods_PQCheckThinSDK_Tests;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -3994,6 +4022,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/PQCheckSDK/PQCheckSDK.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = PQCheckSDK;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4021,6 +4050,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/TransitionKit/TransitionKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = TransitionKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4048,6 +4078,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/PQCheckSDK/PQCheckSDK.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = PQCheckSDK;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4075,6 +4106,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/SimpleKeychain/SimpleKeychain.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = SimpleKeychain;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4102,6 +4134,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/OCHamcrest/OCHamcrest.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = OCHamcrest;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4141,6 +4174,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/RKValueTransformers/RKValueTransformers.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RKValueTransformers;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4168,6 +4202,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/OCHamcrest/OCHamcrest.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = OCHamcrest;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4195,6 +4230,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/RKValueTransformers/RKValueTransformers.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RKValueTransformers;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4224,6 +4260,7 @@
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Pods_PQCheckThinSDK_Example;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4251,6 +4288,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/AFNetworking/AFNetworking.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = AFNetworking;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4278,6 +4316,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/RestKit/RestKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RestKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4307,6 +4346,7 @@
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Pods_PQCheckThinSDK_Example;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4334,6 +4374,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/MBProgressHUD/MBProgressHUD.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = MBProgressHUD;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4361,6 +4402,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/RestKit/RestKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = RestKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4388,6 +4430,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/SOCKit/SOCKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = SOCKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4415,6 +4458,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/Kiwi/Kiwi.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Kiwi;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4442,6 +4486,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/ISO8601DateFormatterValueTransformer/ISO8601DateFormatterValueTransformer.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = ISO8601DateFormatterValueTransformer;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4469,6 +4514,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -4508,6 +4554,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/MBProgressHUD/MBProgressHUD.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = MBProgressHUD;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4535,6 +4582,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/SimpleKeychain/SimpleKeychain.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = SimpleKeychain;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4562,6 +4610,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/AFNetworking/AFNetworking.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = AFNetworking;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4589,6 +4638,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/Kiwi/Kiwi.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Kiwi;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4618,6 +4668,7 @@
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = Pods_PQCheckThinSDK_Tests;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4645,6 +4696,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/TransitionKit/TransitionKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = TransitionKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -4706,6 +4758,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/SOCKit/SOCKit.modulemap";
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = SOCKit;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;

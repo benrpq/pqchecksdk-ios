@@ -36,7 +36,7 @@
 /**
  *  The delegate of the PQCheck manager object.
  */
-@property (nonatomic, weak)   id<PQCheckManagerDelegate> delegate;
+@property (nullable, nonatomic, weak) id<PQCheckManagerDelegate> delegate;
 
 /**
  *  The boolean value that indicates whether or not another attempt should be made automatically in the event of failure on the previous attempt.
@@ -84,15 +84,11 @@
 @property (nullable, nonatomic) PQCheckRecordSelfieViewController *selfieViewController;
 
 /**
- *  Initialises the PQCheck manager object with an instance of `Authorisation` object.
- *
- *  @param authorisation The authorisation representation
+ *  Returns a singleton instance of PQCheckManager object.
  *
  *  @return Return PQCheck manager object
- *
- *  @see Authorisation class
  */
-- (nullable id)initWithAuthorisation:(nullable Authorisation *)authorisation;
++ (PQCheckManager *)defaultManager;
 
 /**
  *  Performs an authorisation with the transcript given by `digest`.
@@ -101,9 +97,10 @@
  *  
  *  @param digest The digest value
  *
+ *  @see Authorisation class
  *  @see PQCheckManagerDelegate protocol
  */
-- (void)performAuthorisationWithDigest:(nonnull NSString *)digest;
+- (void)performAuthorisation:(nonnull Authorisation *)authorisation;
 
 /**
  *  Performs a user enrolment with the given `transcript`. The URL to upload the enrolment video is specified by `uri`.
